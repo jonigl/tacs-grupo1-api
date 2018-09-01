@@ -7,9 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
-public class LoginController {
+public class AuthenticationController {
     @PostMapping("/login")
-    public Login message() {
-        return new Login("Logged in!");
+    public MockupResponse login() {
+        return new MockupResponse("Logged in!");
+    }
+
+    @PostMapping("/logout")
+    public MockupResponse logout() {
+        return new MockupResponse("Logged in!");
     }
 }
