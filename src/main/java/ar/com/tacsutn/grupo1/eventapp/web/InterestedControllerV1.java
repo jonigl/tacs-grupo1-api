@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class InterestedControllerV1 implements Controller {
-    @GetMapping("/events")
-    public MockupResponse getInterested(@RequestParam(value = "event", defaultValue = "Event0") String event) {
+    @GetMapping("/events/event")
+    public MockupResponse getInterested(@RequestParam(value = "name", defaultValue = "Event0") String event) {
 
         // TODO: Add logic
 

@@ -19,24 +19,24 @@ public class InterestedControllerV1Test extends ControllerTest {
 
     @Test
     public void correctURIShouldReturnOkStatus() throws Exception {
-        this.getMvc().perform(get("/api/v1/events")).andExpect(status().isOk());
+        this.getMvc().perform(get("/api/v1/events/event")).andExpect(status().isOk());
     }
 
     @Test
     public void incorrectURIShouldReturnErrorStatus() throws Exception {
-        this.getMvc().perform(get("/api/v1/fail")).andExpect(status().is4xxClientError());
+        this.getMvc().perform(get("/fail")).andExpect(status().is4xxClientError());
     }
 
     @Test
     public void shouldReturnDefaultValueWhenNoParamIsSet() throws Exception {
-        this.getMvc().perform(get("/api/v1/events"))
+        this.getMvc().perform(get("/api/v1/events/event"))
                 .andExpect(jsonPath("$.content")
                         .value("10 users interested in 'Event0' event."));
     }
 
     @Test
     public void shouldReturnSetValueWhenParamIsSet() throws Exception {
-        this.getMvc().perform(get("/api/v1/events").param("event", "Event1"))
+        this.getMvc().perform(get("/api/v1/events/event").param("name", "Event1"))
                 .andExpect(jsonPath("$.content")
                         .value("10 users interested in 'Event1' event."));
     }
