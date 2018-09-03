@@ -18,10 +18,10 @@ public class UserController {
      * Returns a single user by identifier.
      * The administrator account is required.
      *
-     * @param user_id requested user's identifier.
+     * @param userId requested user's identifier.
      */
     @GetMapping("/users/{user_id}")
-    public MockupResponse getUser(@PathVariable Long user_id) {
-        return new MockupResponse(String.format("User %d", user_id));
+    public MockupResponse getUser(@PathVariable Long userId) {
+        return new MockupResponse(String.format("User %d", userId));
     }
 }
