@@ -27,9 +27,7 @@ public class InterestedControllerTest extends ControllerTest {
 
     @Test
     public void v1ShouldReturnSetValueWhenParamIsSet() throws Exception {
-        this.getMvc().perform(get("/api/v1/events/event").param("id", "1"))
-                .andExpect(jsonPath("$.content")
-                        .value("10 usuarios estan interesados en el evento 1"));
+        testRoute("events/event?id=1", "10 usuarios estan interesados en el evento 1");
     }
 
     @Test
