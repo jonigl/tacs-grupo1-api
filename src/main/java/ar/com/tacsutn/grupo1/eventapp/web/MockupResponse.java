@@ -2,13 +2,13 @@ package ar.com.tacsutn.grupo1.eventapp.web;
 
 public class MockupResponse {
 
-    private final String content;
+    private final String message;
 
-    public MockupResponse(String content) {
-        this.content = content;
+    public MockupResponse(String message) {
+        this.message = message;
     }
 
-    public String getContent() {
-        return content;
+    public String getMessage() {
+        return message;
     }
 }
