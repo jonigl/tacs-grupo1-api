@@ -20,7 +20,7 @@ public class UserController {
      *
      * @param userId requested user's identifier.
      */
-    @GetMapping("/users/{user_id}")
+    @GetMapping("/users/{userId}")
     public MockupResponse getUser(@PathVariable Long userId) {
         return new MockupResponse(String.format("User %d", userId));
     }
