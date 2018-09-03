@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -22,6 +23,16 @@ public abstract class ControllerTest {
     public MockMvc getMvc() { return this.mockMvc; }
 
     public abstract Controller getController();
+
+    public void test200Response(String route) throws Exception {
+        this.getMvc().perform(get("/api/v1/" + route)).andExpect(status().isOk());
+    }
+
+    public void testRoute(String route, String expectedValue) throws Exception {
+        this.getMvc().perform(get("/api/v1/" + route))
+                .andExpect(jsonPath("$.content")
+                        .value(expectedValue));
+    }
 
     @Test
     public void contextShouldLoad() {
