@@ -1,6 +1,5 @@
 package ar.com.tacsutn.grupo1.eventapp.web;
 
-import ar.com.tacsutn.grupo1.eventapp.Controller;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
