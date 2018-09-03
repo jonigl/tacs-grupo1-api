@@ -3,9 +3,6 @@ package ar.com.tacsutn.grupo1.eventapp.web;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
 public class InterestedControllerTest extends ControllerTest {
     @Autowired private InterestedController controller;
 
