@@ -14,7 +14,7 @@ public class ListsController {
 
     @PostMapping("/lists")
     public MockupResponse create() {
-        return new MockupResponse(String.format("List created"));
+        return new MockupResponse("List created");
     }
 
     @PutMapping("/lists/{list_id}")
