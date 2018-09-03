@@ -1,7 +1,6 @@
-package ar.com.tacsutn.grupo1.eventapp.controllers;
+package ar.com.tacsutn.grupo1.eventapp.web;
 
 import ar.com.tacsutn.grupo1.eventapp.Controller;
-import ar.com.tacsutn.grupo1.eventapp.web.InterestedController;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

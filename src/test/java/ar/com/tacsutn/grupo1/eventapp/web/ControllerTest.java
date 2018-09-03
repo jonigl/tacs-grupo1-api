@@ -1,4 +1,4 @@
-package ar.com.tacsutn.grupo1.eventapp.controllers;
+package ar.com.tacsutn.grupo1.eventapp.web;
 
 import ar.com.tacsutn.grupo1.eventapp.Controller;
 import org.junit.Test;
