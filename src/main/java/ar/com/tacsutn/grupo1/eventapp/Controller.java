@@ -1,4 +1,4 @@
-package ar.com.tacsutn.grupo1.eventapp.controller;
+package ar.com.tacsutn.grupo1.eventapp;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
