@@ -23,11 +23,6 @@ public class InterestedControllerV1Test extends ControllerTest {
     }
 
     @Test
-    public void incorrectURIShouldReturnErrorStatus() throws Exception {
-        this.getMvc().perform(get("/fail")).andExpect(status().is4xxClientError());
-    }
-
-    @Test
     public void shouldReturnDefaultValueWhenNoParamIsSet() throws Exception {
         this.getMvc().perform(get("/api/v1/events/event"))
                 .andExpect(jsonPath("$.content")
