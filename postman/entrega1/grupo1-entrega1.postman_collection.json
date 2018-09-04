@@ -1,0 +1,557 @@
+{
+	"info": {
+		"_postman_id": "1aa81682-aa85-4ecd-bb35-3e58e4eb49cc",
+		"name": "Oficial",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api/v1",
+			"item": [
+				{
+					"name": "login",
+					"item": [
+						{
+							"name": "/login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/login",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/logout",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/logout",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "lists",
+					"item": [
+						{
+							"name": "events",
+							"item": [
+								{
+									"name": "/lists/:list_id/events",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "{{host}}/api/v1/lists/1/events",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"lists",
+												"1",
+												"events"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/lists/:list_id/events",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "{{host}}/api/v1/lists/1/events",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"lists",
+												"1",
+												"events"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/lists/:list_id/events/:event_id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "{{host}}/api/v1/lists/1/events/2",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"lists",
+												"1",
+												"events",
+												"2"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "compare",
+							"item": [
+								{
+									"name": "/lists/compare",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "{{host}}/api/v1/lists/compare?list1=1&list2=2",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"lists",
+												"compare"
+											],
+											"query": [
+												{
+													"key": "list1",
+													"value": "1"
+												},
+												{
+													"key": "list2",
+													"value": "2"
+												}
+											]
+										},
+										"description": "Returns all the common events from two event lists."
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "/lists",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/lists",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"lists"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/lists/:list_id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/lists/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"lists",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/lists/:list_id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/lists/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"lists",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/lists/:list_id",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/lists/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"lists",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "alarms",
+					"item": [
+						{
+							"name": "/alarms",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/alarms",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"alarms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/alarms/:alarm_id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/alarms/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"alarms",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/alarms/:alarm_id",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/alarms/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"alarms",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/alarms/:alarm_id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/alarms/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"alarms",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "/users",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users"
+									]
+								},
+								"description": "Create a new user account."
+							},
+							"response": []
+						},
+						{
+							"name": "/users/:user_id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/users/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"1"
+									]
+								},
+								"description": "Returns a single user by identifier.\nThe administrator account is required."
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "events",
+					"item": [
+						{
+							"name": "/events/:event_id/users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/events/1/users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"events",
+										"1",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/events?find=1",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/events?find=1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"events"
+									],
+									"query": [
+										{
+											"key": "find",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/events/:event_id/users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/events/1/users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"events",
+										"1",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/events/:event_id/total_users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/events/1/total_users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"events",
+										"1",
+										"total_users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/events/total_events?from=date1&to=date2",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/events/total_events?from=14/12/1492&to=02/09/2018",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"events",
+										"total_events"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "14/12/1492"
+										},
+										{
+											"key": "to",
+											"value": "02/09/2018"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/events?from=date1&to=date2",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{host}}/api/v1/events?from=14/12/1492&to=02/09/2018",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"events"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "14/12/1492"
+										},
+										{
+											"key": "to",
+											"value": "02/09/2018"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		}
+	]
+}
