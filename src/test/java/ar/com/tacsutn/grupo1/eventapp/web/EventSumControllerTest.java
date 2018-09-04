@@ -6,11 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class EventSumControllerTest extends ControllerTest {
     @Autowired private EventSumController controller;
 
-    @Override
-    public Controller getController() {
-        return this.controller;
-    }
-
     @Test
     public void v1CorrectURIShouldReturnOkStatus() throws Exception {
         test200Response("events/total_events");

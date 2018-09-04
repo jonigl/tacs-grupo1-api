@@ -1,12 +1,10 @@
 package ar.com.tacsutn.grupo1.eventapp.web;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/api/v1")
 @RestController
-public class InterestedController implements Controller {
+public class InterestedController {
     @GetMapping("/events/event")
     public MockupResponse getV1(@RequestParam(value = "id", defaultValue = "0") Long id) {
 

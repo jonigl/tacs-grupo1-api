@@ -6,11 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class InterestedControllerTest extends ControllerTest {
     @Autowired private InterestedController controller;
 
-    @Override
-    public Controller getController() {
-        return this.controller;
-    }
-
     @Test
     public void v1CorrectURIShouldReturnOkStatus() throws Exception {
         test200Response("events/event");
