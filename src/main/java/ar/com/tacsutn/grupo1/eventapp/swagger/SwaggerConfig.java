@@ -1,8 +1,9 @@
-package ar.com.tacsutn.grupo1.eventapp;
+package ar.com.tacsutn.grupo1.eventapp.swagger;
 
 import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.PathProvider;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -17,6 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+@Import(CustomJavadocPluginConfiguration.class)
 public class SwaggerConfig {
 
     @Bean
