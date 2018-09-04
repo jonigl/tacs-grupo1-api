@@ -1,10 +1,12 @@
 package ar.com.tacsutn.grupo1.eventapp.web;
 
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/api/v1")
+@Api(tags = "Lists", description = "list resources")
 public class ListsController {
 
     @GetMapping("/lists/{list_id}")

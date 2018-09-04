@@ -1,9 +1,11 @@
 package ar.com.tacsutn.grupo1.eventapp.web;
 
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@Api(tags = "Users", description = "user resources")
 public class UserController {
 
     /**
