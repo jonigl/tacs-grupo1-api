@@ -1,9 +1,11 @@
 package ar.com.tacsutn.grupo1.eventapp.web;
 
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1")
 @RestController
+@Api(tags = "Events", description = "Event resources")
 public class InterestedController {
     @GetMapping("/events/event")
     public MockupResponse getV1(@RequestParam(value = "id", defaultValue = "0") Long id) {
