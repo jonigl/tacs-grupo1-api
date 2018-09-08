@@ -26,8 +26,8 @@ public class UserController {
      * @param userId requested user's identifier.
      * @return the requested user.
      */
-    @GetMapping("/users/{userId}")
-    public User getUser(@PathVariable Long userId) {
+    @GetMapping("/users/{user_id}")
+    public User getUser(@PathVariable("user_id") Long userId) {
         return new User(userId, "sample user", "hidden password", Role.NORMAL);
     }
 }
