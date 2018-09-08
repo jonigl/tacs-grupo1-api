@@ -6,6 +6,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 @WebMvcTest(EventsController.class)
 public class EventsControllerTest extends ControllerTest {
     @Test
+    public void getEventsReturnsOkStatus() throws Exception {
+        test200Response("/api/v1/events?find=last");
+    }
+
+    @Test
+    public void getEventsReturnsEventsMatchingCriteria() throws Exception {
+        testRoute("/api/v1/events?find=last", "El evento 10 cumple con el criterio 'last'.");
+    }
+
+    @Test
     public void getTotalUsersReturnsOkStatus() throws Exception {
         test200Response("/api/v1/events/100/total_users");
     }
