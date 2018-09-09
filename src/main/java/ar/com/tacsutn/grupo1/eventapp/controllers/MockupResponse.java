@@ -1,4 +1,4 @@
-package ar.com.tacsutn.grupo1.eventapp.web;
+package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 public class MockupResponse {
 

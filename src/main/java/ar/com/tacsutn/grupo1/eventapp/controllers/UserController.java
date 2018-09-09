@@ -1,7 +1,7 @@
-package ar.com.tacsutn.grupo1.eventapp.web;
+package ar.com.tacsutn.grupo1.eventapp.controllers;
 
-import ar.com.tacsutn.grupo1.eventapp.domain.Role;
-import ar.com.tacsutn.grupo1.eventapp.domain.User;
+import ar.com.tacsutn.grupo1.eventapp.models.Role;
+import ar.com.tacsutn.grupo1.eventapp.models.User;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 

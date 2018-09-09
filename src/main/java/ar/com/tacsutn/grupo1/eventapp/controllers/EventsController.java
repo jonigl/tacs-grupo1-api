@@ -1,4 +1,4 @@
-package ar.com.tacsutn.grupo1.eventapp.web;
+package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 import io.swagger.annotations.Api;
 import org.springframework.format.annotation.DateTimeFormat;

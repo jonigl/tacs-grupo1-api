@@ -1,4 +1,4 @@
-package ar.com.tacsutn.grupo1.eventapp.web;
+package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -90,7 +90,7 @@
 								-classdir ${project.build.outputDirectory}
 							</additionalparam>
 							<sourcepath>${project.build.sourceDirectory}</sourcepath>
-							<subpackages>ar.com.tacsutn.grupo1.eventapp.web</subpackages>
+							<subpackages>ar.com.tacsutn.grupo1.eventapp.controllers</subpackages>
 							<useStandardDocletOptions>false</useStandardDocletOptions>
 						</configuration>
 					</execution>

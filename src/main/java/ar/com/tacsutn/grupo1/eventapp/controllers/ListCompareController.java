@@ -1,7 +1,7 @@
-package ar.com.tacsutn.grupo1.eventapp.web;
+package ar.com.tacsutn.grupo1.eventapp.controllers;
 
-import ar.com.tacsutn.grupo1.eventapp.domain.Event;
-import ar.com.tacsutn.grupo1.eventapp.domain.RestPage;
+import ar.com.tacsutn.grupo1.eventapp.models.Event;
+import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
 import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
