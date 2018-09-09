@@ -1,4 +1,4 @@
-package ar.com.tacsutn.grupo1.eventapp.web;
+package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +27,14 @@ public class ListsController {
     @DeleteMapping("/lists/{list_id}")
     public MockupResponse delete(@PathVariable Long list_id) {
         return new MockupResponse(String.format("List %d deleted",list_id));
+    }
+
+    /**
+     * Returns all lists.
+     */
+    @GetMapping("/lists")
+    public MockupResponse getAll() {
+        return new MockupResponse("All lists");
     }
 
     @GetMapping("/lists/{list_id}/events")

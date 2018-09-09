@@ -1,4 +1,4 @@
-package ar.com.tacsutn.grupo1.eventapp.domain;
+package ar.com.tacsutn.grupo1.eventapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
