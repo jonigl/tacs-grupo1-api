@@ -1,42 +1,63 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import ar.com.tacsutn.grupo1.eventapp.models.Authority;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Date;
+import java.util.List;
 
 @Entity
-@ApiModel
+@Table(name = "USER")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(example = "12345678")
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
 
-    @Column(nullable = false)
-    @ApiModelProperty(example = "sample user name")
-    private String name;
+    @Column(name = "USERNAME", length = 50, unique = true)
+    @NotNull
+    @Size(min = 4, max = 50)
+    private String username;
 
-    @Column(nullable = false)
-    @JsonIgnore
+    @Column(name = "PASSWORD", length = 100)
+    @NotNull
+    @Size(min = 4, max = 100)
     private String password;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    @JsonIgnore
-    private Role role;
+    @Column(name = "FIRSTNAME", length = 50)
+    @NotNull
+    @Size(min = 4, max = 50)
+    private String firstname;
 
-    public User() {
-    }
+    @Column(name = "LASTNAME", length = 50)
+    @NotNull
+    @Size(min = 4, max = 50)
+    private String lastname;
 
-    public User(Long id, String name, String password, Role role) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.role = role;
-    }
+    @Column(name = "EMAIL", length = 50)
+    @NotNull
+    @Size(min = 4, max = 50)
+    private String email;
+
+    @Column(name = "ENABLED")
+    @NotNull
+    private Boolean enabled;
+
+    @Column(name = "LASTPASSWORDRESETDATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
+    private Date lastPasswordResetDate;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USER_AUTHORITY",
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
+    private List<Authority> authorities;
 
     public Long getId() {
         return id;
@@ -46,12 +67,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -62,11 +83,51 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public List<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public Date getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
     }
 }
