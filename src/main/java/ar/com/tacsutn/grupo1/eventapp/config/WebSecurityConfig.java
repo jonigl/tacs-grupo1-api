@@ -16,9 +16,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.zerhusen.security.JwtAuthenticationEntryPoint;
-import org.zerhusen.security.JwtAuthorizationTokenFilter;
-import org.zerhusen.security.service.JwtUserDetailsService;
+import ar.com.tacsutn.grupo1.eventapp.security.JwtAuthenticationEntryPoint;
+import ar.com.tacsutn.grupo1.eventapp.security.JwtAuthorizationTokenFilter;
+import ar.com.tacsutn.grupo1.eventapp.security.service.JwtUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -76,6 +76,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/h2-console/**/**").permitAll()
 
             .antMatchers("/auth/**").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
+            .antMatchers(HttpMethod.POST,"/api/v1/users").permitAll()
             .anyRequest().authenticated();
 
        httpSecurity

@@ -2,6 +2,7 @@ package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 import io.swagger.annotations.Api;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Api(tags = "Events", description = "Events resources")
 public class EventsController {
     @GetMapping("/events")
+    @PreAuthorize("hasRole('USER')")
     public MockupResponse getEvent(@RequestParam(value = "find") String criteria) {
         // TODO: Add logic to get an Event given a certain filter
 
@@ -19,6 +21,7 @@ public class EventsController {
     }
 
     @GetMapping("/events/{event_id}/total_users")
+    @PreAuthorize("hasRole('ADMIN')")
     public MockupResponse getTotalUsers(@PathVariable Long event_id) {
 
         // TODO: Add logic to get the number of users interested in an event
@@ -27,6 +30,7 @@ public class EventsController {
     }
 
     @GetMapping("/events/total_events")
+    @PreAuthorize("hasRole('ADMIN')")
     public MockupResponse getTotalEvents(
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(value = "from", required = false) LocalDateTime from,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(value = "to", required = false) LocalDateTime to) {

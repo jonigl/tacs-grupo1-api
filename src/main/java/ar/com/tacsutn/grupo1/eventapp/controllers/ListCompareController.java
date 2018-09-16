@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,7 @@ public class ListCompareController {
      * @param listId2 second event list identifier.
      */
     @GetMapping("/lists/compare")
+    @PreAuthorize("hasRole('ADMIN')")
     public RestPage<Event> getCommonEvents(@RequestParam(name = "list1") Long listId1,
                                            @RequestParam(name = "list2") Long listId2) {
         Event event1 = new Event("1", "sample event 1", "event 1 description");

@@ -3,6 +3,7 @@ package ar.com.tacsutn.grupo1.eventapp.controllers;
 import ar.com.tacsutn.grupo1.eventapp.models.OldUser;
 import ar.com.tacsutn.grupo1.eventapp.models.Role;
 import io.swagger.annotations.Api;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,6 +28,7 @@ public class UserController {
      * @return the requested user.
      */
     @GetMapping("/users/{user_id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public OldUser getUser(@PathVariable("user_id") Long userId) {
         return new OldUser(userId, "sample user", "hidden password", Role.NORMAL);
     }

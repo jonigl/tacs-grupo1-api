@@ -12,10 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-import org.zerhusen.security.JwtAuthenticationRequest;
-import org.zerhusen.security.JwtTokenUtil;
-import org.zerhusen.security.JwtUser;
-import org.zerhusen.security.service.JwtAuthenticationResponse;
+import ar.com.tacsutn.grupo1.eventapp.security.JwtAuthenticationRequest;
+import ar.com.tacsutn.grupo1.eventapp.security.JwtTokenUtil;
+import ar.com.tacsutn.grupo1.eventapp.security.JwtUser;
+import ar.com.tacsutn.grupo1.eventapp.security.service.JwtAuthenticationResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
