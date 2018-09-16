@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventList {
@@ -8,6 +9,12 @@ public class EventList {
     private String name;
 
     private List<Event> events;
+
+    public EventList(Long id, String name) {
+        this.id = id;
+        this.name = name;
+        this.events = new ArrayList<>();
+    }
 
     public EventList(Long id, String name, List<Event> eventList) {
         this.id = id;

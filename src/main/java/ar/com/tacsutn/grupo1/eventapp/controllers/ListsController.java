@@ -1,7 +1,10 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
+import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Random;
 
 
 @RestController
@@ -15,8 +18,12 @@ public class ListsController {
     }
 
     @PostMapping("/lists")
-    public MockupResponse create() {
-        return new MockupResponse("List created");
+    public EventList create(@RequestBody String name) {
+        // TODO: El repositorio de usuarios buscar el usuario logueado, añadir la nueva lista y asignarle Id
+
+        Long id = new Long(1);
+
+        return new EventList(id, name);
     }
 
     @PutMapping("/lists/{list_id}")
