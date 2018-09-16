@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.client;
 
+import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
@@ -39,7 +41,7 @@ public class EventbriteClientTest {
 
     @Test
     public void getEventFromValidResponse() throws IOException {
-        String jsonPath = getPath("sample-response.json");
+        String jsonPath = getPath("sample-event-response.json");
         byte[] json = Files.readAllBytes(new File(jsonPath).toPath());
 
         mockServer.expect(anything())
@@ -63,6 +65,29 @@ public class EventbriteClientTest {
         Optional<EventTemplate> event = eventbriteClient.getEvent("12345678");
 
         Assert.assertFalse(event.isPresent());
+    }
+
+    @Test
+    public void searchEvents() throws IOException {
+        String jsonPath = getPath("sample-event-search-response.json");
+        byte[] json = Files.readAllBytes(new File(jsonPath).toPath());
+
+        mockServer.expect(anything())
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+
+        EventFilter filter = new EventFilter()
+                .setKeyword("key")
+                .setStartDateFrom(LocalDateTime.of(2018, 1, 1, 0, 0));
+        RestPage<EventTemplate> events = eventbriteClient.searchEvents(filter).get();
+
+        Assert.assertTrue(events.hasContent());
+        Assert.assertTrue(events.isFirst());
+        Assert.assertFalse(events.isLast());
+        Assert.assertEquals(50, events.getContent().size());
+        Assert.assertEquals(40364, events.getTotalElements());
+        Assert.assertEquals(0, events.getNumber());
+        Assert.assertEquals(50, events.getSize());
     }
 
     private String getPath(String filename) {
