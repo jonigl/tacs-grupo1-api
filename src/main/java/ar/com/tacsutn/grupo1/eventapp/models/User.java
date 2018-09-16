@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @ApiModel
@@ -28,14 +31,22 @@ public class User {
     @JsonIgnore
     private Role role;
 
-    public User() {
-    }
+    private List<EventList> lists;
 
     public User(Long id, String name, String password, Role role) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.role = role;
+        this.lists = new ArrayList<EventList>();
+    }
+
+    public User(Long id, String name, String password, Role role, List<EventList> lists) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.role = role;
+        this.lists = lists;
     }
 
     public Long getId() {
@@ -68,5 +79,27 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public List<EventList> getLists() { return lists; }
+
+    public void setLists(List<EventList> lists) { this.lists = lists; }
+
+    public void addList(EventList eventList) { this.lists.add(eventList); }
+
+    public void deleteList(Long eventListId) {
+        EventList eventList = findEventListById(eventListId);
+
+        this.lists.remove(eventList);
+    }
+
+    public void changeListName(Long eventListId, String newName) {
+        EventList eventList = findEventListById(eventListId);
+
+        eventList.setName(newName);
+    }
+
+    private EventList findEventListById(Long eventListId) {
+        return this.lists.stream().filter(l -> l.getId().equals(eventListId)).collect(Collectors.toList()).get(0);
     }
 }
