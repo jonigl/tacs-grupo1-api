@@ -73,4 +73,9 @@ public class EventListRepositoryTest {
     public void shouldNotChangeEventListNameIfNotExists() {
 
     }
+
+    @Test
+    public void canGetCommonEventsFromTwoUsers() {
+
+    }
 }

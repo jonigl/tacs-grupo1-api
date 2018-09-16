@@ -2,6 +2,7 @@ package ar.com.tacsutn.grupo1.eventapp.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventList {
     private long id;
@@ -17,6 +18,13 @@ public class EventList {
         this.name = name;
         this.user = user;
         this.events = new ArrayList<>();
+    }
+
+    public EventList(long id, String name, User user, List<Event> events) {
+        this.id = id;
+        this.name = name;
+        this.user = user;
+        this.events = events;
     }
 
     public Long getId() {
@@ -43,5 +51,17 @@ public class EventList {
 
     public void setEvents(List<Event> eventList) {
         this.events = eventList;
+    }
+
+    public List<Event> getCommonEvents(EventList other) {
+        return this.events.stream().filter(e -> other.hasEvent(e)).collect(Collectors.toList());
+    }
+
+    public boolean hasEvent(Event event) {
+        return this.getEvents().contains(event);
+    }
+
+    public void removeEvent(Event event) {
+        this.events.remove(event);
     }
 }
