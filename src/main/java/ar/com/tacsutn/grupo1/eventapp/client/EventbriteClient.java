@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.client;
 
+import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,27 @@ public class EventbriteClient {
                 .encode();
 
         return request(uriComponents.toUri(), EventTemplate.class);
+    }
+
+    public Optional<RestPage<EventTemplate>> searchEvents(EventFilter filter) {
+        return this.searchEvents(filter, 1);
+    }
+
+    public Optional<RestPage<EventTemplate>> searchEvents(EventFilter filter, int pageNumber) {
+        UriComponentsBuilder uriComponentsBuilder = getUriComponentsBuilder();
+
+        if (pageNumber > 1) {
+            uriComponentsBuilder.queryParam("page", pageNumber);
+        }
+
+        UriComponents uriComponents = uriComponentsBuilder
+                .path("/events/search")
+                .queryParams(filter.getQueryParams())
+                .build()
+                .encode();
+
+        Optional<EventSearchPage> page = request(uriComponents.toUri(), EventSearchPage.class);
+        return page.map(EventSearchPage::toRestPage);
     }
 
     private <T> Optional<T> request(URI uri, Class<T> responseType) {
