@@ -1,5 +1,7 @@
-package ar.com.tacsutn.grupo1.eventapp.models;
+package ar.com.tacsutn.grupo1.eventapp.repositories;
 
+import ar.com.tacsutn.grupo1.eventapp.models.EventList;
+import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.models.exceptions.NotListOwnerException;
 
 import java.util.List;

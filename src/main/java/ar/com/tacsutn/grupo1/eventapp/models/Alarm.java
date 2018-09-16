@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
+import ar.com.tacsutn.grupo1.eventapp.repositories.EventsRepository;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -8,51 +9,56 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 @ApiModel
-public class Alarm {
+public class Alarm extends TimerTask {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @ApiModelProperty(example = "12345678")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @ApiModelProperty(example = "12345678")
+    private long id;
 
-  @Column(nullable = false)
-  @ApiModelProperty(example = "sample alarm name")
-  private String name;
+    @Column(nullable = false)
+    @ApiModelProperty(example = "sample alarm name")
+    private String name;
 
-  @Column(nullable = false)
-  @ApiModelProperty(example = "sample criteria to find")
-  private String criteria;
+    @Column(nullable = false)
+    @ApiModelProperty(example = "sample criteria to find")
+    private Criteria criteria;
 
-  public Alarm(Long id, String name, String criteria) {
-    this.id = id;
-    this.name = name;
-    this.criteria = criteria;
-  }
+    private List<Event> events;
 
-  public Long getId() {
-    return id;
-  }
+    private Date activationTime;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    private Timer timer;
 
-  public String getName() {
-    return name;
-  }
+    private EventsRepository repository;
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public Alarm(long id, String name, Criteria criteria, Date activationTime, EventsRepository repository) {
+        this.id = id;
+        this.name = name;
+        this.criteria = criteria;
+        this.events = new ArrayList<Event>();
+        this.activationTime = activationTime;
+        this.timer = new Timer();
+        this.repository = repository;
 
-  public String getCriteria() {
-    return criteria;
-  }
+        timer.scheduleAtFixedRate(this, activationTime, TimeUnit.DAYS.toMillis(1));
+    }
 
-  public void setCriteria(String criteria) {
-    this.criteria = criteria;
-  }
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    @Override
+    public void run() {
+        this.events = this.repository.search(this.criteria);
+    }
+
+    public int getEventsCount() {
+        return this.events.size();
+    }
 }

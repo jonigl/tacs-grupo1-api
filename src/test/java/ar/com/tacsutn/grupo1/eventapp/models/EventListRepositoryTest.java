@@ -1,6 +1,7 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
 import ar.com.tacsutn.grupo1.eventapp.models.exceptions.NotListOwnerException;
+import ar.com.tacsutn.grupo1.eventapp.repositories.ListsRepository;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
