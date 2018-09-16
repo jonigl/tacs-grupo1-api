@@ -1,11 +1,9 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
-import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import io.swagger.annotations.Api;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Random;
-
 
 @RestController
 @RequestMapping("/api/v1")
@@ -18,12 +16,14 @@ public class ListsController {
     }
 
     @PostMapping("/lists")
-    public EventList create(@RequestBody String name) {
-        // TODO: El repositorio de usuarios buscar el usuario logueado, añadir la nueva lista y asignarle Id
+    public ResponseEntity create(@RequestBody String list_name) {
+        // TODO: Add User validation
 
-        Long id = new Long(1);
+        /* User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return new EventList(id, name);
+        ListsControllerManager.getInstance().create(user, list_name); */
+
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @PutMapping("/lists/{list_id}")
