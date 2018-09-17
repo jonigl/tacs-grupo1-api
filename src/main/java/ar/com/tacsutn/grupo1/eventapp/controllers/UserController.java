@@ -1,11 +1,10 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
-import ar.com.tacsutn.grupo1.eventapp.models.OldUser;
-import ar.com.tacsutn.grupo1.eventapp.models.Role;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +34,7 @@ public class UserController {
      */
     @GetMapping("/users/{user_id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public OldUser getUser(@PathVariable("user_id") Long userId) {
-        return new OldUser(userId, "sample user", "hidden password", Role.NORMAL);
+    public User getUser(@PathVariable("user_id") Long userId) {
+        return userService.get(userId).orElseThrow(()-> new ResourceNotFoundException("User id not found"));
     }
 }

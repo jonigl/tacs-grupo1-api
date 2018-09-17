@@ -1,14 +1,9 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
-
-import ar.com.tacsutn.grupo1.eventapp.repository.AuthorityRepository;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
@@ -22,41 +17,34 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "USERNAME", length = 50, unique = true)
-    @NotNull
+    @Column(name = "USERNAME", length = 50, unique = true, nullable = false)
     @Size(max = 50)
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(name = "PASSWORD", length = 100)
-    @NotNull
+    @Column(name = "PASSWORD", length = 100, nullable = false)
     @Size(min = 4, max = 100)
     private String password;
 
-    @Column(name = "FIRSTNAME", length = 50)
-    @NotNull
+    @Column(name = "FIRSTNAME", length = 50, nullable = false)
     @Size(min = 4, max = 50)
     private String firstname;
 
-    @Column(name = "LASTNAME", length = 50)
-    @NotNull
+    @Column(name = "LASTNAME", length = 50, nullable = false)
     @Size(min = 4, max = 50)
     private String lastname;
 
-    @Column(name = "EMAIL", length = 50)
-    @NotNull
+    @Column(name = "EMAIL", length = 50, nullable = false)
     @Size(min = 4, max = 50)
     private String email;
 
     @JsonIgnore
-    @Column(name = "ENABLED")
-    @NotNull
+    @Column(name = "ENABLED", nullable = false)
     private Boolean enabled;
 
     @JsonIgnore
-    @Column(name = "LASTPASSWORDRESETDATE")
+    @Column(name = "LASTPASSWORDRESETDATE", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
     private Date lastPasswordResetDate;
 
     @JsonIgnore
