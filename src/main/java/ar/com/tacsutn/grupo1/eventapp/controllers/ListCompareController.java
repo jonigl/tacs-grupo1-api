@@ -26,8 +26,19 @@ public class ListCompareController {
     @GetMapping("/lists/compare")
     public RestPage<Event> getCommonEvents(@RequestParam(name = "list1") Long listId1,
                                            @RequestParam(name = "list2") Long listId2) {
-        Event event1 = new Event("1", "sample event 1", "event 1 description");
-        Event event2 = new Event("2", "sample event 2", "event 2 description");
+        Event event1 = new Event(
+            "1", "sample event 1", "event 1 description",
+            null, null, null,
+            null, null, null,
+            null, false
+        );
+
+        Event event2 = new Event(
+            "2", "sample event 2", "event 2 description",
+            null, null, null,
+            null, null, null,
+            null, false
+        );
 
         Page<Event> page = new PageImpl<>(
             Arrays.asList(event1, event2),

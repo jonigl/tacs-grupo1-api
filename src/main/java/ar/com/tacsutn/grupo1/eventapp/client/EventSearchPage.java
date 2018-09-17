@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.client;
 
+import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +15,7 @@ import java.util.List;
 public class EventSearchPage {
 
     private final Pagination pagination;
-    private final List<EventTemplate> events;
+    private final List<Event> events;
 
     @JsonCreator
     public EventSearchPage(
@@ -23,7 +24,7 @@ public class EventSearchPage {
             Pagination pagination,
 
             @JsonProperty(value = "events", required = true)
-            List<EventTemplate> events
+            List<Event> events
     ) {
 
         this.pagination = pagination;
@@ -34,19 +35,19 @@ public class EventSearchPage {
         return pagination;
     }
 
-    public List<EventTemplate> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public RestPage<EventTemplate> toRestPage() {
+    public RestPage<Event> toRestPage() {
         Pageable pageable = PageRequest.of(
             pagination.getPageNumber() - 1,
             pagination.getPageSize()
         );
 
-        List<EventTemplate> content = events == null ? Collections.emptyList() : events;
+        List<Event> content = events == null ? Collections.emptyList() : events;
 
-        Page<EventTemplate> page = new PageImpl<>(
+        Page<Event> page = new PageImpl<>(
             content,
             pageable,
             pagination.getObjectCount()

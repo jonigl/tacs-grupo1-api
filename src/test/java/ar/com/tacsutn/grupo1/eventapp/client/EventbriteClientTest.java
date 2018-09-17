@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.client;
 
+import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
 import org.junit.Assert;
 import org.junit.Before;
@@ -49,11 +50,11 @@ public class EventbriteClientTest {
                   .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
         String eventId = "123456789ab";
-        EventTemplate event = eventbriteClient.getEvent(eventId).get();
+        Event event = eventbriteClient.getEvent(eventId).get();
 
         Assert.assertEquals(eventId, event.getId());
         Assert.assertEquals("sample event", event.getName());
-        Assert.assertEquals(EventTemplate.Status.LIVE, event.getStatus());
+        Assert.assertEquals(Event.Status.LIVE, event.getStatus());
     }
 
     @Test
@@ -62,7 +63,7 @@ public class EventbriteClientTest {
                   .andExpect(method(HttpMethod.GET))
                   .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON));
 
-        Optional<EventTemplate> event = eventbriteClient.getEvent("12345678");
+        Optional<Event> event = eventbriteClient.getEvent("12345678");
 
         Assert.assertFalse(event.isPresent());
     }
@@ -79,7 +80,7 @@ public class EventbriteClientTest {
         EventFilter filter = new EventFilter()
                 .setKeyword("key")
                 .setStartDateFrom(LocalDateTime.of(2018, 1, 1, 0, 0));
-        RestPage<EventTemplate> events = eventbriteClient.searchEvents(filter).get();
+        RestPage<Event> events = eventbriteClient.searchEvents(filter).get();
 
         Assert.assertTrue(events.hasContent());
         Assert.assertTrue(events.isFirst());

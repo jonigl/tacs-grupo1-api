@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.client;
 
+import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -26,20 +27,20 @@ public class EventbriteClient {
         restTemplate = new RestTemplate();
     }
 
-    public Optional<EventTemplate> getEvent(String id) {
+    public Optional<Event> getEvent(String id) {
         UriComponents uriComponents = getUriComponentsBuilder()
                 .path("/events/{event_id}")
                 .buildAndExpand(id)
                 .encode();
 
-        return request(uriComponents.toUri(), EventTemplate.class);
+        return request(uriComponents.toUri(), Event.class);
     }
 
-    public Optional<RestPage<EventTemplate>> searchEvents(EventFilter filter) {
+    public Optional<RestPage<Event>> searchEvents(EventFilter filter) {
         return this.searchEvents(filter, 1);
     }
 
-    public Optional<RestPage<EventTemplate>> searchEvents(EventFilter filter, int pageNumber) {
+    public Optional<RestPage<Event>> searchEvents(EventFilter filter, int pageNumber) {
         UriComponentsBuilder uriComponentsBuilder = getUriComponentsBuilder();
 
         if (pageNumber > 1) {
