@@ -1,0 +1,75 @@
+{
+  "name": {
+    "text": "sample event",
+    "html": "sample html"
+  },
+  "description": {
+    "text": "sample description",
+    "html": "sample description html"
+  },
+  "id": "123456789ab",
+  "url": "https://www.eventbrite.com.ar/e/sample-event-tickets-123456789ab",
+  "start": {
+    "timezone": "America/Argentina/Buenos_Aires",
+    "local": "2018-09-17T19:30:00",
+    "utc": "2018-09-17T22:30:00Z"
+  },
+  "end": {
+    "timezone": "America/Argentina/Buenos_Aires",
+    "local": "2018-09-17T21:00:00",
+    "utc": "2018-09-18T00:00:00Z"
+  },
+  "organization_id": "123456789abc",
+  "created": "2018-09-10T21:05:27Z",
+  "changed": "2018-09-10T21:11:54Z",
+  "capacity": null,
+  "capacity_is_custom": null,
+  "status": "live",
+  "currency": "ARS",
+  "listed": true,
+  "shareable": true,
+  "online_event": false,
+  "tx_time_limit": 600,
+  "hide_start_date": false,
+  "hide_end_date": false,
+  "locale": "es_AR",
+  "is_locked": false,
+  "privacy_setting": "unlocked",
+  "is_series": false,
+  "is_series_parent": false,
+  "is_reserved_seating": false,
+  "show_pick_a_seat": false,
+  "show_seatmap_thumbnail": false,
+  "show_colors_in_seatmap_thumbnail": false,
+  "source": "create_2.0",
+  "is_free": true,
+  "version": "3.0.0",
+  "logo_id": "12345678",
+  "organizer_id": "123456789ab",
+  "venue_id": "12345678",
+  "category_id": "109",
+  "subcategory_id": null,
+  "format_id": "1",
+  "resource_uri": "https://www.eventbriteapi.com/v3/events/123456789ab/",
+  "is_externally_ticketed": false,
+  "logo": {
+    "crop_mask": {
+      "top_left": {
+        "x": 0,
+        "y": 23
+      },
+      "width": 1000,
+      "height": 500
+    },
+    "original": {
+      "url": "https://sample.url.com/original.jpg",
+      "width": 1001,
+      "height": 564
+    },
+    "id": "12345678",
+    "url": "https://sample.url.com/logo.jpg",
+    "aspect_ratio": "2",
+    "edge_color": "#e4e4e3",
+    "edge_color_set": true
+  }
+}
