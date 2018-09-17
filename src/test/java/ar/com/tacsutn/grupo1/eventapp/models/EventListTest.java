@@ -11,10 +11,10 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class EventListTest {
-    User mockUser1, mockUser2;
-    Event event1, event2;
-    List<Event> events1, events2;
-    EventList list1, list2;
+    private User mockUser1, mockUser2;
+    private Event event1, event2;
+    private List<Event> events1, events2;
+    private EventList list1, list2;
 
     @Before
     public void before() {

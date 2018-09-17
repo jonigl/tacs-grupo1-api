@@ -1,7 +1,8 @@
-package ar.com.tacsutn.grupo1.eventapp.models;
+package ar.com.tacsutn.grupo1.eventapp.repositories;
 
+import ar.com.tacsutn.grupo1.eventapp.models.EventList;
+import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.models.exceptions.NotListOwnerException;
-import ar.com.tacsutn.grupo1.eventapp.repositories.ListsRepository;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,8 +13,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class EventListRepositoryTest {
-    User mockedUser1, mockedUser2;
-    ListsRepository repository;
+    private User mockedUser1, mockedUser2;
+    private ListsRepository repository;
 
     @Before
     public void before() {

@@ -12,10 +12,10 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class AlarmTest {
-    EventsRepository mockRepository;
-    List<Event> mockEvents;
-    Criteria mockCriteria;
-    Alarm alarm;
+    private EventsRepository mockRepository;
+    private List<Event> mockEvents;
+    private Criteria mockCriteria;
+    private Alarm alarm;
 
     @Before
     public void before() {

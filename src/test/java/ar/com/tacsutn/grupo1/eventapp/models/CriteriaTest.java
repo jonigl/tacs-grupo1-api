@@ -7,8 +7,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class CriteriaTest {
-    Criteria criteria;
-    Event eventMock1, eventMock2;
+    private Criteria criteria;
+    private Event eventMock1, eventMock2;
 
     @Before
     public void before() {
