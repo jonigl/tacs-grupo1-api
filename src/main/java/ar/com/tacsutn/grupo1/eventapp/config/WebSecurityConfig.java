@@ -74,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             // Un-secure H2 Database
             .antMatchers("/h2-console/**/**").permitAll()
-
+            .antMatchers("/v2/api-docs", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/csrf").permitAll()
             .antMatchers("/auth/**").permitAll()
             .antMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
             .antMatchers(HttpMethod.POST,"/api/v1/users").permitAll()
@@ -116,6 +116,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // Un-secure H2 Database (for testing purposes, H2 console shouldn't be unprotected in production)
             .and()
             .ignoring()
-            .antMatchers("/h2-console/**/**");
+            .antMatchers("/h2-console/**/**")
+
+            // Swagger
+            .and()
+            .ignoring()
+            .antMatchers("/v2/api-docs", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/csrf");
     }
 }

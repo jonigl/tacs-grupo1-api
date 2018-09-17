@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.security.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 @RestController
-public class AuthenticationRestController {
+@Api(tags = "Authentication", description = "Get authentication token and refresh.")
+public class AuthenticationController {
 
     @Value("${jwt.header}")
     private String tokenHeader;
