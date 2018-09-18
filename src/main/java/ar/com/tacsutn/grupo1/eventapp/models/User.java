@@ -56,11 +56,12 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
     private List<Authority> authorities;
 
+    @JsonIgnore
     @OneToMany(
         cascade = CascadeType.ALL,
         fetch = FetchType.LAZY
     )
-    private List<Alarm> alarms = Collections.emptyList();
+    private List<Alarm> alarms;
 
     public User() {
 

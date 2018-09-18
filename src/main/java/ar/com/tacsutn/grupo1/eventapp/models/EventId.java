@@ -1,5 +1,7 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,18 +10,19 @@ import java.util.List;
 public class EventId {
 
     @Id
+    @Column(unique = true)
     private String id;
 
-    @ManyToMany
+    @JsonIgnore
+    @ManyToMany(mappedBy = "events", fetch = FetchType.LAZY)
     private List<EventList> eventLists;
 
     public EventId() {
 
     }
 
-    public EventId(String id, List<EventList> eventLists) {
+    public EventId(String id) {
         this.id = id;
-        this.eventLists = eventLists;
     }
 
     public String getId() {
@@ -36,5 +39,13 @@ public class EventId {
 
     public void setEventLists(List<EventList> eventLists) {
         this.eventLists = eventLists;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof EventId) {
+            return id.equals(((EventId) obj).id);
+        }
+        return super.equals(obj);
     }
 }

@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface AuthorityRepository extends CrudRepository<Authority, Long> {
     List<Authority> findByName(AuthorityName name);
+    Authority findFirstByName(AuthorityName name);
 }
