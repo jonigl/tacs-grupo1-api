@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,4 +45,9 @@ public class AlarmService {
     public Integer getTotalAlarmsByUserId(Long userId) {
         return alarmRepository.countAllByUserId(userId);
     }
+
+    public List<Alarm> getAllAlarmsByUserId(long userId){
+        return alarmRepository.getAlarmByUserId(userId);
+    }
+
 }
