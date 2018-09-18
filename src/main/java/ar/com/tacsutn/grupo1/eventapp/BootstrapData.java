@@ -74,11 +74,11 @@ public class BootstrapData implements InitializingBean {
         userService.create(admin);
         userService.create(user);
 
-        EventList list1 = listService.create(admin, "list name1");
-        EventList list2 = listService.create(admin, "list name2");
+        EventList list1 = listService.save(admin, "list name1");
+        EventList list2 = listService.save(admin, "list name2");
 
-        listService.create(user, "list name1");
-        listService.create(user, "list name2");
+        listService.save(user, "list name1");
+        listService.save(user, "list name2");
 
         eventRepository.save(new EventId("name", Arrays.asList(list1, list2)));
     }

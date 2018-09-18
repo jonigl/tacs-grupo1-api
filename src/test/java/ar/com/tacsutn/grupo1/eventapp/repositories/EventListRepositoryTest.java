@@ -30,12 +30,12 @@ package ar.com.tacsutn.grupo1.eventapp.repositories;
 //        mockedUser1 = mock(User.class);
 //        mockedUser2 = mock(User.class);
 //
-//        listService.create(mockedUser1, "Test");
+//        listService.save(mockedUser1, "Test");
 //    }
 //
 //    @Test
 //    public void canAddEventList() {
-//        EventList list = listService.create(mockedUser1, "New Test");
+//        EventList list = listService.save(mockedUser1, "New Test");
 //        EventList savedList = listService.getById(list.getId()).getById();
 //
 //        assertEquals("New Test", savedList.getName());
@@ -44,7 +44,7 @@ package ar.com.tacsutn.grupo1.eventapp.repositories;
 //    @Ignore
 //    @Test
 //    public void shouldNotAddEventListIfExists() {
-//        listService.create(mockedUser1, "Test");
+//        listService.save(mockedUser1, "Test");
 //    }
 //
 //    @Test
