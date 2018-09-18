@@ -1,30 +1,38 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Entity
+@Table(
+    uniqueConstraints = @UniqueConstraint(columnNames = {"name", "user"})
+)
 public class EventList {
-    private long id;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user")
     private User user;
 
-    private List<Event> events;
+    @ManyToMany
+    private List<EventId> events;
 
-    public EventList(long id, String name, User user) {
-        this.id = id;
-        this.name = name;
-        this.user = user;
-        this.events = new ArrayList<>();
+    public EventList() {
+
     }
 
-    public EventList(long id, String name, User user, List<Event> events) {
-        this.id = id;
+    public EventList(String name, User user) {
         this.name = name;
         this.user = user;
-        this.events = events;
     }
 
     public Long getId() {
@@ -45,20 +53,12 @@ public class EventList {
 
     public void setUser(User user) { this.user = user; }
 
-    public List<Event> getEvents() {
+    public List<EventId> getEvents() {
         return events;
     }
 
-    public void setEvents(List<Event> eventList) {
+    public void setEvents(List<EventId> eventList) {
         this.events = eventList;
-    }
-
-    public List<Event> getCommonEvents(EventList other) {
-        return this.events.stream().filter(e -> other.hasEvent(e)).collect(Collectors.toList());
-    }
-
-    public boolean hasEvent(Event event) {
-        return this.getEvents().contains(event);
     }
 
     public void removeEvent(Event event) {
