@@ -2,6 +2,7 @@ package ar.com.tacsutn.grupo1.eventapp.client;
 
 import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -40,7 +41,7 @@ public class EventbriteClient {
         return this.searchEvents(filter, 1);
     }
 
-    public Optional<RestPage<Event>> searchEvents(EventFilter filter, int pageNumber) {
+    public Optional<RestPage<Event>> searchEvents(EventFilter filter, Integer pageNumber) {
         UriComponentsBuilder uriComponentsBuilder = getUriComponentsBuilder();
 
         if (pageNumber > 1) {

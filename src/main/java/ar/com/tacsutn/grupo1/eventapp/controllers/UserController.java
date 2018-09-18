@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "Users", description = "user resources")
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * Create a new user account.

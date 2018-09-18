@@ -67,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 
-            // don't create session
+            // don't save session
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
             .authorizeRequests()

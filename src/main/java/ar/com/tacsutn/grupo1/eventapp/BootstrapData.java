@@ -9,10 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class BootstrapData implements InitializingBean {
@@ -71,15 +68,29 @@ public class BootstrapData implements InitializingBean {
             userAuthorities
         );
 
-        userService.create(admin);
+        userService.createAdmin(admin);
         userService.create(user);
 
-        EventList list1 = listService.create(admin, "list name1");
-        EventList list2 = listService.create(admin, "list name2");
+        EventId eventId1 = new EventId("EventId1");
+        eventRepository.save(eventId1);
 
-        listService.create(user, "list name1");
-        listService.create(user, "list name2");
+        EventList list1 = new EventList("list1", admin);
+        list1.setEvents(Collections.singletonList(eventId1));
+        listService.save(list1);
 
-        eventRepository.save(new EventId("name", Arrays.asList(list1, list2)));
+        EventList list2 = new EventList("list2", admin);
+        list2.setEvents(Collections.singletonList(eventId1));
+        listService.save(list2);
+
+        EventList list3 = new EventList("list3", user);
+        list3.setEvents(Collections.singletonList(eventId1));
+        listService.save(list3);
+
+        EventList list4 = new EventList("list4", user);
+        list4.setEvents(Collections.singletonList(eventId1));
+        listService.save(list4);
+
+
+
     }
 }

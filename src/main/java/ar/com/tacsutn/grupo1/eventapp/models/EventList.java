@@ -61,7 +61,7 @@ public class EventList {
         this.events = eventList;
     }
 
-    public void removeEvent(Event event) {
+    public void removeEvent(EventId event) {
         this.events.remove(event);
     }
 }
