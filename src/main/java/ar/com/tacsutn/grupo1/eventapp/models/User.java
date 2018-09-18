@@ -2,10 +2,14 @@ package ar.com.tacsutn.grupo1.eventapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +46,18 @@ public class User {
     @JsonIgnore
     @Column(name = "ENABLED", nullable = false)
     private Boolean enabled;
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    public LocalDateTime getLastAccess() {
+        return lastAccess;
+    }
+
+    public void setLastAccess(LocalDateTime lastAccess) {
+        this.lastAccess = lastAccess;
+    }
+
+    private LocalDateTime lastAccess;
 
     @JsonIgnore
     @Column(name = "LASTPASSWORDRESETDATE", nullable = false)

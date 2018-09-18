@@ -1,10 +1,8 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 import ar.com.tacsutn.grupo1.eventapp.client.EventFilter;
-import ar.com.tacsutn.grupo1.eventapp.models.Alarm;
-import ar.com.tacsutn.grupo1.eventapp.models.AlarmRequest;
-import ar.com.tacsutn.grupo1.eventapp.models.User;
-import ar.com.tacsutn.grupo1.eventapp.repositories.AlarmRepository;
+import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
+import ar.com.tacsutn.grupo1.eventapp.models.*;
 import ar.com.tacsutn.grupo1.eventapp.services.AlarmService;
 import ar.com.tacsutn.grupo1.eventapp.services.SessionService;
 import io.swagger.annotations.Api;
@@ -15,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -23,11 +23,13 @@ public class AlarmsController {
 
     private final AlarmService alarmService;
     private final SessionService sessionService;
+    private final EventbriteClient eventbriteClient;
 
     @Autowired
-    public AlarmsController(AlarmService alarmService, SessionService sessionService) {
+    public AlarmsController(AlarmService alarmService, SessionService sessionService, EventbriteClient eventbriteClient) {
         this.alarmService = alarmService;
         this.sessionService = sessionService;
+        this.eventbriteClient = eventbriteClient;
     }
 
     @PostMapping("/alarms")
@@ -78,4 +80,40 @@ public class AlarmsController {
         Alarm alarm = alarmService.getById(user,alarmId).orElseThrow(() -> new ResourceNotFoundException("Alarm not found."));
         alarmService.remove(alarm);
     }
+
+    /**
+     * User alarms summary
+     *
+     * @return a summary of alarms.
+     */
+    @GetMapping("/alarms/today")
+    @PreAuthorize("hasRole('USER')")
+    public List<AlarmResponse> getAlarmsToday(HttpServletRequest request) {
+        User user = sessionService.getAuthenticatedUser(request);
+        List<Alarm> alarms = alarmService.getAllAlarmsByUserId(user.getId());
+        return alarms.stream().map(alarm ->
+                eventbriteClient.searchEvents(alarm.getFilter())
+            .map(page ->
+                new AlarmResponse(alarm.getId(), alarm.getName(), page.getTotalElements()))
+            .orElse(new AlarmResponse(alarm.getId(), alarm.getName(), 0L)))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns the alarm events.
+     *
+     * @param alarmId alarm id.
+     * @return a page of events.
+     */
+    @GetMapping("/alarms/{alarmId}/fetch")
+    @PreAuthorize("hasRole('USER')")
+    public RestPage<Event> getEvents(
+            @PathVariable Long alarmId,
+            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            HttpServletRequest request) {
+        User user = sessionService.getAuthenticatedUser(request);
+        Alarm alarm = alarmService.getById(user,alarmId).orElseThrow(() -> new ResourceNotFoundException("Alarm not found."));
+        return eventbriteClient.searchEvents(alarm.getFilter(), page).orElseThrow(() -> new ResourceNotFoundException("Events not found."));
+    }
+
 }

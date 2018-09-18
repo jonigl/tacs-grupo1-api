@@ -13,4 +13,6 @@ public interface EventListRepository extends CrudRepository<EventList, Long> {
 
     Page<EventList> findAll(Pageable pageable);
     Page<EventList> findAllByUser(User user, Pageable pageable);
+    Integer countAllByUserId(long user_id);
+
 }
