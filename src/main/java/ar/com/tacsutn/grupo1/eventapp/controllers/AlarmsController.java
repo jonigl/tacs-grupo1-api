@@ -14,28 +14,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 @Api(tags = "Alarms", description = "alarm resources")
 public class AlarmsController {
+    @PostMapping("/alarms")
+    @PreAuthorize("hasRole('USER')")
+    public MockupResponse create() {
+        return new MockupResponse("Alarm created");
+    }
 
-  @PostMapping("/alarms")
-  @PreAuthorize("hasRole('USER')")
-  public MockupResponse create() {
-    return new MockupResponse("Alarm created");
-  }
+    @GetMapping("/alarms/{alarmId}")
+    @PreAuthorize("hasRole('USER')")
+    public MockupResponse get(@PathVariable Long alarmId) {
+        return new MockupResponse(String.format("Alarm %d", alarmId));
+    }
 
-  @GetMapping("/alarms/{alarmId}")
-  @PreAuthorize("hasRole('USER')")
-  public MockupResponse get(@PathVariable Long alarmId) {
-    return new MockupResponse(String.format("Alarm %d", alarmId));
-  }
+    @PutMapping("/alarms/{alarmId}")
+    @PreAuthorize("hasRole('USER')")
+    public MockupResponse update(@PathVariable Long alarmId) {
+        return new MockupResponse(String.format("Alarm %d updated", alarmId));
+    }
 
-  @PutMapping("/alarms/{alarmId}")
-  @PreAuthorize("hasRole('USER')")
-  public MockupResponse update(@PathVariable Long alarmId) {
-    return new MockupResponse(String.format("Alarm %d updated", alarmId));
-  }
-
-  @DeleteMapping("/alarms/{alarmId}")
-  @PreAuthorize("hasRole('USER')")
-  public MockupResponse delete(@PathVariable Long alarmId) {
-    return new MockupResponse(String.format("Alarm %d deleted", alarmId));
-  }
+    @DeleteMapping("/alarms/{alarmId}")
+    @PreAuthorize("hasRole('USER')")
+    public MockupResponse delete(@PathVariable Long alarmId) {
+        return new MockupResponse(String.format("Alarm %d deleted", alarmId));
+    }
 }

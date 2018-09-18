@@ -1,8 +1,11 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 import ar.com.tacsutn.grupo1.eventapp.models.Event;
+import ar.com.tacsutn.grupo1.eventapp.models.EventId;
 import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
+import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +22,13 @@ import java.util.Arrays;
 @Api(tags = "Lists", description = "list resources")
 public class ListCompareController {
 
+    private final EventListService listService;
+
+    @Autowired
+    public ListCompareController(EventListService listService) {
+        this.listService = listService;
+    }
+
     /**
      * Returns all the common events from two event lists.
      * @param listId1 first event list identifier.
@@ -26,28 +36,10 @@ public class ListCompareController {
      */
     @GetMapping("/lists/compare")
     @PreAuthorize("hasRole('ADMIN')")
-    public RestPage<Event> getCommonEvents(@RequestParam(name = "list1") Long listId1,
-                                           @RequestParam(name = "list2") Long listId2) {
-        Event event1 = new Event(
-            "1", "sample event 1", "event 1 description",
-            null, null, null,
-            null, null, null,
-            null, false
-        );
+    public RestPage<EventId> getCommonEvents(
+            @RequestParam(name = "list1") Long listId1,
+            @RequestParam(name = "list2") Long listId2) {
 
-        Event event2 = new Event(
-            "2", "sample event 2", "event 2 description",
-            null, null, null,
-            null, null, null,
-            null, false
-        );
-
-        Page<Event> page = new PageImpl<>(
-            Arrays.asList(event1, event2),
-            PageRequest.of(0, 10),
-            2
-        );
-
-        return new RestPage<>(page);
+        return new RestPage<>(listService.getCommonEvents(listId1, listId2));
     }
 }

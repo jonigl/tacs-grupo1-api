@@ -16,6 +16,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public abstract class ControllerTest {
     @Autowired private MockMvc mockMvc;
 
+    public MockMvc getMockMvc() {
+        return mockMvc;
+    }
+
+    public void setMockMvc(MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
+    }
+
     public void test200Response(String route) throws Exception {
         mockMvc.perform(get(route)).andExpect(status().isOk());
     }

@@ -15,7 +15,7 @@ public class EventsController {
     @GetMapping("/events")
     @PreAuthorize("hasRole('USER')")
     public MockupResponse getEvent(@RequestParam(value = "find") String criteria) {
-        // TODO: Add logic to get an Event given a certain filter
+        // TODO: Add logic to getById an Event given a certain filter
 
         return new MockupResponse("El evento 10 cumple con el criterio '" + criteria + "'.");
     }
@@ -24,7 +24,7 @@ public class EventsController {
     @PreAuthorize("hasRole('ADMIN')")
     public MockupResponse getTotalUsers(@PathVariable Long event_id) {
 
-        // TODO: Add logic to get the number of users interested in an event
+        // TODO: Add logic to getById the number of users interested in an event
 
         return new MockupResponse("10 usuarios estan interesados en el evento " + event_id.toString() + ".");
     }
@@ -32,10 +32,16 @@ public class EventsController {
     @GetMapping("/events/total_events")
     @PreAuthorize("hasRole('ADMIN')")
     public MockupResponse getTotalEvents(
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(value = "from", required = false) LocalDateTime from,
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(value = "to", required = false) LocalDateTime to) {
 
-        // TODO: Add logic to get the number of events between a date range
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam(value = "from", required = false)
+            LocalDateTime from,
+
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam(value = "to", required = false)
+            LocalDateTime to) {
+
+        // TODO: Add logic to getById the number of events between a date range
 
         String fromString = (from != null) ? from.format(DateTimeFormatter.ISO_LOCAL_DATE) : "el inicio de los tiempos";
         String toString = (to != null) ? to.format(DateTimeFormatter.ISO_LOCAL_DATE) : "el dia de hoy";

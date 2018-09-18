@@ -1,4 +1,4 @@
-package ar.com.tacsutn.grupo1.eventapp.repository;
+package ar.com.tacsutn.grupo1.eventapp.repositories;
 
 import ar.com.tacsutn.grupo1.eventapp.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;

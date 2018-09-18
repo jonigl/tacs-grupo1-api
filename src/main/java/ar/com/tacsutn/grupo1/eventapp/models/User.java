@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +55,36 @@ public class User {
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
     private List<Authority> authorities;
+
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.LAZY
+    )
+    private List<Alarm> alarms = Collections.emptyList();
+
+    public User() {
+
+    }
+
+    public User(
+            @Size(max = 50) String username,
+            @Size(min = 4, max = 100) String password,
+            @Size(min = 4, max = 50) String firstname,
+            @Size(min = 4, max = 50) String lastname,
+            @Size(min = 4, max = 50) String email,
+            Boolean enabled, Date lastPasswordResetDate,
+            List<Authority> authorities
+    ) {
+
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.enabled = enabled;
+        this.lastPasswordResetDate = lastPasswordResetDate;
+        this.authorities = authorities;
+    }
 
     public Long getId() {
         return id;
@@ -125,5 +156,13 @@ public class User {
 
     public void setLastPasswordResetDate(Date lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public List<Alarm> getAlarms() {
+        return alarms;
+    }
+
+    public void setAlarms(List<Alarm> alarms) {
+        this.alarms = alarms;
     }
 }

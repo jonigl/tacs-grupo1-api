@@ -1,8 +1,16 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
+import ar.com.tacsutn.grupo1.eventapp.models.EventList;
+import ar.com.tacsutn.grupo1.eventapp.models.User;
+import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
+import ar.com.tacsutn.grupo1.eventapp.services.SessionService;
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -10,16 +18,32 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "Lists", description = "list resources")
 public class ListsController {
 
+    private final EventListService eventListService;
+    private final SessionService sessionService;
+
+    @Autowired
+    public ListsController(EventListService eventListService, SessionService sessionService) {
+        this.eventListService = eventListService;
+        this.sessionService = sessionService;
+    }
+
     @GetMapping("/lists/{list_id}")
     @PreAuthorize("hasRole('USER')")
-    public MockupResponse get(@PathVariable Long list_id) {
-        return new MockupResponse(String.format("List %d",list_id));
+    public EventList get(@PathVariable Long list_id, HttpServletRequest request) {
+        User user = sessionService.getAuthenticatedUser(request);
+        return eventListService.getById(user, list_id).orElseThrow(() ->
+            new ResourceNotFoundException("List not found.")
+        );
     }
 
     @PostMapping("/lists")
     @PreAuthorize("hasRole('USER')")
-    public MockupResponse create() {
-        return new MockupResponse("List created");
+    public EventList create(
+            @RequestParam(name = "name") String listName,
+            HttpServletRequest request) {
+
+        User user = sessionService.getAuthenticatedUser(request);
+        return eventListService.create(user, listName);
     }
 
     @PutMapping("/lists/{list_id}")

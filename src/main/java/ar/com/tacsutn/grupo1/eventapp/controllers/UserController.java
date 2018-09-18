@@ -22,7 +22,7 @@ public class UserController {
      */
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
-        return userService.save(user);
+        return userService.create(user);
     }
 
     /**
@@ -35,6 +35,6 @@ public class UserController {
     @GetMapping("/users/{user_id}")
     @PreAuthorize("hasRole('ADMIN')")
     public User getUser(@PathVariable("user_id") Long userId) {
-        return userService.get(userId).orElseThrow(()-> new ResourceNotFoundException("User id not found"));
+        return userService.getById(userId).orElseThrow(()-> new ResourceNotFoundException("User id not found"));
     }
 }
