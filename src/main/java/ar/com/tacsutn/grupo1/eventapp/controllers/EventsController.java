@@ -4,7 +4,6 @@ import ar.com.tacsutn.grupo1.eventapp.client.EventFilter;
 import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
 import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
-import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import ar.com.tacsutn.grupo1.eventapp.services.EventService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -24,13 +24,14 @@ import java.util.Map;
 public class EventsController {
 
     private final EventbriteClient eventbriteClient;
-    private final EventListService eventListService;
     private final EventService eventService;
 
     @Autowired
-    public EventsController(EventbriteClient eventbriteClient, EventListService eventListService, EventService eventService) {
+    public EventsController(
+            EventbriteClient eventbriteClient,
+            EventService eventService) {
+
         this.eventbriteClient = eventbriteClient;
-        this.eventListService = eventListService;
         this.eventService = eventService;
     }
 
@@ -59,34 +60,37 @@ public class EventsController {
                 .setAddress(address)
                 .setPrice(price);
 
-        return eventbriteClient.searchEvents(eventFilter, page).orElseThrow(() -> new ResourceNotFoundException("Events not found."));
+        return eventbriteClient.searchEvents(eventFilter, page)
+                .orElseThrow(() -> new ResourceNotFoundException("Events not found."));
     }
 
     @GetMapping("/events/{event_id}/total_users")
     @PreAuthorize("hasRole('ADMIN')")
-    public Map<String,Integer> getTotalUsers(@PathVariable String event_id) {
-        Map<String,Integer> response = new HashMap<>();
+    public Map<String, Integer> getTotalUsers(@PathVariable String event_id) {
+        Map<String, Integer> response = new HashMap<>();
         response.put("total_users", eventService.getTotalUsersByEventId(event_id));
         return response;
     }
 
     @GetMapping("/events/total_events")
     @PreAuthorize("hasRole('ADMIN')")
-    public MockupResponse getTotalEvents(
+    public Map<String, Long> getTotalEvents(
 
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam(value = "from", required = false)
-            LocalDateTime from,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @RequestParam(value = "from")
+            Optional<Date> from,
 
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam(value = "to", required = false)
-            LocalDateTime to) {
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @RequestParam(value = "to")
+            Optional<Date> to) {
 
-        // TODO: Add logic to getById the number of events between a date range
+        Map<String, Long> response = new HashMap<>();
+        Long total = eventService.getTotalEventsBetween(
+            from.orElse(new Date(0)),
+            to.orElse(new Date(Long.MAX_VALUE))
+        );
 
-        String fromString = (from != null) ? from.format(DateTimeFormatter.ISO_LOCAL_DATE) : "el inicio de los tiempos";
-        String toString = (to != null) ? to.format(DateTimeFormatter.ISO_LOCAL_DATE) : "el dia de hoy";
-
-        return new MockupResponse("Registrados 100 eventos desde " + fromString + " hasta " + toString + ".");
+        response.put("total_events", total);
+        return response;
     }
 }

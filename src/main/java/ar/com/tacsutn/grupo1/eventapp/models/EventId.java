@@ -1,12 +1,16 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "Event")
+@EntityListeners(AuditingEntityListener.class)
 public class EventId {
 
     @Id
@@ -16,6 +20,10 @@ public class EventId {
     @JsonIgnore
     @ManyToMany(mappedBy = "events", fetch = FetchType.LAZY)
     private List<EventList> eventLists;
+
+    @CreatedDate
+    @Column
+    private Date createdTime;
 
     public EventId() {
 
