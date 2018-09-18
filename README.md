@@ -13,3 +13,21 @@
  Para ejecutar la aplicación localmente debe ejecutar el siguiente comando:
  
     mvn spring-boot:run
+
+Entrega 2
+-
+Agregamos datos iniciales para que sea más fácil probar la aplicación. Principalmente dos tipos de usuarios.<br />
+<br />
+Para el rol USER creamos el siguiente usuario:<br />
+Username: user <br />
+Password: user<br />
+<br />
+Para el rol ADMIN creamos el siguiente usuario:<br />
+Username: admin <br />
+Password: admin<br />
+<br />
+Ademas agregamos dos listas para cada usuario. El servicio que usamos para incializar se encuentra en `src/main/java/ar/com/tacsutn/grupo1/eventapp/BootstrapData.java` 
+<br />
+<br />
+Nota: Para las alarmas utilizamos una estrategia lazy (hasta que tengamos Telegram y hagamos un llamado diario).
+<br />
