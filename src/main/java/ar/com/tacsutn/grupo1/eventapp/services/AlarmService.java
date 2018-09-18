@@ -40,4 +40,8 @@ public class AlarmService {
     public void remove(Alarm alarm) {
         alarmRepository.delete(alarm);
     }
+
+    public Integer getTotalAlarmsByUserId(Long userId) {
+        return alarmRepository.countAllByUserId(userId);
+    }
 }

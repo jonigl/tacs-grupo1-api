@@ -1,6 +1,7 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 import ar.com.tacsutn.grupo1.eventapp.models.User;
+import ar.com.tacsutn.grupo1.eventapp.services.AlarmService;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import io.swagger.annotations.Api;
@@ -19,11 +20,13 @@ public class UserController {
 
     private final UserService userService;
     private final EventListService eventListService;
+    private final AlarmService alarmService;
 
     @Autowired
-    public UserController(UserService userService, EventListService eventListService) {
+    public UserController(UserService userService, EventListService eventListService, AlarmService alarmService) {
         this.userService = userService;
         this.eventListService = eventListService;
+        this.alarmService = alarmService;
     }
 
     /**
@@ -48,7 +51,6 @@ public class UserController {
         return userService.getById(userId).orElseThrow(()-> new ResourceNotFoundException("User id not found"));
     }
 
-
     /**
      * Returns the total number of listEvents by user.
      * The administrator account is required.
@@ -61,6 +63,21 @@ public class UserController {
     public Map<String,Integer> getTotalOfListEvents(@PathVariable("user_id") Long userId) {
         Map<String,Integer> response = new HashMap<>();
         response.put("total_lists", eventListService.getTotalEventListByUserId(userId));
+        return response;
+    }
+
+    /**
+     * Returns the total number of alarms by user.
+     * The administrator account is required.
+     *
+     * @param userId requested user's identifier.
+     * @return the requested user.
+     */
+    @GetMapping("/users/{user_id}/total_alarms")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Map<String,Integer> getTotalOfAlarms(@PathVariable("user_id") Long userId) {
+        Map<String,Integer> response = new HashMap<>();
+        response.put("total_alarms", alarmService.getTotalAlarmsByUserId(userId));
         return response;
     }
 }
