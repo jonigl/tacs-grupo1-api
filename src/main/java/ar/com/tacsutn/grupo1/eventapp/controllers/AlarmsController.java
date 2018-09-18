@@ -81,6 +81,11 @@ public class AlarmsController {
         alarmService.remove(alarm);
     }
 
+    /**
+     * User alarms summary
+     *
+     * @return a summary of alarms.
+     */
     @GetMapping("/alarms/today")
     @PreAuthorize("hasRole('USER')")
     public List<AlarmResponse> getAlarmsToday(HttpServletRequest request) {
@@ -94,6 +99,12 @@ public class AlarmsController {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Returns the alarm events.
+     *
+     * @param alarmId alarm id.
+     * @return a page of events.
+     */
     @GetMapping("/alarms/{alarmId}/fetch")
     @PreAuthorize("hasRole('USER')")
     public RestPage<Event> getEvents(
