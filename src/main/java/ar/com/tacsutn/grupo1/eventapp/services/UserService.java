@@ -45,6 +45,11 @@ public class UserService {
     }
 
     @Transactional
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Transactional
     public User createAdmin(User user) {
         user.setEnabled(true);
         user.setLastPasswordResetDate(new Date());

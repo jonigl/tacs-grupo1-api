@@ -1,9 +1,16 @@
 package ar.com.tacsutn.grupo1.eventapp.security.controller;
 
+import ar.com.tacsutn.grupo1.eventapp.models.User;
+import ar.com.tacsutn.grupo1.eventapp.security.JwtAuthenticationRequest;
+import ar.com.tacsutn.grupo1.eventapp.security.JwtTokenUtil;
+import ar.com.tacsutn.grupo1.eventapp.security.JwtUser;
+import ar.com.tacsutn.grupo1.eventapp.security.service.JwtAuthenticationResponse;
+import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,12 +20,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-import ar.com.tacsutn.grupo1.eventapp.security.JwtAuthenticationRequest;
-import ar.com.tacsutn.grupo1.eventapp.security.JwtTokenUtil;
-import ar.com.tacsutn.grupo1.eventapp.security.JwtUser;
-import ar.com.tacsutn.grupo1.eventapp.security.service.JwtAuthenticationResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @RestController
@@ -38,6 +42,9 @@ public class AuthenticationController {
     @Qualifier("jwtUserDetailsService")
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "${jwt.route.authentication.path}", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
 
@@ -45,8 +52,15 @@ public class AuthenticationController {
 
         // Reload password post-security so we can generate the token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails);
 
+        // update last access
+        JwtUser jwtUser = (JwtUser) userDetails;
+        User user = userService.getById(jwtUser.getId()).orElseThrow(()-> new ResourceNotFoundException("User id not found"));
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        user.setLastAccess(currentDateTime);
+        userService.save(user);
+
+        final String token = jwtTokenUtil.generateToken(userDetails);
         // Return the token
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
