@@ -52,11 +52,11 @@ public class UserController {
     }
 
     /**
-     * Returns the total number of listEvents by user.
+     * Returns the total number of events by user.
      * The administrator account is required.
      *
      * @param userId requested user's identifier.
-     * @return the requested user.
+     * @return the total number of events by user.
      */
     @GetMapping("/users/{user_id}/total_events")
     @PreAuthorize("hasRole('ADMIN')")
@@ -71,7 +71,7 @@ public class UserController {
      * The administrator account is required.
      *
      * @param userId requested user's identifier.
-     * @return the requested user.
+     * @return the total number of alarms by user.
      */
     @GetMapping("/users/{user_id}/total_alarms")
     @PreAuthorize("hasRole('ADMIN')")
