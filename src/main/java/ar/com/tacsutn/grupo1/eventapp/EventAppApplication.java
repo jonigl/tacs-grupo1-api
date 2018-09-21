@@ -20,7 +20,10 @@ public class EventAppApplication {
     public static PropertySourcesPlaceholderConfigurer properties() {
         PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-        yaml.setResources(new FileSystemResource("eventbrite.yml"));
+        yaml.setResources(
+            new FileSystemResource("eventbrite.yml"),
+            new FileSystemResource("telegram.yml")
+        );
         configurer.setProperties(yaml.getObject());
         return configurer;
     }
