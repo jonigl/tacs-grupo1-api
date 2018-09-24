@@ -1,9 +1,10 @@
 package ar.com.tacsutn.grupo1.eventapp.telegram.command;
 
-import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBotService;
-import com.pengrad.telegrambot.model.Update;
+import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public interface BotCommand {
 
-    void run(TelegramBotService botService, Update event);
+    void run(TelegramBot bot, Update event) throws TelegramApiException;
 }

@@ -1,6 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.telegram;
 
-import com.pengrad.telegrambot.model.Update;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 @FunctionalInterface
 public interface Callback {
