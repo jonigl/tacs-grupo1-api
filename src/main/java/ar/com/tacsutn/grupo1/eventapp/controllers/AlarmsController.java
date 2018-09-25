@@ -26,7 +26,11 @@ public class AlarmsController {
     private final EventbriteClient eventbriteClient;
 
     @Autowired
-    public AlarmsController(AlarmService alarmService, SessionService sessionService, EventbriteClient eventbriteClient) {
+    public AlarmsController(
+            AlarmService alarmService,
+            SessionService sessionService,
+            EventbriteClient eventbriteClient) {
+
         this.alarmService = alarmService;
         this.sessionService = sessionService;
         this.eventbriteClient = eventbriteClient;
@@ -35,7 +39,8 @@ public class AlarmsController {
     @PostMapping("/alarms")
     @PreAuthorize("hasRole('USER')")
     public Alarm create(@RequestBody AlarmRequest alarmRequest,
-                                 HttpServletRequest request) {
+                        HttpServletRequest request) {
+
         User user = sessionService.getAuthenticatedUser(request);
         EventFilter eventFilter = new EventFilter()
                 .setKeyword(alarmRequest.getKeyword())
@@ -56,8 +61,9 @@ public class AlarmsController {
     @PutMapping("/alarms/{alarmId}")
     @PreAuthorize("hasRole('USER')")
     public Alarm update(@PathVariable Long alarmId,
-                                 @RequestBody AlarmRequest alarmRequest,
-                                 HttpServletRequest request) {
+                        @RequestBody AlarmRequest alarmRequest,
+                        HttpServletRequest request) {
+
         User user = sessionService.getAuthenticatedUser(request);
         Alarm alarm = alarmService.getById(user,alarmId).orElseThrow(() -> new ResourceNotFoundException("Alarm not found."));
         alarm.setName(alarmRequest.getName());
@@ -76,6 +82,7 @@ public class AlarmsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long alarmId,
                        HttpServletRequest request) {
+
         User user = sessionService.getAuthenticatedUser(request);
         Alarm alarm = alarmService.getById(user,alarmId).orElseThrow(() -> new ResourceNotFoundException("Alarm not found."));
         alarmService.remove(alarm);
@@ -91,12 +98,12 @@ public class AlarmsController {
     public List<AlarmResponse> getAlarmsToday(HttpServletRequest request) {
         User user = sessionService.getAuthenticatedUser(request);
         List<Alarm> alarms = alarmService.getAllAlarmsByUserId(user.getId());
-        return alarms.stream().map(alarm ->
-                eventbriteClient.searchEvents(alarm.getFilter())
-            .map(page ->
-                new AlarmResponse(alarm.getId(), alarm.getName(), page.getTotalElements()))
-            .orElse(new AlarmResponse(alarm.getId(), alarm.getName(), 0L)))
-            .collect(Collectors.toList());
+        return alarms
+                .stream()
+                .map(alarm -> eventbriteClient.searchEvents(alarm.getFilter())
+                    .map(page -> new AlarmResponse(alarm.getId(), alarm.getName(), page.getTotalElements()))
+                    .orElse(new AlarmResponse(alarm.getId(), alarm.getName(), 0L)))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -111,6 +118,7 @@ public class AlarmsController {
             @PathVariable Long alarmId,
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             HttpServletRequest request) {
+
         User user = sessionService.getAuthenticatedUser(request);
         Alarm alarm = alarmService.getById(user,alarmId).orElseThrow(() -> new ResourceNotFoundException("Alarm not found."));
         return eventbriteClient.searchEvents(alarm.getFilter(), page).orElseThrow(() -> new ResourceNotFoundException("Events not found."));

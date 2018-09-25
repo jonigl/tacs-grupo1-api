@@ -4,6 +4,7 @@ import ar.com.tacsutn.grupo1.eventapp.models.*;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import ar.com.tacsutn.grupo1.eventapp.services.EventService;
 import ar.com.tacsutn.grupo1.eventapp.services.SessionService;
+import ar.com.tacsutn.grupo1.eventapp.swagger.ApiPageable;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -29,7 +31,11 @@ public class ListsController {
     private final EventService eventService;
 
     @Autowired
-    public ListsController(EventListService eventListService, SessionService sessionService, EventService eventService) {
+    public ListsController(
+            EventListService eventListService,
+            SessionService sessionService,
+            EventService eventService) {
+
         this.eventListService = eventListService;
         this.sessionService = sessionService;
         this.eventService = eventService;
@@ -91,7 +97,10 @@ public class ListsController {
      */
     @GetMapping("/lists")
     @PreAuthorize("hasRole('USER')")
-    public RestPage<EventList> getAll(Pageable pageable, HttpServletRequest request) {
+    @ApiPageable
+    public RestPage<EventList> getAll(
+            @ApiIgnore Pageable pageable,
+            HttpServletRequest request) {
 
         User user = sessionService.getAuthenticatedUser(request);
         Page<EventList> list = eventListService.getListsByUser(user, pageable);
@@ -122,6 +131,7 @@ public class ListsController {
             @PathVariable Long list_id,
             @RequestParam String event_id,
             HttpServletRequest request) {
+
         User user = sessionService.getAuthenticatedUser(request);
         EventList eventList = eventListService.getById(user, list_id)
                 .orElseThrow(() -> new ResourceNotFoundException("List not found."));
@@ -137,6 +147,7 @@ public class ListsController {
     public void removeEvent(@PathVariable Long list_id,
                             @PathVariable String event_id,
                             HttpServletRequest request) {
+
         User user = sessionService.getAuthenticatedUser(request);
         EventList eventList = eventListService.getById(user, list_id)
                 .orElseThrow(() -> new ResourceNotFoundException("List not found."));
@@ -145,5 +156,4 @@ public class ListsController {
         eventService.removeEvent(eventList, event);
         eventListService.save(eventList);
     }
-
 }
