@@ -1,6 +1,7 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
 import ar.com.tacsutn.grupo1.eventapp.client.deserializer.DatetimeDZDeserializer;
+import ar.com.tacsutn.grupo1.eventapp.client.deserializer.LogoDeserializer;
 import ar.com.tacsutn.grupo1.eventapp.client.deserializer.MultipartTextDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -108,6 +109,13 @@ public class Event {
      */
     private final boolean onlineEvent;
 
+    /**
+     * The image logo for this event.
+     */
+    @ApiModelProperty(example = "https://sample.domain.com/logo-image.jpg")
+    @JsonDeserialize(using = LogoDeserializer.class)
+    private final String logo;
+
     @JsonCreator
     public Event(
             @JsonProperty(value = "id", required = true)
@@ -141,7 +149,10 @@ public class Event {
             String currency,
 
             @JsonProperty(value = "online_event", required = true)
-            boolean onlineEvent
+            boolean onlineEvent,
+
+            @JsonProperty(value = "logo", required = false)
+            String logo
     ) {
 
         this.id = id;
@@ -155,6 +166,7 @@ public class Event {
         this.status = status;
         this.currency = currency;
         this.onlineEvent = onlineEvent;
+        this.logo = logo;
     }
 
     public String getId() {
@@ -199,5 +211,9 @@ public class Event {
 
     public boolean isOnlineEvent() {
         return onlineEvent;
+    }
+
+    public String getLogo() {
+        return logo;
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
@@ -80,10 +81,17 @@ public class InlineQueryHandler {
      * @return a Telegram inline query result.
      */
     private InlineQueryResult createResult(Event event) {
+        String description = event.getDescription();
+        if (description.length() > 100) {
+            description = description.substring(0, 100) + "...";
+        }
+
         return new InlineQueryResultArticle()
                 .setId(event.getId())
                 .setTitle(event.getName())
-                .setDescription(event.getDescription())
+                .setDescription(description)
+                .setThumbUrl(event.getLogo())
+                .setUrl(event.getUrl())
                 .setInputMessageContent(createMessageContent(event));
     }
 
@@ -93,16 +101,11 @@ public class InlineQueryHandler {
      * @param event the Eventbrite event.
      * @return the message content.
      */
-    private InputTextMessageContent createMessageContent(Event event) {
-        String description = event.getDescription();
-        if (description.length() > 500) {
-            description = description.substring(0, 500) + "...";
-        }
-
+    private InputMessageContent createMessageContent(Event event) {
         String messageText = new StringBuilder()
-                .append("***").append(event.getName()).append("***\n")
-                .append("\n")
-                .append(description)
+                .append("Has seleccionado el evento ")
+                .append("[").append(event.getName()).append("]")
+                .append("(").append(event.getUrl()).append(").")
                 .toString();
 
         return new InputTextMessageContent()
