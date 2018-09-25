@@ -18,20 +18,32 @@ public class TelegramBot extends TelegramLongPollingBot {
     private String botToken;
 
     private final BotCommandFactory botCommandFactory;
+    private final InlineQueryHandler inlineQueryHandler;
+
     private Map<String, Callback> callbackQueryCallbacks = new Hashtable<>();
 
     @Autowired
-    public TelegramBot(BotCommandFactory botCommandFactory) {
+    public TelegramBot(
+            BotCommandFactory botCommandFactory,
+            InlineQueryHandler inlineQueryHandler) {
+
         this.botCommandFactory = botCommandFactory;
+        this.inlineQueryHandler = inlineQueryHandler;
     }
 
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasCallbackQuery()) {
             onCallbackQuery(update);
+        } else if (update.hasInlineQuery()) {
+            onInlineQuery(update);
         } else if (update.hasMessage() && update.getMessage().isCommand()){
             onCommand(update);
         }
+    }
+
+    private void onInlineQuery(Update update) {
+        inlineQueryHandler.handle(this, update);
     }
 
     private void onCommand(Update update) {
@@ -43,6 +55,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 .forEach(command -> runCommand(command.getText(), update));
     }
 
+    /**
+     * Runs a bot command by the command name.
+     * @param commandName the command name.
+     * @param update the update event of the command message.
+     */
     private void runCommand(String commandName, Update update) {
         botCommandFactory.getCommand(commandName)
                 .ifPresent(command -> {

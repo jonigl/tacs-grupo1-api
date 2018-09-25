@@ -19,6 +19,11 @@ public class BotCommandFactory {
         botCommandMap.put("/search", applicationContext.getBean(SearchCommand.class));
     }
 
+    /**
+     * Retrieves a bot command by the command name.
+     * @param commandName the command name.
+     * @return the requested bot command.
+     */
     public Optional<BotCommand> getCommand(String commandName) {
         return Optional.ofNullable(botCommandMap.get(commandName));
     }
