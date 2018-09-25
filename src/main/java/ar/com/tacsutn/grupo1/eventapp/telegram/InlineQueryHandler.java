@@ -13,8 +13,12 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessageconten
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,7 +96,8 @@ public class InlineQueryHandler {
                 .setDescription(description)
                 .setThumbUrl(event.getLogo())
                 .setUrl(event.getUrl())
-                .setInputMessageContent(createMessageContent(event));
+                .setInputMessageContent(createMessageContent(event))
+                .setReplyMarkup(createReplyMarkup(event));
     }
 
     /**
@@ -111,5 +116,26 @@ public class InlineQueryHandler {
         return new InputTextMessageContent()
                 .setMessageText(messageText)
                 .enableMarkdown(true);
+    }
+
+    /**
+     * Creates the reply message markup of the event with inline keyboard button.
+     * @param event the Eventbrite event selected by user.
+     * @return the specified reply markup.
+     */
+    private InlineKeyboardMarkup createReplyMarkup(Event event) {
+        InlineKeyboardButton addButton = new InlineKeyboardButton("Añadir a una lista");
+        addButton.setCallbackData("add " + event.getId());
+
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        row.add(addButton);
+
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        rows.add(row);
+
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        markup.setKeyboard(rows);
+
+        return markup;
     }
 }

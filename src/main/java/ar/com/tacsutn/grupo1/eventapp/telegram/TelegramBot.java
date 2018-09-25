@@ -73,7 +73,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void onCallbackQuery(Update update) {
         Callback callback = callbackQueryCallbacks.remove(update.getCallbackQuery().getData());
-        callback.call(update);
+        if (callback != null) {
+            callback.call(update);
+        }
     }
 
     @Override
