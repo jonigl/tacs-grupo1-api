@@ -37,10 +37,10 @@ public class ListsController {
 
     @Autowired
     public ListsController(
-        EventListService eventListService,
-        SessionService sessionService,
-        EventService eventService,
-        EventbriteClient eventbriteClient) {
+            EventListService eventListService,
+            SessionService sessionService,
+            EventService eventService,
+            EventbriteClient eventbriteClient) {
 
         this.eventListService = eventListService;
         this.sessionService = sessionService;
