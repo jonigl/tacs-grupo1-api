@@ -71,7 +71,7 @@ public class BootstrapData implements InitializingBean {
         userService.createAdmin(admin);
         userService.create(user);
 
-        EventId eventId1 = new EventId("EventId1");
+        EventId eventId1 = new EventId("49244292003");
         eventRepository.save(eventId1);
 
         EventList list1 = new EventList("list1", admin);
@@ -89,8 +89,5 @@ public class BootstrapData implements InitializingBean {
         EventList list4 = new EventList("list4", user);
         list4.setEvents(Collections.singletonList(eventId1));
         listService.save(list4);
-
-
-
     }
 }
