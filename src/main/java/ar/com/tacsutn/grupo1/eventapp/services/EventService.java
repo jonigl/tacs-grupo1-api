@@ -3,6 +3,8 @@ package ar.com.tacsutn.grupo1.eventapp.services;
 import ar.com.tacsutn.grupo1.eventapp.models.EventId;
 import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import ar.com.tacsutn.grupo1.eventapp.repositories.EventRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,5 +41,10 @@ public class EventService {
     @Transactional
     public long getTotalEventsBetween(Date from, Date to) {
         return eventRepository.countAllByCreatedTimeIsBetween(from, to);
+    }
+
+    @Transactional
+    public Page<EventId> getIdsByEventListId(Long eventListId, Pageable pageable) {
+        return eventRepository.getIdsByEventListId(eventListId, pageable);
     }
 }
