@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -26,6 +27,7 @@ public class User {
     @Size(max = 50)
     private String username;
 
+    @ApiModelProperty(hidden = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "PASSWORD", length = 100, nullable = false)
     @Size(min = 4, max = 100)
@@ -46,7 +48,7 @@ public class User {
     @JsonIgnore
     @Column(name = "ENABLED", nullable = false)
     private Boolean enabled;
-
+    
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     public LocalDateTime getLastAccess() {
