@@ -12,6 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,6 +27,7 @@ public class AlarmServiceTest {
   private AlarmService alarmService;
   private User user1, user2;
   private EventFilter eventFilter;
+  private Alarm alarm1, alarm2;
 
   @Before
   public void before() {
@@ -38,22 +41,49 @@ public class AlarmServiceTest {
     assertEquals((long) this.alarmService.getTotalAlarmsByUserId(user1.getId()), 1);
   }
 
+  @Test
+  public void canGetAlarmById() {
+    Alarm result = alarmService.getById(alarm2.getId()).orElseThrow(NoSuchElementException::new);
+    assertEquals(result.getId(), alarm2.getId());
+  }
+
+  @Test(expected = NoSuchElementException.class)
+  public void canNotGetAlarmFromAnotherUser() {
+      alarmService.getById(user1, alarm2.getId()).orElseThrow(NoSuchElementException::new);
+  }
+
+  @Test(expected = NoSuchElementException.class)
+  public void getExceptionWhenAlarmIsNotFound () {
+    userService.getById(alarm1.getId() + 123).orElseThrow(NoSuchElementException::new);
+  }
+
+  @Test
+  public void canRemoveAlarm() {
+      assertEquals((long) alarmService.getTotalAlarmsByUserId(user1.getId()), 1);
+      List<Alarm> alarms = alarmService.getAllAlarmsByUserId(user1.getId());
+      assertEquals(alarms.size(), 1);
+      alarmService.remove(alarms.get(0));
+      assertEquals((long) alarmService.getTotalAlarmsByUserId(user1.getId()), 0);
+      List<Alarm> alarmsReload = alarmService.getAllAlarmsByUserId(user1.getId());
+      assertEquals(alarmsReload.size(), 0);
+  }
+
   private void createUsers() {
-    this.user1 = new User("JohnDoemann", "1234", "John", "Doemann", "john.doemann@test.com", true, new Date(), null);
-    this.user2 = new User("JanetDoemann2", "1234", "Janet", "Doemann", "janet.doemann@test.com", true, new Date(), null);
-    this.userService.save(this.user1);
-    this.userService.save(this.user2);
+    user1 = new User("JohnDoemann", "1234", "John", "Doemann", "john.doemann@test.com", true, new Date(), null);
+    user2 = new User("JanetDoemann2", "1234", "Janet", "Doemann", "janet.doemann@test.com", true, new Date(), null);
+    userService.create(user1);
+    userService.create(user2);
   }
 
   private void createEventFilters() {
-    this.eventFilter = new EventFilter();
-    this.eventFilter.setKeyword("Pop");
+    eventFilter = new EventFilter();
+    eventFilter.setKeyword("Pop");
   }
 
   private void createAlarms() {
-    Alarm alarm1 = new Alarm(this.user1, "Alarm", this.eventFilter);
-    Alarm alarm2 = new Alarm(this.user2, "Alarm2", this.eventFilter);
-    this.alarmService.save(alarm1);
-    this.alarmService.save(alarm2);
+    alarm1 = new Alarm(user1, "Alarm", eventFilter);
+    alarm2 = new Alarm(user2, "Alarm2", eventFilter);
+    alarmService.save(alarm1);
+    alarmService.save(alarm2);
   }
 }
