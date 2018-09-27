@@ -33,6 +33,11 @@ public class EventId {
         this.id = id;
     }
 
+    public EventId(String id, Date createdTime) {
+        this.id = id;
+        this.createdTime = createdTime;
+    }
+
     public String getId() {
         return id;
     }

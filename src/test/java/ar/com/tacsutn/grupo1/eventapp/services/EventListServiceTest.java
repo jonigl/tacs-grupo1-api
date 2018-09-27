@@ -1,11 +1,8 @@
-package ar.com.tacsutn.grupo1.eventapp.repositories;
+package ar.com.tacsutn.grupo1.eventapp.services;
 
 import ar.com.tacsutn.grupo1.eventapp.models.EventId;
 import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
-import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
-import ar.com.tacsutn.grupo1.eventapp.services.EventService;
-import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -108,7 +105,7 @@ public class EventListServiceTest {
 
     @Test
     public void canChangeEventListName() {
-        listService.rename(user1, eventList1.getId(),"TestRename");
+        listService.rename(user1, eventList1.getId(), "TestRename");
 
         EventList renamedList = listService.getById(eventList1.getId()).orElseThrow(NoSuchElementException::new);
 
@@ -117,12 +114,12 @@ public class EventListServiceTest {
 
     @Test(expected = NoSuchElementException.class)
     public void shouldNotChangeListNameIfNotExists() {
-        listService.rename(user1, -2000L,"TestRename");
+        listService.rename(user1, -2000L, "TestRename");
     }
 
     @Test(expected = NoSuchElementException.class)
     public void shouldNotChangeListNameIfNotOwner() {
-        listService.rename(user1, eventList3.getId(),"TestRename");
+        listService.rename(user1, eventList3.getId(), "TestRename");
     }
 
     @Test
