@@ -5,16 +5,22 @@ import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
 import ar.com.tacsutn.grupo1.eventapp.models.*;
 import ar.com.tacsutn.grupo1.eventapp.services.AlarmService;
 import ar.com.tacsutn.grupo1.eventapp.services.SessionService;
+import ar.com.tacsutn.grupo1.eventapp.swagger.ApiPageable;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -95,15 +101,27 @@ public class AlarmsController {
      */
     @GetMapping("/alarms/today")
     @PreAuthorize("hasRole('USER')")
-    public List<AlarmResponse> getAlarmsToday(HttpServletRequest request) {
+    @ApiPageable
+    public RestPage<AlarmResponse> getAlarmsToday(
+            @ApiIgnore Pageable pageable,
+            HttpServletRequest request) {
+
         User user = sessionService.getAuthenticatedUser(request);
-        List<Alarm> alarms = alarmService.getAllAlarmsByUserId(user.getId());
-        return alarms
-                .stream()
-                .map(alarm -> eventbriteClient.searchEvents(alarm.getFilter())
-                    .map(page -> new AlarmResponse(alarm.getId(), alarm.getName(), page.getTotalElements()))
-                    .orElse(new AlarmResponse(alarm.getId(), alarm.getName(), 0L)))
-                .collect(Collectors.toList());
+        Page<Alarm> alarms = alarmService.getAllAlarmsByUserId(user.getId(), pageable);
+
+        Stream<AlarmResponse> stream = alarms.stream().parallel().map(alarm ->
+            eventbriteClient.searchEvents(alarm.getFilter())
+                .map(page -> new AlarmResponse(alarm.getId(), alarm.getName(), page.getTotalElements()))
+                .orElse(new AlarmResponse(alarm.getId(), alarm.getName(), 0L))
+        );
+
+        List<AlarmResponse> content = stream.collect(Collectors.toList());
+
+        Page<AlarmResponse> page = new PageImpl<>(
+            content, alarms.getPageable(), alarms.getTotalElements()
+        );
+
+        return new RestPage<>(page);
     }
 
     /**
