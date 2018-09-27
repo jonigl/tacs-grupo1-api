@@ -17,18 +17,20 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Value("${telegram.bot-token}")
     private String botToken;
 
+    private String username;
+
     private final BotCommandFactory botCommandFactory;
     private final InlineQueryHandler inlineQueryHandler;
-
-    private Map<String, Callback> callbackQueryCallbacks = new Hashtable<>();
+    private final CallbackQueryHandler callbackQueryHandler;
 
     @Autowired
     public TelegramBot(
-            BotCommandFactory botCommandFactory,
-            InlineQueryHandler inlineQueryHandler) {
+        BotCommandFactory botCommandFactory,
+        InlineQueryHandler inlineQueryHandler, CallbackQueryHandler callbackQueryHandler) {
 
         this.botCommandFactory = botCommandFactory;
         this.inlineQueryHandler = inlineQueryHandler;
+        this.callbackQueryHandler = callbackQueryHandler;
     }
 
     @Override
@@ -72,15 +74,20 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void onCallbackQuery(Update update) {
-        Callback callback = callbackQueryCallbacks.remove(update.getCallbackQuery().getData());
-        if (callback != null) {
-            callback.call(update);
-        }
+        callbackQueryHandler.handle(this, update);
     }
 
     @Override
     public String getBotUsername() {
-        return "EventAppBot";
+        if (username == null) {
+            try {
+                username = getMe().getUserName();
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return username;
     }
 
     @Override
