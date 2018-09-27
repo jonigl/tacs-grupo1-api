@@ -86,6 +86,6 @@ public class EventFilter {
     }
 
     private String formatDateTime(LocalDateTime dateTime) {
-        return DateTimeFormatter.ISO_DATE_TIME.format(dateTime);
+        return DateTimeFormatter.ISO_DATE_TIME.format(dateTime.withNano(0));
     }
 }
