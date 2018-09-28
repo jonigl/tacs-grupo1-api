@@ -54,6 +54,10 @@ public class EventId {
         this.eventLists = eventLists;
     }
 
+    public Date getCreatedTime() { return createdTime; }
+
+    public void setCreatedTime(Date createdTime) { this.createdTime = createdTime; }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof EventId) {

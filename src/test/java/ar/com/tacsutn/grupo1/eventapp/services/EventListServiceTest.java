@@ -167,6 +167,20 @@ public class EventListServiceTest {
         getCommonEvents(-2000L, -4000L);
     }
 
+    @Test
+    public void canFindUserCountInterestedInEvent() {
+        int interestedCount = eventService.getTotalUsersByEventId("0");
+
+        assertEquals(2, interestedCount);
+    }
+
+    @Test
+    public void shouldBe0IfNoUsersAreInterestedInEvent() {
+        int interestedCount = eventService.getTotalUsersByEventId("foo");
+
+        assertEquals(0, interestedCount);
+    }
+
     private void setUsers() {
         user1 = new User("JohnDoemann1", "1234", "John", "Doemann", "john.doemann@test.com", true, new Date(), null);
         user2 = new User("JanetDoemann2", "1234", "Janet", "Doemann", "janet.doemann@test.com", true, new Date(), null);

@@ -37,9 +37,9 @@ public class EventServiceTest {
 
     @Before
     public void before() {
-        event1 = new EventId("1", dateGenerator(1000));
-        event2 = new EventId("2", dateGenerator(2000));
-        event3 = new EventId("3", dateGenerator(3000));
+        event1 = new EventId("1", new Date(-10000));
+        event2 = new EventId("2", new Date(0));
+        event3 = new EventId("3", new Date(10000));
 
         eventService.save(event1);
 
@@ -82,8 +82,8 @@ public class EventServiceTest {
     public void canFindAllEventsBetweenDates() {
         addAllEvents();
 
-        Date from = dateGenerator(1000);
-        Date to = dateGenerator(3000);
+        Date from = new Date(-10000);
+        Date to = new Date(10000);
 
         long eventsCount = eventService.getTotalEventsBetween(from, to);
 
@@ -94,8 +94,8 @@ public class EventServiceTest {
     public void canFindSomeEventsAfterFromDate() {
         addAllEvents();
 
-        Date from = dateGenerator(2000);
-        Date to = dateGenerator(3000);
+        Date from = new Date(0);
+        Date to = new Date(10000);
 
         long eventsCount = eventService.getTotalEventsBetween(from, to);
 
@@ -106,8 +106,8 @@ public class EventServiceTest {
     public void canFindSomeEventsBeforeToDate() {
         addAllEvents();
 
-        Date from = dateGenerator(1000);
-        Date to = dateGenerator(2000);
+        Date from = new Date(-10000);
+        Date to = new Date(0);
 
         long eventsCount = eventService.getTotalEventsBetween(from, to);
 
@@ -118,16 +118,12 @@ public class EventServiceTest {
     public void shouldNotFindEventsIfNotInRange() {
         addAllEvents();
 
-        Date from = dateGenerator(10000);
-        Date to = dateGenerator(30000);
+        Date from = new Date(50000);
+        Date to = new Date(100000);
 
         long eventsCount = eventService.getTotalEventsBetween(from, to);
 
         assertEquals(0, eventsCount);
-    }
-
-    private Date dateGenerator(long milliseconds) {
-        return new Date(milliseconds);
     }
 
     private void addAllEvents() {
