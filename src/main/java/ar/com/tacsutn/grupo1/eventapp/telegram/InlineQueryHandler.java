@@ -41,10 +41,13 @@ public class InlineQueryHandler {
     public void handle(TelegramBot bot, Update update) {
         InlineQuery inlineQuery = update.getInlineQuery();
 
-        try {
-            bot.executeAsync(createAnswer(inlineQuery), new BaseSentCallback<>());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+        String query = inlineQuery.getQuery();
+        if (query != null && !query.isEmpty()) {
+            try {
+                bot.executeAsync(createAnswer(inlineQuery), new BaseSentCallback<>());
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -63,6 +66,7 @@ public class InlineQueryHandler {
 
         return new AnswerInlineQuery()
                 .setInlineQueryId(inlineQuery.getId())
+                .setPersonal(false)
                 .setResults(results);
     }
 
@@ -125,7 +129,7 @@ public class InlineQueryHandler {
      */
     private InlineKeyboardMarkup createReplyMarkup(Event event) {
         InlineKeyboardButton addButton = new InlineKeyboardButton("Añadir a una lista");
-        addButton.setCallbackData("add " + event.getId());
+//        addButton.setCallbackData("add " + event.getId());
 
         List<InlineKeyboardButton> row = new ArrayList<>();
         row.add(addButton);
