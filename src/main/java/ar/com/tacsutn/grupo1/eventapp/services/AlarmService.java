@@ -48,6 +48,6 @@ public class AlarmService {
     }
 
     public Page<Alarm> getAllAlarmsByUserId(long userId, Pageable pageable){
-        return alarmRepository.getAlarmByUserId(userId, pageable);
+        return alarmRepository.getAlarmsByUserId(userId, pageable);
     }
 }

@@ -9,5 +9,5 @@ public interface AlarmRepository extends CrudRepository<Alarm, Long> {
 
     Integer countAllByUserId(long user_id);
 
-    Page<Alarm> getAlarmByUserId(long user_id, Pageable pageable);
+    Page<Alarm> getAlarmsByUserId(long user_id, Pageable pageable);
 }
