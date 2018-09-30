@@ -1,15 +1,16 @@
 package ar.com.tacsutn.grupo1.eventapp.services;
 
+import ar.com.tacsutn.grupo1.eventapp.BootstrapData;
 import ar.com.tacsutn.grupo1.eventapp.models.EventId;
 import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -24,8 +26,10 @@ import static org.junit.Assert.assertFalse;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Transactional
 public class EventServiceTest {
+    @MockBean
+    private BootstrapData bootstrapData;
+
     @Mock
     private User user1;
 
@@ -42,6 +46,7 @@ public class EventServiceTest {
         setEventList();
     }
 
+    @Transactional
     @Test
     public void canGetById() {
         EventId actualEvent = eventService.getById(event1.getId()).orElseThrow(NoSuchElementException::new);
@@ -49,11 +54,13 @@ public class EventServiceTest {
         assertEquals(event1, actualEvent);
     }
 
+    @Transactional
     @Test
     public void shouldNotGetEventIfNotExists() {
         assertFalse(eventService.getById(event2.getId()).isPresent());
     }
 
+    @Transactional
     @Test
     public void canDeleteEventFromList() {
         eventService.removeEvent(eventList, event1);
@@ -61,6 +68,7 @@ public class EventServiceTest {
         assertArrayEquals(new EventId[]{}, eventList.getEvents().toArray());
     }
 
+    @Transactional
     @Test
     public void shouldNotDeleteEventIfNotExists() {
         eventService.removeEvent(eventList, event2);
@@ -68,51 +76,26 @@ public class EventServiceTest {
         assertEquals(1, eventList.getEvents().size());
     }
 
-    @Ignore
+    @Transactional
     @Test
     public void canFindAllEventsBetweenDates() {
         addAllEvents();
 
-        Date from = new Date(-10000);
-        Date to = new Date(10000);
+        Date from = dateGenerator(-1);
+        Date to = dateGenerator(1);
 
         long eventsCount = eventService.getTotalEventsBetween(from, to);
 
         assertEquals(3, eventsCount);
     }
 
-    @Ignore
-    @Test
-    public void canFindSomeEventsAfterFromDate() {
-        addAllEvents();
-
-        Date from = new Date(0);
-        Date to = new Date(10000);
-
-        long eventsCount = eventService.getTotalEventsBetween(from, to);
-
-        assertEquals(2, eventsCount);
-    }
-
-    @Ignore
-    @Test
-    public void canFindSomeEventsBeforeToDate() {
-        addAllEvents();
-
-        Date from = new Date(-10000);
-        Date to = new Date(0);
-
-        long eventsCount = eventService.getTotalEventsBetween(from, to);
-
-        assertEquals(2, eventsCount);
-    }
-
+    @Transactional
     @Test
     public void shouldNotFindEventsIfNotInRange() {
         addAllEvents();
 
-        Date from = new Date(50000);
-        Date to = new Date(100000);
+        Date from = dateGenerator(100);
+        Date to = dateGenerator(1000);
 
         long eventsCount = eventService.getTotalEventsBetween(from, to);
 
@@ -140,5 +123,9 @@ public class EventServiceTest {
     private void addAllEvents() {
         eventService.save(event2);
         eventService.save(event3);
+    }
+
+    private Date dateGenerator(long days) {
+        return new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(days));
     }
 }
