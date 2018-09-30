@@ -38,21 +38,28 @@ public class EventsController {
     @GetMapping("/events")
     @PreAuthorize("hasRole('USER')")
     public RestPage<Event> getEvent(
+
             @RequestParam(value = "q", required = false)
             String keyboard,
+
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             @RequestParam(value = "from", required = false)
             LocalDateTime from,
+
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             @RequestParam(value = "to", required = false)
             LocalDateTime to,
+
             @RequestParam(value = "address", required = false)
             String address,
+
             @RequestParam(value = "price", required = false)
             String price,
+
             @RequestParam(value = "page", required = false, defaultValue = "1")
             Integer page
     ) {
+
         EventFilter eventFilter = new EventFilter()
                 .setKeyword(keyboard)
                 .setStartDateFrom(from)

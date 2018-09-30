@@ -4,10 +4,11 @@ import ar.com.tacsutn.grupo1.eventapp.models.Alarm;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.repositories.AlarmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,8 +47,7 @@ public class AlarmService {
         return alarmRepository.countAllByUserId(userId);
     }
 
-    public List<Alarm> getAllAlarmsByUserId(long userId){
-        return alarmRepository.getAlarmByUserId(userId);
+    public Page<Alarm> getAllAlarmsByUserId(long userId, Pageable pageable){
+        return alarmRepository.getAlarmsByUserId(userId, pageable);
     }
-
 }
