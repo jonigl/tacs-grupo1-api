@@ -61,10 +61,6 @@ public class EventList {
         this.events = eventList;
     }
 
-    public int getSize() {
-        return this.events.size();
-    }
-
     public void removeEvent(EventId event) {
         this.events.remove(event);
     }

@@ -33,11 +33,6 @@ public class EventId {
         this.id = id;
     }
 
-    public EventId(String id, Date createdTime) {
-        this.id = id;
-        this.createdTime = createdTime;
-    }
-
     public String getId() {
         return id;
     }
@@ -53,10 +48,6 @@ public class EventId {
     public void setEventLists(List<EventList> eventLists) {
         this.eventLists = eventLists;
     }
-
-    public Date getCreatedTime() { return createdTime; }
-
-    public void setCreatedTime(Date createdTime) { this.createdTime = createdTime; }
 
     @Override
     public boolean equals(Object obj) {

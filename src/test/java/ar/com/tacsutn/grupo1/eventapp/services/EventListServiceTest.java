@@ -153,17 +153,17 @@ public class EventListServiceTest {
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void shouldNotFindCommonEventsIfFirstIdDoesntExist() {
+    public void shouldNotFindCommonEventsIfFirstIdDoesNotExist() {
         getCommonEvents(-2000L, eventList1.getId());
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void shouldNotFindCommonEventsIfSecondIdDoesntExist() {
+    public void shouldNotFindCommonEventsIfSecondIdDoesNotExist() {
         getCommonEvents(eventList1.getId(), -4000L);
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void shouldNotFindCommonEventsIfNeitherIdsDoesntExist() {
+    public void shouldNotFindCommonEventsIfNeitherIdsDoesNotExist() {
         getCommonEvents(-2000L, -4000L);
     }
 
