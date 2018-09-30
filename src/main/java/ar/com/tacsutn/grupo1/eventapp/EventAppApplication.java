@@ -27,7 +27,8 @@ public class EventAppApplication {
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
         yaml.setResources(
             new FileSystemResource("eventbrite.yml"),
-            new FileSystemResource("telegram.yml")
+            new FileSystemResource("telegram.yml"),
+            new FileSystemResource("jwt.yml")
         );
         configurer.setProperties(yaml.getObject());
         return configurer;
