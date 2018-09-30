@@ -23,7 +23,11 @@ public class UserController {
     private final AlarmService alarmService;
 
     @Autowired
-    public UserController(UserService userService, EventListService eventListService, AlarmService alarmService) {
+    public UserController(
+            UserService userService,
+            EventListService eventListService,
+            AlarmService alarmService) {
+
         this.userService = userService;
         this.eventListService = eventListService;
         this.alarmService = alarmService;
@@ -48,7 +52,9 @@ public class UserController {
     @GetMapping("/users/{user_id}")
     @PreAuthorize("hasRole('ADMIN')")
     public User getUser(@PathVariable("user_id") Long userId) {
-        return userService.getById(userId).orElseThrow(()-> new ResourceNotFoundException("User id not found"));
+        return userService
+                .getById(userId)
+                .orElseThrow(()-> new ResourceNotFoundException("User id not found"));
     }
 
     /**
@@ -60,8 +66,8 @@ public class UserController {
      */
     @GetMapping("/users/{user_id}/total_events")
     @PreAuthorize("hasRole('ADMIN')")
-    public Map<String,Integer> getTotalOfListEvents(@PathVariable("user_id") Long userId) {
-        Map<String,Integer> response = new HashMap<>();
+    public Map<String, Integer> getTotalOfListEvents(@PathVariable("user_id") Long userId) {
+        Map<String, Integer> response = new HashMap<>();
         response.put("total_lists", eventListService.getTotalEventListByUserId(userId));
         return response;
     }
@@ -75,8 +81,8 @@ public class UserController {
      */
     @GetMapping("/users/{user_id}/total_alarms")
     @PreAuthorize("hasRole('ADMIN')")
-    public Map<String,Integer> getTotalOfAlarms(@PathVariable("user_id") Long userId) {
-        Map<String,Integer> response = new HashMap<>();
+    public Map<String, Integer> getTotalOfAlarms(@PathVariable("user_id") Long userId) {
+        Map<String, Integer> response = new HashMap<>();
         response.put("total_alarms", alarmService.getTotalAlarmsByUserId(userId));
         return response;
     }
