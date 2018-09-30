@@ -19,6 +19,8 @@ public class BootstrapData implements InitializingBean {
     private final EventRepository eventRepository;
     private final AuthorityRepository authorityRepository;
 
+    private static final String SAMPLE_EVENT_ID = "49244292003";
+
     @Autowired
     private BootstrapData(
             UserService userService,
@@ -71,7 +73,7 @@ public class BootstrapData implements InitializingBean {
         userService.createAdmin(admin);
         userService.create(user);
 
-        EventId eventId1 = new EventId("EventId1");
+        EventId eventId1 = new EventId(SAMPLE_EVENT_ID);
         eventRepository.save(eventId1);
 
         EventList list1 = new EventList("list1", admin);
@@ -89,8 +91,5 @@ public class BootstrapData implements InitializingBean {
         EventList list4 = new EventList("list4", user);
         list4.setEvents(Collections.singletonList(eventId1));
         listService.save(list4);
-
-
-
     }
 }
