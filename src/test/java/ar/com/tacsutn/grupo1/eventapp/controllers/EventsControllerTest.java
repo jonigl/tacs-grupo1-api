@@ -1,10 +1,14 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 import org.junit.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@WebMvcTest(EventsController.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class EventsControllerTest extends ControllerTest {
+
     @Test
     public void getEventsReturnsOkStatus() throws Exception {
         test200Response("/api/v1/events?find=last");

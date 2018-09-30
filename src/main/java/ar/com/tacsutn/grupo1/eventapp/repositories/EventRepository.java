@@ -14,7 +14,7 @@ public interface EventRepository extends CrudRepository<EventId, String> {
            value = "SELECT COUNT(DISTINCT B.USER) " +
                    "FROM EVENT_LIST_EVENTS A " +
                    "INNER JOIN EVENT_LIST B ON A.EVENT_LISTS_ID = B.ID " +
-                   "WHERE EVENTS_ID = ?1;")
+                   "WHERE EVENTS_ID = ?1")
     Integer getTotalUsersByEventId(String eventId);
 
     @Query(nativeQuery = true,
