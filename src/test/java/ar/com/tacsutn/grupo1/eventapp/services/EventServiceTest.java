@@ -81,8 +81,8 @@ public class EventServiceTest {
     public void canFindAllEventsBetweenDates() {
         addAllEvents();
 
-        Date from = dateGenerator(-1);
-        Date to = dateGenerator(1);
+        Date from = dateGeneratorFromToday(-1);
+        Date to = dateGeneratorFromToday(1);
 
         long eventsCount = eventService.getTotalEventsBetween(from, to);
 
@@ -94,8 +94,8 @@ public class EventServiceTest {
     public void shouldNotFindEventsIfNotInRange() {
         addAllEvents();
 
-        Date from = dateGenerator(100);
-        Date to = dateGenerator(1000);
+        Date from = dateGeneratorFromToday(100);
+        Date to = dateGeneratorFromToday(1000);
 
         long eventsCount = eventService.getTotalEventsBetween(from, to);
 
@@ -125,7 +125,7 @@ public class EventServiceTest {
         eventService.save(event3);
     }
 
-    private Date dateGenerator(long days) {
+    private Date dateGeneratorFromToday(long days) {
         return new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(days));
     }
 }
