@@ -39,7 +39,7 @@ public class AlarmService {
         alarmRepository.delete(alarm);
     }
 
-    public Integer getTotalAlarmsByUserId(Long userId) {
+    public long getTotalAlarmsByUserId(Long userId) {
         return alarmRepository.countAllByUserId(userId);
     }
 

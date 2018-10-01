@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface AlarmRepository extends CrudRepository<Alarm, Long> {
 
-    Integer countAllByUserId(long user_id);
+    long countAllByUserId(long user_id);
 
     Page<Alarm> getAlarmsByUserId(long user_id, Pageable pageable);
 }

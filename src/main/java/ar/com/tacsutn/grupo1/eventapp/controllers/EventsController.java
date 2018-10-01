@@ -4,6 +4,8 @@ import ar.com.tacsutn.grupo1.eventapp.client.EventFilter;
 import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
 import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
+import ar.com.tacsutn.grupo1.eventapp.models.TotalEvents;
+import ar.com.tacsutn.grupo1.eventapp.models.TotalUsers;
 import ar.com.tacsutn.grupo1.eventapp.services.EventService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,15 +75,15 @@ public class EventsController {
 
     @GetMapping("/events/{event_id}/total_users")
     @PreAuthorize("hasRole('ADMIN')")
-    public Map<String, Integer> getTotalUsers(@PathVariable String event_id) {
-        Map<String, Integer> response = new HashMap<>();
-        response.put("total_users", eventService.getTotalUsersByEventId(event_id));
-        return response;
+    public TotalUsers getTotalUsers(@PathVariable String event_id) {
+        TotalUsers totalUsers = new TotalUsers();
+        totalUsers.setTotalUsers(eventService.getTotalUsersByEventId(event_id));
+        return totalUsers;
     }
 
     @GetMapping("/events/total_events")
     @PreAuthorize("hasRole('ADMIN')")
-    public Map<String, Long> getTotalEvents(
+    public TotalEvents getTotalEvents(
 
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             @RequestParam(value = "from")
@@ -91,13 +93,13 @@ public class EventsController {
             @RequestParam(value = "to")
             Optional<Date> to) {
 
-        Map<String, Long> response = new HashMap<>();
-        Long total = eventService.getTotalEventsBetween(
+        TotalEvents totalEvents = new TotalEvents();
+        long total = eventService.getTotalEventsBetween(
             from.orElse(new Date(0)),
             to.orElse(new Date(Long.MAX_VALUE))
         );
 
-        response.put("total_events", total);
-        return response;
+        totalEvents.setTotalEvents(total);
+        return totalEvents;
     }
 }
