@@ -14,13 +14,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +33,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public abstract class ControllerTest {
+
     @MockBean
     private BootstrapData bootstrapData;
 
@@ -49,15 +50,11 @@ public abstract class ControllerTest {
     @Autowired
     private EventListService listService;
 
-    private EventList eventList1, eventList2, eventList3;
-
     @MockBean
     private SessionService sessionService;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
-
-    private MockHttpServletRequest request;
 
     private MockMvc mockMvc;
 
@@ -78,9 +75,9 @@ public abstract class ControllerTest {
     }
 
     private void setLists() {
-        eventList1 = new EventList("List1", user1);
-        eventList2 = new EventList("List2", user1);
-        eventList3 = new EventList("List3", user2);
+        EventList eventList1 = new EventList("List1", user1);
+        EventList eventList2 = new EventList("List2", user1);
+        EventList eventList3 = new EventList("List3", user2);
 
         List<EventId> list1 = new ArrayList<>(), list2 = new ArrayList<>(), list3 = new ArrayList<>();
 
@@ -106,9 +103,7 @@ public abstract class ControllerTest {
         setEvents();
         setLists();
 
-        request = new MockHttpServletRequest();
-
-        when(sessionService.getAuthenticatedUser(request)).thenReturn(user1);
+        when(sessionService.getAuthenticatedUser(any(HttpServletRequest.class))).thenReturn(user1);
 
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).apply(springSecurity()).build();
     }
