@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ListsControllerTest extends ControllerTest {
-
     @WithMockUser(roles = "USER")
     @Transactional
     @DirtiesContext
