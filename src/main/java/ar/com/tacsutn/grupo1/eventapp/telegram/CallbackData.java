@@ -1,5 +1,7 @@
 package ar.com.tacsutn.grupo1.eventapp.telegram;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,20 +9,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Optional;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CallbackData {
 
-    @JsonProperty("c")
-    private Long chatId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    public enum Type {
+        SELECTED_EVENT, SELECTED_LIST
+    }
+
+    @JsonProperty("t")
+    private Type type;
 
     @JsonProperty("e")
     private String eventId;
 
-    public Long getChatId() {
-        return chatId;
+    @JsonProperty("l")
+    private Long listId;
+
+    public Type getType() {
+        return type;
     }
 
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public String getEventId() {
@@ -29,6 +40,14 @@ public class CallbackData {
 
     public void setEventId(String eventId) {
         this.eventId = eventId;
+    }
+
+    public Long getListId() {
+        return listId;
+    }
+
+    public void setListId(Long listId) {
+        this.listId = listId;
     }
 
     public static String serialize(CallbackData callbackData) {

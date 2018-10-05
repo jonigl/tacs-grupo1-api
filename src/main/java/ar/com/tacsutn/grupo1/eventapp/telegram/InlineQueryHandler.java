@@ -18,7 +18,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -128,14 +127,25 @@ public class InlineQueryHandler {
      * @return the specified reply markup.
      */
     private InlineKeyboardMarkup createReplyMarkup(Event event) {
-        InlineKeyboardButton addButton = new InlineKeyboardButton("Añadir a una lista");
-//        addButton.setCallbackData("add " + event.getId());
+        CallbackData callbackData = new CallbackData();
+        callbackData.setType(CallbackData.Type.SELECTED_EVENT);
+        callbackData.setEventId(event.getId());
 
-        List<InlineKeyboardButton> row = new ArrayList<>();
-        row.add(addButton);
+        InlineKeyboardButton linkButton = new InlineKeyboardButton("Ver en Eventbrite");
+        linkButton.setUrl(event.getUrl());
+
+        InlineKeyboardButton addButton = new InlineKeyboardButton("Añadir a una lista");
+        addButton.setCallbackData(CallbackData.serialize(callbackData));
+
+        List<InlineKeyboardButton> linkRow = new ArrayList<>();
+        linkRow.add(linkButton);
+
+        List<InlineKeyboardButton> addRow = new ArrayList<>();
+        addRow.add(addButton);
 
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-        rows.add(row);
+        rows.add(linkRow);
+        rows.add(addRow);
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         markup.setKeyboard(rows);
