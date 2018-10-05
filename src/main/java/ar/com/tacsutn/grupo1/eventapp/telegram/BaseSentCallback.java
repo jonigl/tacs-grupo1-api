@@ -15,7 +15,7 @@ public class BaseSentCallback<T extends Serializable> implements SentCallback<T>
 
     @Override
     public void onError(BotApiMethod<T> botApiMethod, TelegramApiRequestException e) {
-
+        e.printStackTrace();
     }
 
     @Override
