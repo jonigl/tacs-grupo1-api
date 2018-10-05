@@ -22,19 +22,16 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final BotCommandFactory botCommandFactory;
     private final InlineQueryHandler inlineQueryHandler;
     private final CallbackQueryHandler callbackQueryHandler;
-    private final ChosenInlineHandler chosenInlineHandler;
 
     @Autowired
     public TelegramBot(
         BotCommandFactory botCommandFactory,
         InlineQueryHandler inlineQueryHandler,
-        CallbackQueryHandler callbackQueryHandler,
-        ChosenInlineHandler chosenInlineHandler) {
+        CallbackQueryHandler callbackQueryHandler) {
 
         this.botCommandFactory = botCommandFactory;
         this.inlineQueryHandler = inlineQueryHandler;
         this.callbackQueryHandler = callbackQueryHandler;
-        this.chosenInlineHandler = chosenInlineHandler;
     }
 
     @Override
@@ -43,8 +40,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             onCallbackQuery(update);
         } else if (update.hasInlineQuery()) {
             onInlineQuery(update);
-        } else if (update.hasChosenInlineQuery()){
-            onChosenInline(update);
         } else if (update.hasMessage() && update.getMessage().isCommand()) {
             onCommand(update);
         }
@@ -52,10 +47,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void onInlineQuery(Update update) {
         inlineQueryHandler.handle(this, update);
-    }
-
-    private void onChosenInline(Update update) {
-        chosenInlineHandler.handle(this, update);
     }
 
     private void onCommand(Update update) {
