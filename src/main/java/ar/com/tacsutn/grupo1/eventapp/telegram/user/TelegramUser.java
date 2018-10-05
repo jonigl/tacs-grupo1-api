@@ -9,28 +9,17 @@ public class TelegramUser {
 
     @Id
     @Column(nullable = false, unique = true)
-    private Integer telegramUser;
+    private Integer telegramUserId;
 
-    @Column(nullable = false)
-    private Long telegramChat;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "telegramUser", optional = false)
     private User internalUser;
 
-    public Integer getTelegramUser() {
-        return telegramUser;
+    public Integer getTelegramUserId() {
+        return telegramUserId;
     }
 
-    public void setTelegramUser(Integer telegramUser) {
-        this.telegramUser = telegramUser;
-    }
-
-    public Long getTelegramChat() {
-        return telegramChat;
-    }
-
-    public void setTelegramChat(Long telegramChat) {
-        this.telegramChat = telegramChat;
+    public void setTelegramUserId(Integer telegramUserId) {
+        this.telegramUserId = telegramUserId;
     }
 
     public User getInternalUser() {

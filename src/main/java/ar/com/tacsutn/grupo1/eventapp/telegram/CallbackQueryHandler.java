@@ -8,13 +8,17 @@ import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,55 +39,97 @@ public class CallbackQueryHandler {
     }
 
     /**
-     * Processes an callback query triggered by an inline button.
+     * Processes a callback query triggered by an inline button.
      * @param bot the telegram bot.
      * @param update the update event containing the callback query.
      */
     public void handle(TelegramBot bot, Update update) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
-        if (callbackQuery.getData().startsWith("add ")) {
-            handleAdd(bot, callbackQuery);
+        CallbackData.deserialize(callbackQuery.getData()).ifPresent(callbackData -> {
+            switch (callbackData.getType()) {
+                case SELECTED_EVENT:
+                    handleSelectedEvent(bot, callbackQuery, callbackData);
+                case SELECTED_LIST:
+                    handleSelectedList(bot, callbackQuery, callbackData);
+            }
+        });
+    }
+
+    /**
+     * Process a callback query of a selected event by the user.
+     * @param bot the telegram bot.
+     * @param callbackQuery the callback query with the selected event data.
+     */
+    private void handleSelectedEvent(TelegramBot bot, CallbackQuery callbackQuery, CallbackData callbackData) {
+        Integer userId = callbackQuery.getFrom().getId();
+        Optional<TelegramUser> telegramUser = telegramUserRepository.getByTelegramUserId(userId);
+
+        String eventId = callbackData.getEventId();
+
+        Optional<BotApiMethod<? extends Serializable>> answer = telegramUser.map(u ->
+            answerAuthenticated(u, eventId)
+        );
+
+        BotApiMethod<? extends Serializable> request = answer.orElseGet(() ->
+            answerUnauthenticated(callbackQuery)
+        );
+
+        try {
+            bot.executeAsync(request, new BaseSentCallback<>());
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
-    private void handleAdd(TelegramBot bot, CallbackQuery callbackQuery) {
-        // TODO: Get user by telegram user id, then get chat id by user.
-
-        Integer userId = callbackQuery.getFrom().getId();
-        Optional<TelegramUser> telegramUser = telegramUserRepository.getByTelegramUser(userId);
-
-        Optional<SendMessage> request = telegramUser.map(user -> {
-            Long chatId = user.getTelegramChat();
-            User internalUser = user.getInternalUser();
-
-//            String eventId = getEventId(callbackQuery);
-            String text = "Seleccione una lista para añadir el evento.";
-
-            ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup().setKeyboard(getKeyboard(internalUser));
-            return new SendMessage(chatId, text).setReplyMarkup(replyMarkup);
-        });
-
-//        try {
-//            bot.executeAsync(request, new BaseSentCallback<>());
-//        } catch (TelegramApiException e) {
-//            e.printStackTrace();
-//        }
+    /**
+     * Process a callback query of a selected list (and event) by the user.
+     * @param bot the telegram bot.
+     * @param callbackQuery the callback query with the selected list and event data.
+     */
+    private void handleSelectedList(TelegramBot bot, CallbackQuery callbackQuery, CallbackData callbackData) {
+        // TODO
     }
 
-    private List<KeyboardRow> getKeyboard(User user) {
+    private SendMessage answerAuthenticated(TelegramUser user, String eventId) {
+        User internalUser = user.getInternalUser();
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup()
+                .setKeyboard(getKeyboard(internalUser, eventId));
+
+        return new SendMessage()
+                .setChatId((long) user.getTelegramUserId())
+                .setText("Seleccione una lista para añadir:")
+                .setReplyMarkup(inlineKeyboardMarkup);
+    }
+
+    private AnswerCallbackQuery answerUnauthenticated(CallbackQuery callbackQuery) {
+        return new AnswerCallbackQuery()
+                .setCallbackQueryId(callbackQuery.getId())
+                .setText("Debe loguearse primero.")
+                .setShowAlert(true);
+    }
+
+    private List<List<InlineKeyboardButton>> getKeyboard(User user, String eventId) {
+        // TODO: Pagination.
         Page<EventList> eventLists = eventListService.getListsByUser(user);
         return eventLists.stream()
-                .map(this::getKeyboardRow)
+                .map(list -> getKeyboardRow(list, eventId))
                 .collect(Collectors.toList());
     }
 
-    private KeyboardRow getKeyboardRow(EventList eventList) {
-        KeyboardRow keyboardRow = new KeyboardRow();
-        keyboardRow.add(eventList.getName());
-        return keyboardRow;
-    }
+    private List<InlineKeyboardButton> getKeyboardRow(EventList eventList, String eventId) {
+        CallbackData callbackData = new CallbackData();
+        callbackData.setType(CallbackData.Type.SELECTED_LIST);
+        callbackData.setEventId(eventId);
+        callbackData.setListId(eventList.getId());
 
-    private String getEventId(CallbackQuery callbackQuery) {
-        return callbackQuery.getData().replaceFirst("^add ", "");
+        InlineKeyboardButton button = new InlineKeyboardButton()
+                .setText(eventList.getName())
+                .setCallbackData(CallbackData.serialize(callbackData));
+
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        row.add(button);
+
+        return row;
     }
 }

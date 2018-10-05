@@ -8,7 +8,6 @@ import java.util.Optional;
 @Repository
 public interface TelegramUserRepository extends CrudRepository<TelegramUser, Integer> {
 
-    Optional<TelegramUser> getByTelegramUser(Integer telegramUserId);
-    Optional<TelegramUser> getByTelegramChat(Long telegramChatId);
+    Optional<TelegramUser> getByTelegramUserId(Integer telegramUserId);
     Optional<TelegramUser> getByInternalUser_Id(Long internalUserId);
 }
