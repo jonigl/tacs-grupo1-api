@@ -200,4 +200,15 @@ public class User {
     public void setTelegramUser(TelegramUser telegramUser) {
         this.telegramUser = telegramUser;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj instanceof User) {
+            return id.equals(((User) obj).getId());
+        } else {
+            return super.equals(obj);
+        }
+    }
 }

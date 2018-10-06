@@ -1,13 +1,17 @@
 package ar.com.tacsutn.grupo1.eventapp.telegram;
 
+import ar.com.tacsutn.grupo1.eventapp.models.EventId;
 import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
+import ar.com.tacsutn.grupo1.eventapp.services.EventService;
 import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUser;
 import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -27,14 +31,17 @@ import java.util.stream.Collectors;
 public class CallbackQueryHandler {
 
     private final TelegramUserRepository telegramUserRepository;
+    private final EventService eventService;
     private final EventListService eventListService;
 
     @Autowired
     public CallbackQueryHandler(
             TelegramUserRepository telegramUserRepository,
+            EventService eventService,
             EventListService eventListService) {
 
         this.telegramUserRepository = telegramUserRepository;
+        this.eventService = eventService;
         this.eventListService = eventListService;
     }
 
@@ -61,24 +68,11 @@ public class CallbackQueryHandler {
      * @param callbackQuery the callback query with the selected event data.
      */
     private void handleSelectedEvent(TelegramBot bot, CallbackQuery callbackQuery, CallbackData callbackData) {
-        Integer userId = callbackQuery.getFrom().getId();
-        Optional<TelegramUser> telegramUser = telegramUserRepository.getByTelegramUserId(userId);
-
         String eventId = callbackData.getEventId();
 
-        Optional<BotApiMethod<? extends Serializable>> answer = telegramUser.map(u ->
-            answerAuthenticated(u, eventId)
-        );
-
-        BotApiMethod<? extends Serializable> request = answer.orElseGet(() ->
-            answerUnauthenticated(callbackQuery)
-        );
-
-        try {
-            bot.executeAsync(request, new BaseSentCallback<>());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        getUserOrAlert(bot, callbackQuery)
+                .map(user -> answerSelectedEvent(user, eventId))
+                .ifPresent(answer -> makeRequest(bot, answer));
     }
 
     /**
@@ -87,10 +81,52 @@ public class CallbackQueryHandler {
      * @param callbackQuery the callback query with the selected list and event data.
      */
     private void handleSelectedList(TelegramBot bot, CallbackQuery callbackQuery, CallbackData callbackData) {
-        // TODO
+        EventId eventId = new EventId(callbackData.getEventId());
+        Long listId = callbackData.getListId();
+
+        getUserOrAlert(bot, callbackQuery)
+                .flatMap(user -> addEventToList(user.getInternalUser(), listId, eventId))
+                .map(list -> answerAddedEventToList(callbackQuery, list))
+                .ifPresent(answer -> makeRequest(bot, answer));
     }
 
-    private SendMessage answerAuthenticated(TelegramUser user, String eventId) {
+    /**
+     * Makes an async request to Telegram.
+     * @param bot the Telegram bot.
+     * @param request the request.
+     */
+    private void makeRequest(TelegramBot bot, BotApiMethod<? extends Serializable> request) {
+        try {
+            bot.executeAsync(request, new BaseSentCallback<>());
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Retrieves the specified Telegram user or sends a login request alert if unauthenticated.
+     * @param bot the Telegram bot.
+     * @param callbackQuery the callback query required authentication.
+     * @return the Telegram user.
+     */
+    private Optional<TelegramUser> getUserOrAlert(TelegramBot bot, CallbackQuery callbackQuery) {
+        Integer userId = callbackQuery.getFrom().getId();
+        Optional<TelegramUser> telegramUser = telegramUserRepository.getByTelegramUserId(userId);
+        if (!telegramUser.isPresent()) {
+            AnswerCallbackQuery answer = answerUnauthenticated(callbackQuery);
+            makeRequest(bot, answer);
+        }
+
+        return telegramUser;
+    }
+
+    /**
+     * Creates the send message request next to the event selection by the user.
+     * @param user the Telegram user.
+     * @param eventId the selected event's identifier.
+     * @return the send message request.
+     */
+    private SendMessage answerSelectedEvent(TelegramUser user, String eventId) {
         User internalUser = user.getInternalUser();
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup()
@@ -102,6 +138,23 @@ public class CallbackQueryHandler {
                 .setReplyMarkup(inlineKeyboardMarkup);
     }
 
+    /**
+     * Creates the response message request when the event is added successfully to the list.
+     * @param callbackQuery the original callback query requested the add operation.
+     * @param eventList the event list with the recently added event.
+     * @return the response message request.
+     */
+    private SendMessage answerAddedEventToList(CallbackQuery callbackQuery, EventList eventList) {
+        return new SendMessage()
+            .setChatId((long) callbackQuery.getFrom().getId())
+            .setText("El evento fue añadido a la lista \"" + eventList.getName() + "\".");
+    }
+
+    /**
+     * Creates the login request alert to an unauthenticated operation.
+     * @param callbackQuery the callback query with unauthenticated operation.
+     * @return the answer request.
+     */
     private AnswerCallbackQuery answerUnauthenticated(CallbackQuery callbackQuery) {
         return new AnswerCallbackQuery()
                 .setCallbackQueryId(callbackQuery.getId())
@@ -109,6 +162,12 @@ public class CallbackQueryHandler {
                 .setShowAlert(true);
     }
 
+    /**
+     * Creates the inline keyboard with user's event lists as options.
+     * @param user the user.
+     * @param eventId the identifier of the selected event to be added to a list.
+     * @return the created keyboard.
+     */
     private List<List<InlineKeyboardButton>> getKeyboard(User user, String eventId) {
         // TODO: Pagination.
         Page<EventList> eventLists = eventListService.getListsByUser(user);
@@ -131,5 +190,16 @@ public class CallbackQueryHandler {
         row.add(button);
 
         return row;
+    }
+
+    @Transactional
+    private Optional<EventList> addEventToList(User user, Long listId, EventId eventId) {
+        try {
+            eventService.save(eventId);
+            return eventListService.addEvent(user, listId, eventId);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 }
