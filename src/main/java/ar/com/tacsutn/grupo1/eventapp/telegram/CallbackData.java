@@ -12,9 +12,9 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CallbackData {
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     public enum Type {
-        SELECTED_EVENT, SELECTED_LIST
+        SELECTED_EVENT, SELECTED_LIST, SHOW_LIST_EVENTS
     }
 
     @JsonProperty("t")

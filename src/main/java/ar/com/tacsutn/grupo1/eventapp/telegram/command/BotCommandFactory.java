@@ -17,6 +17,7 @@ public class BotCommandFactory {
     public BotCommandFactory(ApplicationContext applicationContext) {
         botCommandMap = new Hashtable<>();
         botCommandMap.put("/search", applicationContext.getBean(SearchCommand.class));
+        botCommandMap.put("/mylists", applicationContext.getBean(MyListsCommand.class));
     }
 
     /**
