@@ -14,7 +14,7 @@ public class CallbackData {
 
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     public enum Type {
-        SELECTED_EVENT, SELECTED_LIST, SHOW_LIST_EVENTS
+        SELECTED_EVENT, SELECTED_LIST, SHOW_LIST_EVENTS, SHOW_EVENT_DETAILS
     }
 
     @JsonProperty("t")
