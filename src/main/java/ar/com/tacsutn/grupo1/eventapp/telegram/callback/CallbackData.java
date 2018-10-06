@@ -1,4 +1,4 @@
-package ar.com.tacsutn.grupo1.eventapp.telegram;
+package ar.com.tacsutn.grupo1.eventapp.telegram.callback;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;

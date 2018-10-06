@@ -3,7 +3,7 @@ package ar.com.tacsutn.grupo1.eventapp.telegram.command;
 import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import ar.com.tacsutn.grupo1.eventapp.telegram.BaseSentCallback;
-import ar.com.tacsutn.grupo1.eventapp.telegram.CallbackData;
+import ar.com.tacsutn.grupo1.eventapp.telegram.callback.CallbackData;
 import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
 import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

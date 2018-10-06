@@ -3,6 +3,7 @@ package ar.com.tacsutn.grupo1.eventapp.telegram;
 import ar.com.tacsutn.grupo1.eventapp.client.EventFilter;
 import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
 import ar.com.tacsutn.grupo1.eventapp.models.Event;
+import ar.com.tacsutn.grupo1.eventapp.telegram.callback.CallbackData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
