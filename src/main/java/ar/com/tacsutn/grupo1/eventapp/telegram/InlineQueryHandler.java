@@ -3,7 +3,6 @@ package ar.com.tacsutn.grupo1.eventapp.telegram;
 import ar.com.tacsutn.grupo1.eventapp.client.EventFilter;
 import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
 import ar.com.tacsutn.grupo1.eventapp.models.Event;
-import ar.com.tacsutn.grupo1.eventapp.telegram.callback.CallbackData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -14,11 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessageconten
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,7 +97,7 @@ public class InlineQueryHandler {
                 .setThumbUrl(event.getLogo())
                 .setUrl(event.getUrl())
                 .setInputMessageContent(createMessageContent(event))
-                .setReplyMarkup(createReplyMarkup(event));
+                .setReplyMarkup(Utils.createEventDetailsReplyMarkup(event));
     }
 
     /**
@@ -120,37 +116,5 @@ public class InlineQueryHandler {
         return new InputTextMessageContent()
                 .setMessageText(messageText)
                 .enableMarkdown(true);
-    }
-
-    /**
-     * Creates the reply message markup of the event with inline keyboard button.
-     * @param event the Eventbrite event selected by user.
-     * @return the specified reply markup.
-     */
-    private InlineKeyboardMarkup createReplyMarkup(Event event) {
-        CallbackData callbackData = new CallbackData();
-        callbackData.setType(CallbackData.Type.SELECTED_EVENT);
-        callbackData.setEventId(event.getId());
-
-        InlineKeyboardButton linkButton = new InlineKeyboardButton("Ver en Eventbrite");
-        linkButton.setUrl(event.getUrl());
-
-        InlineKeyboardButton addButton = new InlineKeyboardButton("Añadir a una lista");
-        addButton.setCallbackData(CallbackData.serialize(callbackData));
-
-        List<InlineKeyboardButton> linkRow = new ArrayList<>();
-        linkRow.add(linkButton);
-
-        List<InlineKeyboardButton> addRow = new ArrayList<>();
-        addRow.add(addButton);
-
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-        rows.add(linkRow);
-        rows.add(addRow);
-
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-        markup.setKeyboard(rows);
-
-        return markup;
     }
 }

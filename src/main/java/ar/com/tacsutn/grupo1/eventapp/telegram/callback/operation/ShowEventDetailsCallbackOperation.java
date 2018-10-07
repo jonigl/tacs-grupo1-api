@@ -3,16 +3,12 @@ package ar.com.tacsutn.grupo1.eventapp.telegram.callback.operation;
 import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
 import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
+import ar.com.tacsutn.grupo1.eventapp.telegram.Utils;
 import ar.com.tacsutn.grupo1.eventapp.telegram.callback.CallbackData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-
-import java.util.Collections;
-import java.util.List;
 
 @Component
 public class ShowEventDetailsCallbackOperation extends AbstractCallbackOperation {
@@ -46,18 +42,6 @@ public class ShowEventDetailsCallbackOperation extends AbstractCallbackOperation
                 .enableMarkdown(true)
                 .enableWebPagePreview()
                 .setText(messageText)
-                .setReplyMarkup(getKeyboardMarkup(event));
-    }
-
-    private InlineKeyboardMarkup getKeyboardMarkup(Event event) {
-        InlineKeyboardButton button = new InlineKeyboardButton()
-                .setUrl(event.getUrl())
-                .setText("Ver en Eventbrite");
-
-        List<InlineKeyboardButton> row = Collections.singletonList(button);
-        List<List<InlineKeyboardButton>> keyboard = Collections.singletonList(row);
-
-        return new InlineKeyboardMarkup()
-                .setKeyboard(keyboard);
+                .setReplyMarkup(Utils.createEventDetailsReplyMarkup(event));
     }
 }
