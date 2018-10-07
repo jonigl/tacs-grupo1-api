@@ -2,10 +2,10 @@ package ar.com.tacsutn.grupo1.eventapp.telegram.command;
 
 import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
+import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import ar.com.tacsutn.grupo1.eventapp.telegram.BaseSentCallback;
 import ar.com.tacsutn.grupo1.eventapp.telegram.callback.CallbackData;
 import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
-import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 @Component
 public class MyListsCommand implements BotCommand {
 
-    private final TelegramUserRepository telegramUserRepository;
+    private final UserService userService;
     private final EventListService eventListService;
 
     @Autowired
-    public MyListsCommand(TelegramUserRepository telegramUserRepository, EventListService eventListService) {
-        this.telegramUserRepository = telegramUserRepository;
+    public MyListsCommand(UserService userService, EventListService eventListService) {
+        this.userService = userService;
         this.eventListService = eventListService;
     }
 
@@ -35,8 +35,8 @@ public class MyListsCommand implements BotCommand {
     public void run(TelegramBot bot, Update event) throws TelegramApiException {
         Integer userId = event.getMessage().getFrom().getId();
 
-        SendMessage request = telegramUserRepository.getByTelegramUserId(userId)
-                .map(user -> eventListService.getListsByUser(user.getInternalUser()))
+        SendMessage request = userService.getByTelegramUserId(userId)
+                .map(eventListService::getListsByUser)
                 .map(lists -> getShowListMessageRequestFromEventLists(event, lists))
                 .orElse(getRequestLoginMessageRequest(event));
 

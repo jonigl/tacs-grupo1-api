@@ -3,10 +3,9 @@ package ar.com.tacsutn.grupo1.eventapp.telegram.callback.operation;
 import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
+import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
 import ar.com.tacsutn.grupo1.eventapp.telegram.callback.CallbackData;
-import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUser;
-import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -26,10 +25,10 @@ public class SelectedEventCallbackOperation extends AuthenticatedCallbackOperati
 
     @Autowired
     protected SelectedEventCallbackOperation(
-            TelegramUserRepository telegramUserRepository,
+            UserService userService,
             EventListService eventListService) {
 
-        super(telegramUserRepository);
+        super(userService);
         this.eventListService = eventListService;
     }
 
@@ -49,15 +48,13 @@ public class SelectedEventCallbackOperation extends AuthenticatedCallbackOperati
 
     /**
      * Creates the send message request next to the event selection by the user.
-     * @param user the Telegram user.
+     * @param user the user.
      * @param eventId the selected event's identifier.
      * @return the send message request.
      */
-    private SendMessage answerSelectedEvent(TelegramUser user, String eventId) {
-        User internalUser = user.getInternalUser();
-
+    private SendMessage answerSelectedEvent(User user, String eventId) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup()
-                .setKeyboard(getKeyboard(internalUser, eventId));
+                .setKeyboard(getKeyboard(user, eventId));
 
         return new SendMessage()
                 .setChatId((long) user.getTelegramUserId())

@@ -1,6 +1,5 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
-import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -82,12 +81,8 @@ public class User {
     )
     private List<Alarm> alarms;
 
-    @JsonIgnore
-    @OneToOne(
-        cascade = CascadeType.ALL,
-        fetch = FetchType.LAZY
-    )
-    private TelegramUser telegramUser;
+    @Column(unique = true)
+    private Integer telegramUserId;
 
     public User() {
 
@@ -193,12 +188,12 @@ public class User {
         this.alarms = alarms;
     }
 
-    public TelegramUser getTelegramUser() {
-        return telegramUser;
+    public Integer getTelegramUserId() {
+        return telegramUserId;
     }
 
-    public void setTelegramUser(TelegramUser telegramUser) {
-        this.telegramUser = telegramUser;
+    public void setTelegramUserId(Integer telegramUserId) {
+        this.telegramUserId = telegramUserId;
     }
 
     @Override

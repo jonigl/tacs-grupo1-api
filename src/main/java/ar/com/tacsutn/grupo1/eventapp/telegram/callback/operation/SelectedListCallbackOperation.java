@@ -5,9 +5,9 @@ import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import ar.com.tacsutn.grupo1.eventapp.services.EventService;
+import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
 import ar.com.tacsutn.grupo1.eventapp.telegram.callback.CallbackData;
-import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
@@ -25,11 +25,11 @@ public class SelectedListCallbackOperation extends AuthenticatedCallbackOperatio
 
     @Autowired
     protected SelectedListCallbackOperation(
-            TelegramUserRepository telegramUserRepository,
+            UserService userService,
             EventService eventService,
             EventListService eventListService) {
 
-        super(telegramUserRepository);
+        super(userService);
         this.eventService = eventService;
         this.eventListService = eventListService;
     }
@@ -45,7 +45,7 @@ public class SelectedListCallbackOperation extends AuthenticatedCallbackOperatio
         Long listId = callbackData.getListId();
 
         getUserOrAlert(bot, callbackQuery)
-                .flatMap(user -> addEventToList(user.getInternalUser(), listId, eventId))
+                .flatMap(user -> addEventToList(user, listId, eventId))
                 .map(list -> answerAddedEventToList(callbackQuery, list))
                 .ifPresent(answer -> makeRequest(bot, answer));
     }

@@ -1,8 +1,8 @@
 package ar.com.tacsutn.grupo1.eventapp.telegram.callback.operation;
 
+import ar.com.tacsutn.grupo1.eventapp.models.User;
+import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
-import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUser;
-import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUserRepository;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -10,27 +10,28 @@ import java.util.Optional;
 
 abstract class AuthenticatedCallbackOperation extends AbstractCallbackOperation {
 
-    private final TelegramUserRepository telegramUserRepository;
+    private final UserService userService;
 
-    protected AuthenticatedCallbackOperation(TelegramUserRepository telegramUserRepository) {
-        this.telegramUserRepository = telegramUserRepository;
+    protected AuthenticatedCallbackOperation(UserService userService) {
+        this.userService = userService;
     }
 
     /**
-     * Retrieves the specified Telegram user or sends a login request alert if unauthenticated.
+     * Retrieves the specified user or sends a login request alert if unauthenticated.
      * @param bot the Telegram bot.
      * @param callbackQuery the callback query required authentication.
-     * @return the Telegram user.
+     * @return the authenticated user.
      */
-    protected Optional<TelegramUser> getUserOrAlert(TelegramBot bot, CallbackQuery callbackQuery) {
+    protected Optional<User> getUserOrAlert(TelegramBot bot, CallbackQuery callbackQuery) {
         Integer userId = callbackQuery.getFrom().getId();
-        Optional<TelegramUser> telegramUser = telegramUserRepository.getByTelegramUserId(userId);
-        if (!telegramUser.isPresent()) {
+        Optional<User> user = userService.getByTelegramUserId(userId);
+
+        if (!user.isPresent()) {
             AnswerCallbackQuery answer = answerUnauthenticated(callbackQuery);
             makeRequest(bot, answer);
         }
 
-        return telegramUser;
+        return user;
     }
 
     /**

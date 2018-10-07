@@ -4,9 +4,9 @@ import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
 import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.models.EventId;
 import ar.com.tacsutn.grupo1.eventapp.services.EventService;
+import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
 import ar.com.tacsutn.grupo1.eventapp.telegram.callback.CallbackData;
-import ar.com.tacsutn.grupo1.eventapp.telegram.user.TelegramUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,11 +29,11 @@ public class ShowListEventsCallbackOperation extends AuthenticatedCallbackOperat
 
     @Autowired
     protected ShowListEventsCallbackOperation(
-            TelegramUserRepository telegramUserRepository,
+            UserService userService,
             EventbriteClient eventbriteClient,
             EventService eventService) {
 
-        super(telegramUserRepository);
+        super(userService);
         this.eventbriteClient = eventbriteClient;
         this.eventService = eventService;
     }
