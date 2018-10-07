@@ -104,7 +104,7 @@ public class EventListService {
         return new PageImpl<>(events);
     }
 
-    public Integer getTotalEventListByUserId(long user_id){
+    public long getTotalEventListByUserId(long user_id){
         return eventListRepository.countAllByUserId(user_id);
     }
 

@@ -21,13 +21,19 @@ Agregamos datos iniciales para que sea más fácil probar la aplicación. Princi
 Para el rol USER creamos el siguiente usuario:<br />
 Username: user <br />
 Password: user<br />
-<br />
+
+Username: user2 <br />
+Password: user2<br />
+
 Para el rol ADMIN creamos el siguiente usuario:<br />
 Username: admin <br />
 Password: admin<br />
 <br />
-Ademas agregamos dos listas para cada usuario. El servicio que usamos para incializar se encuentra en `src/main/java/ar/com/tacsutn/grupo1/eventapp/BootstrapData.java` 
+Ademas agregamos dos listas para cada usuario con el rol USER. El servicio que usamos para incializar se encuentra en `src/main/java/ar/com/tacsutn/grupo1/eventapp/BootstrapData.java` 
 <br />
-<br />
-Nota: Para las alarmas utilizamos una estrategia lazy (hasta que tengamos Telegram y hagamos un llamado diario).
-<br />
+
+Para las alarmas utilizamos una estrategia lazy (hasta que tengamos Telegram y hagamos un llamado diario).
+
+Nuestra **nueva documentación** está basada en swagger y se puede acceder desde el siguiente link: [`https://tacs-grupo1.herokuapp.com/swagger-ui.html`](https://tacs-grupo1.herokuapp.com/swagger-ui.html) y localmente desde: [`http://localhost:8080/swagger-ui.html`](http://localhost:8080/swagger-ui.html) .
+
+**Importante:** Hemos deprecado la documentación en postman porque hemos alcanzado el límite impuesto para TEAMS.

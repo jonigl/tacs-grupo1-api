@@ -21,10 +21,6 @@ public class AlarmService {
         this.alarmRepository = alarmRepository;
     }
 
-    public Optional<Alarm> get(Long id) {
-        return alarmRepository.findById(id);
-    }
-
     @Transactional
     public Alarm save(Alarm alarm) {
         return alarmRepository.save(alarm);
@@ -43,7 +39,7 @@ public class AlarmService {
         alarmRepository.delete(alarm);
     }
 
-    public Integer getTotalAlarmsByUserId(Long userId) {
+    public long getTotalAlarmsByUserId(Long userId) {
         return alarmRepository.countAllByUserId(userId);
     }
 

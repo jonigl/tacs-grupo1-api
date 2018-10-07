@@ -1,5 +1,7 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
+import ar.com.tacsutn.grupo1.eventapp.models.TotalAlarms;
+import ar.com.tacsutn.grupo1.eventapp.models.TotalLists;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.services.AlarmService;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
@@ -9,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -58,18 +57,18 @@ public class UserController {
     }
 
     /**
-     * Returns the total number of events by user.
+     * Returns the total number of lists by user.
      * The administrator account is required.
      *
      * @param userId requested user's identifier.
      * @return the total number of events by user.
      */
-    @GetMapping("/users/{user_id}/total_events")
+    @GetMapping("/users/{user_id}/total_lists")
     @PreAuthorize("hasRole('ADMIN')")
-    public Map<String, Integer> getTotalOfListEvents(@PathVariable("user_id") Long userId) {
-        Map<String, Integer> response = new HashMap<>();
-        response.put("total_lists", eventListService.getTotalEventListByUserId(userId));
-        return response;
+    public TotalLists getTotalOfListEvents(@PathVariable("user_id") Long userId) {
+        TotalLists totalLists = new TotalLists();
+        totalLists.setTotalLists(eventListService.getTotalEventListByUserId(userId));
+        return totalLists;
     }
 
     /**
@@ -81,9 +80,9 @@ public class UserController {
      */
     @GetMapping("/users/{user_id}/total_alarms")
     @PreAuthorize("hasRole('ADMIN')")
-    public Map<String, Integer> getTotalOfAlarms(@PathVariable("user_id") Long userId) {
-        Map<String, Integer> response = new HashMap<>();
-        response.put("total_alarms", alarmService.getTotalAlarmsByUserId(userId));
-        return response;
+    public TotalAlarms getTotalOfAlarms(@PathVariable("user_id") Long userId) {
+        TotalAlarms totalAlarms = new TotalAlarms();
+        totalAlarms.setTotalAlarms(alarmService.getTotalAlarmsByUserId(userId));
+        return totalAlarms;
     }
 }
