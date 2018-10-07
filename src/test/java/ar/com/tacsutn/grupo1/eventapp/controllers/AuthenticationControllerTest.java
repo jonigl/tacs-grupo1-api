@@ -114,13 +114,9 @@ public class AuthenticationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"username\": \"user\", \"password\": \"user\"}")).andReturn().getResponse();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        String token = objectMapper.readTree(loginResponse.getContentAsString()).get("token").asText();
-
         mockMvc.perform(
                 get("/api/v1/refresh")
-                        .header("Authorization", token))
+                        .header("Authorization", getBearerToken(loginResponse)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -133,5 +129,11 @@ public class AuthenticationControllerTest {
                 get("/api/v1/refresh"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
+    }
+
+    private String getBearerToken(MockHttpServletResponse response) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return "Bearer " + objectMapper.readTree(response.getContentAsString()).get("token").asText();
     }
 }
