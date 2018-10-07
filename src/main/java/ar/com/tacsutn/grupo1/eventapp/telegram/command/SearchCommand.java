@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.telegram.command;
 
+import ar.com.tacsutn.grupo1.eventapp.telegram.BaseSentCallback;
 import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,8 @@ public class SearchCommand implements BotCommand {
         SendMessage sendMessage = new SendMessage(chatId, text)
             .setParseMode("markdown")
             .setReplyMarkup(replyMarkup);
-        bot.execute(sendMessage);
+
+        bot.executeAsync(sendMessage, new BaseSentCallback<>());
     }
 
     /**

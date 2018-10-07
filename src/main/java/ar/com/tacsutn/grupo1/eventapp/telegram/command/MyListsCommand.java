@@ -36,9 +36,9 @@ public class MyListsCommand implements BotCommand {
         Integer userId = event.getMessage().getFrom().getId();
 
         SendMessage request = telegramUserRepository.getByTelegramUserId(userId)
-            .map(user -> eventListService.getListsByUser(user.getInternalUser()))
-            .map(lists -> getShowListMessageRequestFromEventLists(event, lists))
-            .orElse(getRequestLoginMessageRequest(event));
+                .map(user -> eventListService.getListsByUser(user.getInternalUser()))
+                .map(lists -> getShowListMessageRequestFromEventLists(event, lists))
+                .orElse(getRequestLoginMessageRequest(event));
 
         bot.executeAsync(request, new BaseSentCallback<>());
     }
