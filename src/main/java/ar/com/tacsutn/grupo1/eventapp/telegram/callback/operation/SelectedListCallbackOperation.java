@@ -45,9 +45,9 @@ public class SelectedListCallbackOperation extends AuthenticatedCallbackOperatio
         Long listId = callbackData.getListId();
 
         getUserOrAlert(bot, callbackQuery)
-            .flatMap(user -> addEventToList(user.getInternalUser(), listId, eventId))
-            .map(list -> answerAddedEventToList(callbackQuery, list))
-            .ifPresent(answer -> makeRequest(bot, answer));
+                .flatMap(user -> addEventToList(user.getInternalUser(), listId, eventId))
+                .map(list -> answerAddedEventToList(callbackQuery, list))
+                .ifPresent(answer -> makeRequest(bot, answer));
     }
 
     /**
@@ -58,8 +58,8 @@ public class SelectedListCallbackOperation extends AuthenticatedCallbackOperatio
      */
     private SendMessage answerAddedEventToList(CallbackQuery callbackQuery, EventList eventList) {
         return new SendMessage()
-            .setChatId((long) callbackQuery.getFrom().getId())
-            .setText("El evento fue añadido a la lista \"" + eventList.getName() + "\".");
+                .setChatId((long) callbackQuery.getFrom().getId())
+                .setText("El evento fue añadido a la lista \"" + eventList.getName() + "\".");
     }
 
     @Transactional

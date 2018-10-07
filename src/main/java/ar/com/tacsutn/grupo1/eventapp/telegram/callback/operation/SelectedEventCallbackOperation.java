@@ -43,8 +43,8 @@ public class SelectedEventCallbackOperation extends AuthenticatedCallbackOperati
         String eventId = callbackData.getEventId();
 
         getUserOrAlert(bot, callbackQuery)
-            .map(user -> answerSelectedEvent(user, eventId))
-            .ifPresent(answer -> makeRequest(bot, answer));
+                .map(user -> answerSelectedEvent(user, eventId))
+                .ifPresent(answer -> makeRequest(bot, answer));
     }
 
     /**
@@ -57,12 +57,12 @@ public class SelectedEventCallbackOperation extends AuthenticatedCallbackOperati
         User internalUser = user.getInternalUser();
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup()
-            .setKeyboard(getKeyboard(internalUser, eventId));
+                .setKeyboard(getKeyboard(internalUser, eventId));
 
         return new SendMessage()
-            .setChatId((long) user.getTelegramUserId())
-            .setText("Seleccione una lista para añadir:")
-            .setReplyMarkup(inlineKeyboardMarkup);
+                .setChatId((long) user.getTelegramUserId())
+                .setText("Seleccione una lista para añadir:")
+                .setReplyMarkup(inlineKeyboardMarkup);
     }
 
     /**
@@ -75,8 +75,8 @@ public class SelectedEventCallbackOperation extends AuthenticatedCallbackOperati
         // TODO: Pagination.
         Page<EventList> eventLists = eventListService.getListsByUser(user);
         return eventLists.stream()
-            .map(list -> getKeyboardRow(list, eventId))
-            .collect(Collectors.toList());
+                .map(list -> getKeyboardRow(list, eventId))
+                .collect(Collectors.toList());
     }
 
     private List<InlineKeyboardButton> getKeyboardRow(EventList eventList, String eventId) {
@@ -86,8 +86,8 @@ public class SelectedEventCallbackOperation extends AuthenticatedCallbackOperati
         callbackData.setListId(eventList.getId());
 
         InlineKeyboardButton button = new InlineKeyboardButton()
-            .setText(eventList.getName())
-            .setCallbackData(CallbackData.serialize(callbackData));
+                .setText(eventList.getName())
+                .setCallbackData(CallbackData.serialize(callbackData));
 
         List<InlineKeyboardButton> row = new ArrayList<>();
         row.add(button);

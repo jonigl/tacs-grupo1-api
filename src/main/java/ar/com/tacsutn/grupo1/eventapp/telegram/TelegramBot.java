@@ -25,9 +25,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Autowired
     public TelegramBot(
-        BotCommandFactory botCommandFactory,
-        InlineQueryHandler inlineQueryHandler,
-        CallbackQueryHandler callbackQueryHandler) {
+            BotCommandFactory botCommandFactory,
+            InlineQueryHandler inlineQueryHandler,
+            CallbackQueryHandler callbackQueryHandler) {
 
         this.botCommandFactory = botCommandFactory;
         this.inlineQueryHandler = inlineQueryHandler;
@@ -53,9 +53,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<MessageEntity> entities = update.getMessage().getEntities();
 
         entities.stream()
-            .filter(entity -> entity.getType().equals("bot_command")
-                && entity.getOffset() == 0)
-            .forEach(command -> runCommand(command.getText(), update));
+                .filter(entity -> entity.getType().equals("bot_command")
+                    && entity.getOffset() == 0)
+                .forEach(command -> runCommand(command.getText(), update));
     }
 
     /**

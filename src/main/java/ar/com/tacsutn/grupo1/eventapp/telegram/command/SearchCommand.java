@@ -31,8 +31,8 @@ public class SearchCommand implements BotCommand {
             bot.getBotUsername() +
             " ...'*** o hacer clic sobre el boton ***'Iniciar búsqueda'***.";
         SendMessage sendMessage = new SendMessage(chatId, text)
-            .setParseMode("markdown")
-            .setReplyMarkup(replyMarkup);
+                .setParseMode("markdown")
+                .setReplyMarkup(replyMarkup);
 
         bot.executeAsync(sendMessage, new BaseSentCallback<>());
     }

@@ -40,8 +40,8 @@ abstract class AuthenticatedCallbackOperation extends AbstractCallbackOperation 
      */
     private AnswerCallbackQuery answerUnauthenticated(CallbackQuery callbackQuery) {
         return new AnswerCallbackQuery()
-            .setCallbackQueryId(callbackQuery.getId())
-            .setText("Debe loguearse primero.")
-            .setShowAlert(true);
+                .setCallbackQueryId(callbackQuery.getId())
+                .setText("Debe loguearse primero.")
+                .setShowAlert(true);
     }
 }
