@@ -80,11 +80,11 @@ public class EventsControllerTest extends ControllerTest {
     @Transactional
     @DirtiesContext
     @Test
-    public void shouldNotGetEventsWithNonExistentFilter() throws Exception {
+    public void canGetEventsWithNonExistentFilter() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/events/?shouldnotwork=shouldnotwork"))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk());
     }
 
     @WithMockUser(roles = "ADMIN")

@@ -26,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.servlet.Filter;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -41,19 +42,14 @@ public abstract class ControllerTest {
     private BootstrapData bootstrapData;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthorityRepository authorityRepository;
 
-    @Autowired
-    @Qualifier("jwtUserDetailsService")
-    private UserDetailsService userDetailsService;
+    List<Authority> userAuthorities, adminAuthorities;
 
     @Autowired
     private UserService userService;
 
     private User user1, user2;
-
-    @Autowired
-    private AuthorityRepository authorityRepository;
 
     @Autowired
     private EventService eventService;
@@ -74,19 +70,23 @@ public abstract class ControllerTest {
 
     private MockMvc mockMvc;
 
+    private void setAuthorities() {
+        Authority userAuthority = new Authority();
+        userAuthority.setName(AuthorityName.ROLE_USER);
+        authorityRepository.save(userAuthority);
+
+        userAuthorities = Collections.singletonList(userAuthority);
+
+        Authority adminAuthority = new Authority();
+        adminAuthority.setName(AuthorityName.ROLE_ADMIN);
+        authorityRepository.save(adminAuthority);
+
+        adminAuthorities = Collections.singletonList(adminAuthority);
+    }
+
     private void setUsers() {
-        Authority authority1 = new Authority();
-
-        authority1.setName(AuthorityName.ROLE_USER);
-
-        List<Authority> authorities = new ArrayList<>();
-
-        authorityRepository.save(authority1);
-
-        authorities.add(authority1);
-
-        user1 = new User("JohnDoemann1", "1234", "John", "Doemann", "john.doemann@test.com", true, new Date(), authorities);
-        user2 = new User("JanetDoemann2", "1234", "Janet", "Doemann", "janet.doemann@test.com", true, new Date(), authorities);
+        user1 = new User("JohnDoemann1", "1234", "John", "Doemann", "john.doemann@test.com", true, new Date(), userAuthorities);
+        user2 = new User("JanetDoemann2", "1234", "Janet", "Doemann", "janet.doemann@test.com", true, new Date(), adminAuthorities);
 
         userService.save(user1);
         userService.save(user2);
@@ -125,6 +125,7 @@ public abstract class ControllerTest {
 
     @Before
     public void before() {
+        setAuthorities();
         setUsers();
         setEvents();
         setLists();

@@ -1,27 +1,58 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
+import ar.com.tacsutn.grupo1.eventapp.BootstrapData;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import javax.servlet.Filter;
+
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AuthenticationControllerTest extends ControllerTest {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class AuthenticationControllerTest {
+    @Autowired
+    private BootstrapData bootstrapData;
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private Filter springSecurityFilterChain;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void before() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
+                .addFilters(springSecurityFilterChain)
+                .apply(springSecurity())
+                .build();
+    }
+
     @Transactional
     @DirtiesContext
     @Test
     public void canLogin() throws Exception {
-        this.getMockMvc()
-                .perform(
-                        post("/api/v1/login")
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                                .content("{\"username\": \"JohnDoemann1\", \"password\": \"1234\"}")
-                )
+        mockMvc.perform(
+                post("/api/v1/login")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"username\": \"user\", \"password\": \"user\"}")
+        )
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -30,13 +61,24 @@ public class AuthenticationControllerTest extends ControllerTest {
     @DirtiesContext
     @Test
     public void shouldNotLoginWithWrongUser() throws Exception {
-        this.getMockMvc()
-                .perform(
-                        post("/api/v1/login")
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                                .content("{\"username\": \"JohnDoe\", \"password\": \"1234\"}")
-                )
+        mockMvc.perform(
+                post("/api/v1/login")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"username\": \"wrong\", \"password\": \"wrong\"}")
+        )
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Transactional
+    @DirtiesContext
+    @Test
+    public void shouldNotLoginWithWrongPassword() throws Exception {
+        mockMvc.perform(
+                post("/api/v1/login")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"username\": \"user\", \"password\": \"wrong\"}")
+        )
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
