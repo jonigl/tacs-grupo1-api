@@ -1,9 +1,9 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 import ar.com.tacsutn.grupo1.eventapp.BootstrapData;
-import ar.com.tacsutn.grupo1.eventapp.models.EventId;
-import ar.com.tacsutn.grupo1.eventapp.models.EventList;
-import ar.com.tacsutn.grupo1.eventapp.models.User;
+import ar.com.tacsutn.grupo1.eventapp.models.*;
+import ar.com.tacsutn.grupo1.eventapp.repositories.AuthorityRepository;
+import ar.com.tacsutn.grupo1.eventapp.security.JwtTokenUtil;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import ar.com.tacsutn.grupo1.eventapp.services.EventService;
 import ar.com.tacsutn.grupo1.eventapp.services.SessionService;
@@ -12,14 +12,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,14 +37,23 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public abstract class ControllerTest {
-
     @MockBean
     private BootstrapData bootstrapData;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    @Qualifier("jwtUserDetailsService")
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private UserService userService;
 
     private User user1, user2;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
     @Autowired
     private EventService eventService;
@@ -56,11 +69,24 @@ public abstract class ControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    @Autowired
+    private Filter springSecurityFilterChain;
+
     private MockMvc mockMvc;
 
     private void setUsers() {
-        user1 = new User("JohnDoemann1", "1234", "John", "Doemann", "john.doemann@test.com", true, new Date(), null);
-        user2 = new User("JanetDoemann2", "1234", "Janet", "Doemann", "janet.doemann@test.com", true, new Date(), null);
+        Authority authority1 = new Authority();
+
+        authority1.setName(AuthorityName.ROLE_USER);
+
+        List<Authority> authorities = new ArrayList<>();
+
+        authorityRepository.save(authority1);
+
+        authorities.add(authority1);
+
+        user1 = new User("JohnDoemann1", "1234", "John", "Doemann", "john.doemann@test.com", true, new Date(), authorities);
+        user2 = new User("JanetDoemann2", "1234", "Janet", "Doemann", "janet.doemann@test.com", true, new Date(), authorities);
 
         userService.save(user1);
         userService.save(user2);
@@ -105,7 +131,11 @@ public abstract class ControllerTest {
 
         when(sessionService.getAuthenticatedUser(any(HttpServletRequest.class))).thenReturn(user1);
 
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).apply(springSecurity()).build();
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
+                .addFilters(springSecurityFilterChain)
+                .apply(springSecurity())
+                .build();
     }
 
     @Transactional
