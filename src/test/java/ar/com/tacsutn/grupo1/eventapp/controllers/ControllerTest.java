@@ -9,20 +9,17 @@ import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.services.*;
 import ar.com.tacsutn.grupo1.eventapp.models.*;
 import ar.com.tacsutn.grupo1.eventapp.repositories.AuthorityRepository;
-import ar.com.tacsutn.grupo1.eventapp.security.JwtTokenUtil;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import ar.com.tacsutn.grupo1.eventapp.services.EventService;
 import ar.com.tacsutn.grupo1.eventapp.services.SessionService;
 import ar.com.tacsutn.grupo1.eventapp.services.UserService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -69,8 +66,7 @@ public abstract class ControllerTest {
     @Autowired
     private AlarmService alarmService;
 
-    private Alarm alarm1 , alarm2, alarm3;
-
+    private Alarm alarm1, alarm2, alarm3;
 
     @MockBean
     private SessionService sessionService;
@@ -106,7 +102,6 @@ public abstract class ControllerTest {
     }
 
     private void setAlarms() {
-
         EventFilter filter1 = new EventFilter()
                 .setKeyword("nodejs")
                 .setStartDateFrom(LocalDateTime.of(2018,10,2,0,0))

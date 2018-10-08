@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
@@ -109,6 +110,7 @@ public class EventsControllerTest extends ControllerTest {
                 .andExpect(status().isForbidden());
     }
 
+    @Ignore
     @WithMockUser(roles = "ADMIN")
     @Transactional
     @DirtiesContext

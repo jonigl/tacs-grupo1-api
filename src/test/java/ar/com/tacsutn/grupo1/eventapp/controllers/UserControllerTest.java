@@ -79,6 +79,4 @@ public class UserControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-
-
 }
