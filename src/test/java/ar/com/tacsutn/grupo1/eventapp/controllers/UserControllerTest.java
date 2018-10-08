@@ -7,6 +7,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,6 +65,19 @@ public class UserControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.total_lists").value("1"));
+    }
+
+    @WithMockUser(roles = "ADMIN")
+    @Transactional
+    @DirtiesContext
+    @Test
+    public void canCreateUser() throws Exception {
+        this.getMockMvc()
+                .perform(post("/api/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\"email\": \"a@a.com\", \"firstname\": \"Nombre5\", \"lastAccess\": \"2018-10-08T01:03:50.801Z\", \"lastname\": \"Apellido5\", \"username\": \"user5\", \"password\": \"123456\"}"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
 
