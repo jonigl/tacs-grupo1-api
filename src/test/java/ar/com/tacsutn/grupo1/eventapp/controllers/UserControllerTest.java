@@ -53,30 +53,18 @@ public class UserControllerTest extends ControllerTest {
                 .andExpect(jsonPath("$.total_alarms").value("0"));
 
     }
-/*
-    @WithMockUser(roles = "USER")
-    @Transactional
-    @DirtiesContext
-    @Test
-    public void canGetTotalListsOfUser() throws Exception {
-        this.getMockMvc()
-                .perform(get("/api/v1/users/2/total_events")*//*.accept(MediaType.parseMediaType("application/json;charset=UTF-8"))*//*)
-                .andDo(print())
-                .andExpect(status().isOk());
-                //.andExpect(jsonPath("$.totalLists").value("1"));
-    }
 
     @WithMockUser(roles = "ADMIN")
     @Transactional
     @DirtiesContext
     @Test
-    public void shouldGetZeroTotalListsOfNonExistentUser() throws Exception {
+    public void canGetTotalEventsOfUser() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/55/total_lists").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+                .perform(get("/api/v1/users/2/total_events").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalLists").value("0"));
+                .andExpect(jsonPath("$.total_lists").value("1"));
+    }
 
-    }*/
 
 }
