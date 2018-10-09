@@ -158,16 +158,15 @@ public class ListsControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Ignore
     @WithMockUser(roles = "USER")
     @Transactional
     @DirtiesContext
     @Test
-    public void canPostListsEventsByIdWithSameId() throws Exception {
+    public void canPostListsEventsByIdWithExistingId() throws Exception {
         this.getMockMvc()
                 .perform(post("/api/v1/lists/1/events/?event_id=0"))
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk());
     }
 
     @WithMockUser(roles = "USER")
@@ -179,18 +178,6 @@ public class ListsControllerTest extends ControllerTest {
                 .perform(post("/api/v1/lists/1/events"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
-    }
-
-    @Ignore
-    @WithMockUser(roles = "USER")
-    @Transactional
-    @DirtiesContext
-    @Test
-    public void shouldNotPostListsEventsByIdIfEventDoesNotExist() throws Exception {
-        this.getMockMvc()
-                .perform(post("/api/v1/lists/1/events/?event_id=8000"))
-                .andDo(print())
-                .andExpect(status().isNotFound());
     }
 
     @WithMockUser(roles = "USER")
