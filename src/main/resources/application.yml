@@ -16,12 +16,3 @@ spring:
 logging:
   level:
     org.hibernate.type: trace
-
-jwt:
-  header: Authorization
-  secret: tacs-grupo1
-  expiration: 604800
-  route:
-    authentication:
-      path: /api/v1/login
-      refresh: /api/v1/refresh

@@ -62,4 +62,8 @@ public class UserService {
     public Optional<User> getById(long id) {
         return userRepository.getById(id);
     }
+
+    public Optional<User> getByTelegramUserId(int telegramUserId) {
+        return userRepository.getUserByTelegramUserId(telegramUserId);
+    }
 }
