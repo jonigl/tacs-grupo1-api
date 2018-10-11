@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.telegram.telegrambots.ApiContextInitializer;
 
 import java.sql.SQLException;
 
@@ -19,6 +20,7 @@ import java.sql.SQLException;
 public class EventAppApplication {
 
     public static void main(String[] args) {
+        ApiContextInitializer.init();
         SpringApplication.run(EventAppApplication.class, args);
     }
 
@@ -26,7 +28,11 @@ public class EventAppApplication {
     public static PropertySourcesPlaceholderConfigurer properties() {
         PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-        yaml.setResources(new FileSystemResource("eventbrite.yml"));
+        yaml.setResources(
+            new FileSystemResource("eventbrite.yml"),
+            new FileSystemResource("telegram.yml"),
+            new FileSystemResource("jwt.yml")
+        );
         configurer.setProperties(yaml.getObject());
         return configurer;
     }

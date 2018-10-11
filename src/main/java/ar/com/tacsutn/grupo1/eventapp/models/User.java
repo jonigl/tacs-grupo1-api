@@ -81,6 +81,9 @@ public class User {
     )
     private List<Alarm> alarms;
 
+    @Column(unique = true)
+    private Integer telegramUserId;
+
     public User() {
 
     }
@@ -183,5 +186,24 @@ public class User {
 
     public void setAlarms(List<Alarm> alarms) {
         this.alarms = alarms;
+    }
+
+    public Integer getTelegramUserId() {
+        return telegramUserId;
+    }
+
+    public void setTelegramUserId(Integer telegramUserId) {
+        this.telegramUserId = telegramUserId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj instanceof User) {
+            return id.equals(((User) obj).getId());
+        } else {
+            return super.equals(obj);
+        }
     }
 }

@@ -12,4 +12,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> getById(long id);
 
+    Optional<User> getUserByTelegramUserId(Integer telegramUserId);
 }

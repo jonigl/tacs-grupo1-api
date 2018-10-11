@@ -83,6 +83,14 @@ public class EventListService {
         return eventListRepository.save(eventList);
     }
 
+    @Transactional
+    public Optional<EventList> addEvent(User user, Long id, EventId event) {
+        return getById(user, id).map(eventList -> {
+            eventList.getEvents().add(event);
+            return eventListRepository.save(eventList);
+        });
+    }
+
     public Page<EventId> getCommonEvents(Long id1, Long id2) {
         EventList list1 = getById(id1)
                 .orElseThrow(NoSuchElementException::new);
