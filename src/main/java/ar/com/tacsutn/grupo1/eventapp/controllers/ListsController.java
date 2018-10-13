@@ -147,13 +147,12 @@ public class ListsController {
     @Transactional
     public EventList addEvent(
             @PathVariable Long list_id,
-            @RequestParam String event_id,
+            @RequestBody EventId eventId,
             HttpServletRequest request) {
 
         User user = sessionService.getAuthenticatedUser(request);
         EventList eventList = eventListService.getById(user, list_id)
                 .orElseThrow(() -> new ResourceNotFoundException("List not found."));
-        EventId eventId = new EventId(event_id);
         eventService.save(eventId);
         eventList.getEvents().add(eventId);
         return eventListService.save(eventList);
