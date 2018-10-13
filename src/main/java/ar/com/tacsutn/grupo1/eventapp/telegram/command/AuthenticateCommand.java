@@ -1,29 +1,27 @@
 package ar.com.tacsutn.grupo1.eventapp.telegram.command;
 
 import ar.com.tacsutn.grupo1.eventapp.models.User;
-import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import ar.com.tacsutn.grupo1.eventapp.telegram.BaseSentCallback;
 import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+@Component
 public class AuthenticateCommand implements BotCommand {
 
     @Value("${telegram.auth-page-url}")
     private String AUTH_PAGE_URL;
 
     private final UserService userService;
-    private final EventListService eventListService;
 
-    public AuthenticateCommand(
-            UserService userService,
-            EventListService eventListService) {
-
+    @Autowired
+    public AuthenticateCommand(UserService userService) {
         this.userService = userService;
-        this.eventListService = eventListService;
     }
 
 
