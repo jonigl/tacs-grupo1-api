@@ -70,8 +70,9 @@ public class UserService {
     public User createAdmin(User user) {
         user.setEnabled(true);
         user.setLastPasswordResetDate(new Date());
-        List<Authority> lists = Arrays.asList(authorityRepository.findFirstByName(AuthorityName.ROLE_USER), authorityRepository.findFirstByName(AuthorityName.ROLE_ADMIN));
-        user.setAuthorities(lists);
+        //List<Authority> lists = Arrays.asList(authorityRepository.findFirstByName(AuthorityName.ROLE_USER), authorityRepository.findFirstByName(AuthorityName.ROLE_ADMIN));
+        //user.setAuthorities(lists);
+        user.setAuthorities(authorityRepository.findByName(AuthorityName.ROLE_ADMIN));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
