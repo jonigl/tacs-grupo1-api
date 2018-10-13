@@ -62,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+            .cors().and()
             // we don't need CSRF because our token is invulnerable
             .csrf().disable()
 
@@ -77,7 +78,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/v2/api-docs", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/csrf").permitAll()
             .antMatchers("/auth/**").permitAll()
             .antMatchers( "/api/v1/login").permitAll()
-            .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
             .anyRequest().authenticated();
 
        httpSecurity

@@ -6,9 +6,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(
-    uniqueConstraints = @UniqueConstraint(columnNames = {"name", "user"})
-)
+// TODO: 12/10/2018 thinks about this feature
+// @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "user"}))
 public class EventList {
 
     @Id
