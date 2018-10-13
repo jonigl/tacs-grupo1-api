@@ -15,9 +15,10 @@ public class HelpCommand implements BotCommand {
             "revisar tus listas de eventos y agregar nuevos eventos " +
             "a tus listas.\n\n" +
             "Lista de comandos:\n" +
-            "/search    Buscar en Eventbrite.\n" +
-            "/mylists   Ver tus listas de eventos.\n" +
-            "/help      Mostrar ayuda.";
+            "/authenticate Autenticarse en Event App." +
+            "/search Buscar en Eventbrite.\n" +
+            "/mylists Ver tus listas de eventos.\n" +
+            "/help Mostrar ayuda.";
 
     @Override
     public void run(TelegramBot bot, Update event) throws TelegramApiException {
