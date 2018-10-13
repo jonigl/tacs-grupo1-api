@@ -46,7 +46,6 @@ public class EventAppApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
                 // https://stackoverflow.com/a/47570835/2618907
                 registry.addMapping("/**").allowedMethods("*").allowedOrigins("*")
                         .allowedHeaders("*");
