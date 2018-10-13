@@ -62,8 +62,9 @@ public class EventListService {
     }
 
     @Transactional
-    public EventList save(User user, String name) {
-        return eventListRepository.save(new EventList(name, user));
+    public EventList save(User user, EventList eventList) {
+        eventList.setUser(user);
+        return eventListRepository.save(eventList);
     }
 
     @Transactional

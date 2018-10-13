@@ -60,26 +60,25 @@ public class ListsController {
     @PostMapping("/lists")
     @PreAuthorize("hasRole('USER')")
     public EventList create(
-            @RequestParam(name = "name") String listName,
+            @RequestBody EventList eventList,
             HttpServletRequest request) {
 
         User user = sessionService.getAuthenticatedUser(request);
-        return eventListService.save(user, listName);
+        return eventListService.save(user, eventList);
     }
 
     @PutMapping("/lists/{list_id}")
     @PreAuthorize("hasRole('USER')")
     public EventList update(
-            @PathVariable Long list_id,
-            @RequestParam String name,
+            @RequestBody EventList eventList,
             HttpServletRequest request) {
 
         User user = sessionService.getAuthenticatedUser(request);
         EventList list = eventListService
-                .getById(user, list_id)
+                .getById(user, eventList.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("List not found."));
 
-        list.setName(name);
+        list.setName(eventList.getName());
         return eventListService.save(list);
     }
 
@@ -148,13 +147,12 @@ public class ListsController {
     @Transactional
     public EventList addEvent(
             @PathVariable Long list_id,
-            @RequestParam String event_id,
+            @RequestBody EventId eventId,
             HttpServletRequest request) {
 
         User user = sessionService.getAuthenticatedUser(request);
         EventList eventList = eventListService.getById(user, list_id)
                 .orElseThrow(() -> new ResourceNotFoundException("List not found."));
-        EventId eventId = new EventId(event_id);
         eventService.save(eventId);
         eventList.getEvents().add(eventId);
         return eventListService.save(eventList);
