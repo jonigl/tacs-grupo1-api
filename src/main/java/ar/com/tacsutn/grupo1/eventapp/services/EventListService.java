@@ -38,7 +38,7 @@ public class EventListService {
 
     @Transactional
     public Page<EventList> getLists() {
-        return getLists(PageRequest.of(0, 20));
+        return getLists(PageRequest.of(0, 50));
     }
 
     @Transactional
@@ -48,7 +48,7 @@ public class EventListService {
 
     @Transactional
     public Page<EventList> getListsByUser(User user) {
-        return getListsByUser(user, PageRequest.of(0, 20));
+        return getListsByUser(user, PageRequest.of(0, 50));
     }
 
     @Transactional

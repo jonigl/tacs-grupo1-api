@@ -1,18 +1,20 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
-import ar.com.tacsutn.grupo1.eventapp.models.TotalAlarms;
-import ar.com.tacsutn.grupo1.eventapp.models.TotalLists;
-import ar.com.tacsutn.grupo1.eventapp.models.User;
-import ar.com.tacsutn.grupo1.eventapp.models.UserRequest;
+import ar.com.tacsutn.grupo1.eventapp.models.*;
 import ar.com.tacsutn.grupo1.eventapp.services.AlarmService;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import ar.com.tacsutn.grupo1.eventapp.services.SessionService;
 import ar.com.tacsutn.grupo1.eventapp.services.UserService;
+import ar.com.tacsutn.grupo1.eventapp.swagger.ApiPageable;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,6 +39,20 @@ public class UserController {
         this.eventListService = eventListService;
         this.alarmService = alarmService;
         this.sessionService = sessionService;
+    }
+
+    /**
+     * Returns all users.
+     */
+    @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiPageable
+    public RestPage<User> getAll(
+            @ApiIgnore Pageable pageable,
+            HttpServletRequest request) {
+
+        Page<User> list = userService.getAllUsers(PageRequest.of(0, 50));
+        return new RestPage<>(list);
     }
 
     /**
