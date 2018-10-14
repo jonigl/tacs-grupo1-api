@@ -28,4 +28,6 @@ public interface EventRepository extends CrudRepository<EventId, String> {
     Page<EventId> getIdsByEventListId(Long id, Pageable pageable);
 
     Long countAllByCreatedTimeIsBetween(Date from, Date to);
+
+    Page<EventId> getAllByCreatedTimeIsBetween(Date from, Date to, Pageable pageable);
 }
