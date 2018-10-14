@@ -11,6 +11,8 @@ public class UserRequest {
 
     private final String password;
 
+    private final String email;
+
     private final String firstname;
 
     private final String lastname;
@@ -28,6 +30,10 @@ public class UserRequest {
             @Size(min = 4, max = 100)
             String password,
 
+            @JsonProperty(value = "email", required = true)
+            @Size(min = 4, max = 50)
+            String email,
+
             @JsonProperty(value = "firstname", required = true)
             @Size(min = 4, max = 50)
             String firstname,
@@ -42,6 +48,7 @@ public class UserRequest {
 
         this.username = username;
         this.password = password;
+        this.email = email;
         this.firstname = firstname;
         this.lastname = lastname;
         this.telegramUserId = telegramUserId;
@@ -53,6 +60,10 @@ public class UserRequest {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getFirstname() {

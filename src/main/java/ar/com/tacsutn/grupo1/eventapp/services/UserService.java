@@ -1,6 +1,5 @@
 package ar.com.tacsutn.grupo1.eventapp.services;
 
-import ar.com.tacsutn.grupo1.eventapp.models.Authority;
 import ar.com.tacsutn.grupo1.eventapp.models.AuthorityName;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.models.UserRequest;
@@ -11,9 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,6 +45,7 @@ public class UserService {
     @Transactional
     public User update(User user, UserRequest userRequest) {
         user.setUsername(userRequest.getUsername());
+        user.setEmail(userRequest.getEmail());
         user.setFirstname(userRequest.getFirstname());
         user.setLastname(userRequest.getLastname());
 
