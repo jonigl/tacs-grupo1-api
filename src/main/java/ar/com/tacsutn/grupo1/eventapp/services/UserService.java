@@ -3,6 +3,7 @@ package ar.com.tacsutn.grupo1.eventapp.services;
 import ar.com.tacsutn.grupo1.eventapp.models.Authority;
 import ar.com.tacsutn.grupo1.eventapp.models.AuthorityName;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
+import ar.com.tacsutn.grupo1.eventapp.models.UserRequest;
 import ar.com.tacsutn.grupo1.eventapp.repositories.AuthorityRepository;
 import ar.com.tacsutn.grupo1.eventapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,22 @@ public class UserService {
     }
 
     @Transactional
+    public User update(User user, UserRequest userRequest) {
+        user.setUsername(userRequest.getUsername());
+        user.setFirstname(userRequest.getFirstname());
+        user.setLastname(userRequest.getLastname());
+
+        Optional.ofNullable(userRequest.getPassword())
+                .map(passwordEncoder::encode)
+                .ifPresent(user::setPassword);
+
+        Optional.ofNullable(userRequest.getTelegramUserId())
+                .ifPresent(user::setTelegramUserId);
+
+        return userRepository.save(user);
+    }
+
+    @Transactional
     public User save(User user) {
         return userRepository.save(user);
     }
@@ -53,8 +70,9 @@ public class UserService {
     public User createAdmin(User user) {
         user.setEnabled(true);
         user.setLastPasswordResetDate(new Date());
-        List<Authority> lists = Arrays.asList(authorityRepository.findFirstByName(AuthorityName.ROLE_USER), authorityRepository.findFirstByName(AuthorityName.ROLE_ADMIN));
-        user.setAuthorities(lists);
+        //List<Authority> lists = Arrays.asList(authorityRepository.findFirstByName(AuthorityName.ROLE_USER), authorityRepository.findFirstByName(AuthorityName.ROLE_ADMIN));
+        //user.setAuthorities(lists);
+        user.setAuthorities(authorityRepository.findByName(AuthorityName.ROLE_ADMIN));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

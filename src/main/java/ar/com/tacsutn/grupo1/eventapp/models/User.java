@@ -24,7 +24,7 @@ public class User {
     private Long id;
 
     @Column(name = "USERNAME", length = 50, unique = true, nullable = false)
-    @Size(max = 50)
+    @Size(min = 4, max = 50)
     private String username;
 
     @ApiModelProperty(hidden = true)
@@ -89,7 +89,7 @@ public class User {
     }
 
     public User(
-            @Size(max = 50) String username,
+            @Size(min = 4, max = 50) String username,
             @Size(min = 4, max = 100) String password,
             @Size(min = 4, max = 50) String firstname,
             @Size(min = 4, max = 50) String lastname,

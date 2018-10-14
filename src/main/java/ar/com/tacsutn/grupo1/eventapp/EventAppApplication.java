@@ -10,7 +10,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.telegram.telegrambots.ApiContextInitializer;
 
 import java.sql.SQLException;
@@ -44,11 +43,14 @@ public class EventAppApplication {
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
+        return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
+                // https://stackoverflow.com/a/47570835/2618907
+                registry.addMapping("/**").allowedMethods("*").allowedOrigins("*")
+                        .allowedHeaders("*");
             }
         };
     }
+
 }

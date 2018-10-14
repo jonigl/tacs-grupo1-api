@@ -3,14 +3,18 @@ package ar.com.tacsutn.grupo1.eventapp.controllers;
 import ar.com.tacsutn.grupo1.eventapp.models.TotalAlarms;
 import ar.com.tacsutn.grupo1.eventapp.models.TotalLists;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
+import ar.com.tacsutn.grupo1.eventapp.models.UserRequest;
 import ar.com.tacsutn.grupo1.eventapp.services.AlarmService;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
+import ar.com.tacsutn.grupo1.eventapp.services.SessionService;
 import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,16 +24,19 @@ public class UserController {
     private final UserService userService;
     private final EventListService eventListService;
     private final AlarmService alarmService;
+    private final SessionService sessionService;
 
     @Autowired
     public UserController(
             UserService userService,
             EventListService eventListService,
-            AlarmService alarmService) {
+            AlarmService alarmService,
+            SessionService sessionService) {
 
         this.userService = userService;
         this.eventListService = eventListService;
         this.alarmService = alarmService;
+        this.sessionService = sessionService;
     }
 
     /**
@@ -54,6 +61,29 @@ public class UserController {
         return userService
                 .getById(userId)
                 .orElseThrow(()-> new ResourceNotFoundException("User id not found"));
+    }
+
+    /**
+     * Returns the currently authenticated user (by its authentication header).
+     *
+     * @return the authenticated user.
+     */
+    @GetMapping("/users/info")
+    @PreAuthorize("hasRole('USER')")
+    public User getUserInfo(HttpServletRequest request) {
+        return sessionService.getAuthenticatedUser(request);
+    }
+
+    /**
+     * Updates the authenticated user's information.
+     *
+     * @return the updated authenticated user.
+     */
+    @PatchMapping("/users/info")
+    @PreAuthorize("hasRole('USER')")
+    public User updateUserInfo(@RequestBody UserRequest userRequest, HttpServletRequest request) {
+        User user = sessionService.getAuthenticatedUser(request);
+        return userService.update(user, userRequest);
     }
 
     /**
