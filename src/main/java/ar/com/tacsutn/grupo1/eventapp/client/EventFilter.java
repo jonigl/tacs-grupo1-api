@@ -95,7 +95,7 @@ public class EventFilter {
             getStartDateTo(),
             getAddress(),
             getPrice()
-        ).allMatch(Objects::nonNull);
+        ).anyMatch(Objects::nonNull);
     }
 
     private String formatDateTime(LocalDateTime dateTime) {
