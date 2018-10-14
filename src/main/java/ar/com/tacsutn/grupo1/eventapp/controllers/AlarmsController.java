@@ -101,6 +101,11 @@ public class AlarmsController {
                 .setAddress(alarmRequest.getAddress())
                 .setStartDateTo(alarmRequest.getStartDateTo())
                 .setPrice(alarmRequest.getPrice());
+
+        if (!alarm.getFilter().isValid()) {
+            throw new BadRequestException("Filter is not set.");
+        }
+
         alarmService.save(alarm);
         return alarm;
     }
