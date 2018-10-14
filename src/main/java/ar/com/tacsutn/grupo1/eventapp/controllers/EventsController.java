@@ -58,7 +58,7 @@ public class EventsController {
             @RequestParam(value = "price", required = false)
             String price,
 
-            @RequestParam(value = "page", required = false, defaultValue = "1")
+            @RequestParam(value = "page", required = false, defaultValue = "0")
             Integer page
     ) {
 

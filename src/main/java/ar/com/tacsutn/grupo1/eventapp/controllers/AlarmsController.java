@@ -165,12 +165,11 @@ public class AlarmsController {
     @PreAuthorize("hasRole('USER')")
     public RestPage<Event> getEvents(
             @PathVariable Long alarmId,
-            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             HttpServletRequest request) {
 
         User user = sessionService.getAuthenticatedUser(request);
-        Alarm alarm = alarmService.getById(user,alarmId).orElseThrow(() -> new ResourceNotFoundException("Alarm not found."));
+        Alarm alarm = alarmService.getById(user, alarmId).orElseThrow(() -> new ResourceNotFoundException("Alarm not found."));
         return eventbriteClient.searchEvents(alarm.getFilter(), page).orElseThrow(() -> new ResourceNotFoundException("Events not found."));
     }
-
 }
