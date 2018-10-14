@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -7,6 +8,7 @@ import org.springframework.util.MultiValueMap;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EventFilter {
@@ -83,6 +85,17 @@ public class EventFilter {
 
         multiValueMap.values().removeIf(elem -> elem.stream().allMatch(Objects::isNull));
         return multiValueMap;
+    }
+
+    @JsonIgnore
+    public boolean isValid() {
+        return Stream.of(
+            getKeyword(),
+            getStartDateFrom(),
+            getStartDateTo(),
+            getAddress(),
+            getPrice()
+        ).allMatch(Objects::nonNull);
     }
 
     private String formatDateTime(LocalDateTime dateTime) {

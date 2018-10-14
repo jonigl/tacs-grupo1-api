@@ -64,13 +64,19 @@ public class AlarmsController {
                         HttpServletRequest request) {
 
         User user = sessionService.getAuthenticatedUser(request);
+
         EventFilter eventFilter = new EventFilter()
                 .setKeyword(alarmRequest.getKeyword())
                 .setStartDateFrom(alarmRequest.getStartDateFrom())
                 .setAddress(alarmRequest.getAddress())
                 .setStartDateTo(alarmRequest.getStartDateTo())
                 .setPrice(alarmRequest.getPrice());
-        Alarm alarm = new Alarm(user,alarmRequest.getName(), eventFilter);
+
+        if (!eventFilter.isValid()) {
+            throw new BadRequestException("Filter is not set.");
+        }
+
+        Alarm alarm = new Alarm(user, alarmRequest.getName(), eventFilter);
         return alarmService.save(alarm);
     }
 
@@ -127,8 +133,12 @@ public class AlarmsController {
 
         Stream<AlarmResponse> stream = alarms.stream().parallel().map(alarm ->
             eventbriteClient.searchEvents(alarm.getFilter())
-                .map(page -> new AlarmResponse(alarm.getId(), alarm.getName(), page.getTotalElements()))
-                .orElse(new AlarmResponse(alarm.getId(), alarm.getName(), 0L))
+                .map(page -> new AlarmResponse(
+                    alarm.getId(), alarm.getName(), alarm.getFilter(), page.getTotalElements()
+                ))
+                .orElse(new AlarmResponse(
+                    alarm.getId(), alarm.getName(), alarm.getFilter(), 0L
+                ))
         );
 
         List<AlarmResponse> content = stream.collect(Collectors.toList());

@@ -1,5 +1,7 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
+import ar.com.tacsutn.grupo1.eventapp.client.EventFilter;
+
 public class AlarmResponse {
 
     private Long id;
@@ -8,9 +10,12 @@ public class AlarmResponse {
 
     private Long total_events_matched;
 
-    public AlarmResponse(Long id, String name, Long total_events_matched) {
+    private EventFilter filter;
+
+    public AlarmResponse(Long id, String name, EventFilter filter, Long total_events_matched) {
         this.id = id;
         this.name = name;
+        this.filter = filter;
         this.total_events_matched = total_events_matched;
     }
 
@@ -36,5 +41,13 @@ public class AlarmResponse {
 
     public void setTotal_events_matched(Long total_events_matched) {
         this.total_events_matched = total_events_matched;
+    }
+
+    public EventFilter getFilter() {
+        return filter;
+    }
+
+    public void setFilter(EventFilter filter) {
+        this.filter = filter;
     }
 }
