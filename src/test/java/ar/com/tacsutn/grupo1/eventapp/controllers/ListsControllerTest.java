@@ -2,6 +2,7 @@ package ar.com.tacsutn.grupo1.eventapp.controllers;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,35 @@ public class ListsControllerTest extends ControllerTest {
     @Test
     public void canPostLists() throws Exception {
         this.getMockMvc()
-                .perform(post("/api/v1/lists?name=List3"))
+                .perform(post("/api/v1/lists")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"events\": [{\"id\": \"1\"}], \"name\": \"NewList1\" }"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @WithMockUser(roles = "USER")
+    @Transactional
+    @DirtiesContext
+    @Test
+    public void canPostListsWithNoEvents() throws Exception {
+        this.getMockMvc()
+                .perform(post("/api/v1/lists")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"name\": \"NewList1\" }"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @WithMockUser(roles = "USER")
+    @Transactional
+    @DirtiesContext
+    @Test
+    public void canPostListsWithManyEvents() throws Exception {
+        this.getMockMvc()
+                .perform(post("/api/v1/lists")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"events\": [{\"id\": \"0\"}, {\"id\": \"1\"}], \"name\": \"NewList1\" }"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -41,20 +70,25 @@ public class ListsControllerTest extends ControllerTest {
     @Transactional
     @DirtiesContext
     @Test
-    public void canPostListsIfItExists() throws Exception {
+    public void shouldNotPostListsIfHasSameName() throws Exception {
         this.getMockMvc()
-                .perform(post("/api/v1/lists?name=List1"))
+                .perform(post("/api/v1/lists")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"events\": [{\"id\": \"0\"}], \"name\": \"List1\" }"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
+    @Ignore
     @WithMockUser(roles = "USER")
     @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPostListsIfNoNameGiven() throws Exception {
         this.getMockMvc()
-                .perform(post("/api/v1/lists"))
+                .perform(post("/api/v1/lists")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"events\": [{\"id\": \"1\"}] }"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -76,7 +110,35 @@ public class ListsControllerTest extends ControllerTest {
     @Test
     public void canPutListsById() throws Exception {
         this.getMockMvc()
-                .perform(put("/api/v1/lists/1?name=Test"))
+                .perform(put("/api/v1/lists/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"events\": [{\"id\": \"1\"}], \"id\": 1, \"name\": \"NewName1\" }"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @WithMockUser(roles = "USER")
+    @Transactional
+    @DirtiesContext
+    @Test
+    public void canPutListsByIdWithNoEvents() throws Exception {
+        this.getMockMvc()
+                .perform(put("/api/v1/lists/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"id\": 1, \"name\": \"NewName1\" }"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @WithMockUser(roles = "USER")
+    @Transactional
+    @DirtiesContext
+    @Test
+    public void canPutListsByIdWithManyEvents() throws Exception {
+        this.getMockMvc()
+                .perform(put("/api/v1/lists/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"events\": [{\"id\": \"0\"}, {\"id\": \"1\"}], \"id\": 1, \"name\": \"NewName1\" }"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -87,18 +149,23 @@ public class ListsControllerTest extends ControllerTest {
     @Test
     public void canPutListsByIdWithSameName() throws Exception {
         this.getMockMvc()
-                .perform(put("/api/v1/lists/1?name=List1"))
+                .perform(put("/api/v1/lists/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"events\": [{\"id\": \"0\"}], \"id\": 1, \"name\": \"List1\" }"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
+    @Ignore
     @WithMockUser(roles = "USER")
     @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPutListsByIdIfNotNameGiven() throws Exception {
         this.getMockMvc()
-                .perform(put("/api/v1/lists/500"))
+                .perform(put("/api/v1/lists/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"events\": [{\"id\": \"1\"}], \"id\": 1}"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -109,7 +176,23 @@ public class ListsControllerTest extends ControllerTest {
     @Test
     public void shouldNotPutListsByIdIfNotExists() throws Exception {
         this.getMockMvc()
-                .perform(put("/api/v1/lists/500?name=Test"))
+                .perform(put("/api/v1/lists/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"events\": [{\"id\": \"0\"}], \"id\": 500, \"name\": \"List500\" }"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Ignore
+    @WithMockUser(roles = "USER")
+    @Transactional
+    @DirtiesContext
+    @Test
+    public void shouldNotPutListsByIdWithEventThatDoesNotExist() throws Exception {
+        this.getMockMvc()
+                .perform(put("/api/v1/lists/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"events\": [{\"id\": \"0\"}, {\"id\": \"500\"}], \"id\": 1, \"name\": \"ListNew1\" }"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -153,31 +236,39 @@ public class ListsControllerTest extends ControllerTest {
     @Test
     public void canPostListsEventsById() throws Exception {
         this.getMockMvc()
-                .perform(post("/api/v1/lists/1/events/?event_id=1"))
+                .perform(post("/api/v1/lists/1/events")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"id\": 1 }"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
+    @Ignore
     @WithMockUser(roles = "USER")
     @Transactional
     @DirtiesContext
     @Test
-    public void canPostListsEventsByIdWithExistingId() throws Exception {
+    public void canPostListsEventsWithExistingEvent() throws Exception {
         this.getMockMvc()
-                .perform(post("/api/v1/lists/1/events/?event_id=0"))
+                .perform(post("/api/v1/lists/1/events")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"id\": 0 }"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
+    @Ignore
     @WithMockUser(roles = "USER")
     @Transactional
     @DirtiesContext
     @Test
-    public void shouldNotPostListsEventsByIdIfIdIsNotQueried() throws Exception {
+    public void shouldNotPostListsEventsWithAnEventThatDoesNotExist() throws Exception {
         this.getMockMvc()
-                .perform(post("/api/v1/lists/1/events"))
+                .perform(post("/api/v1/lists/1/events")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"id\": 500 }"))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @WithMockUser(roles = "USER")
