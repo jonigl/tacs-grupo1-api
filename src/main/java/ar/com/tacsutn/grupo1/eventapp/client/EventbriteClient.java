@@ -37,14 +37,14 @@ public class EventbriteClient {
     }
 
     public Optional<RestPage<Event>> searchEvents(EventFilter filter) {
-        return this.searchEvents(filter, 1);
+        return this.searchEvents(filter, 0);
     }
 
     public Optional<RestPage<Event>> searchEvents(EventFilter filter, Integer pageNumber) {
         UriComponentsBuilder uriComponentsBuilder = getUriComponentsBuilder();
 
-        if (pageNumber > 1) {
-            uriComponentsBuilder.queryParam("page", pageNumber);
+        if (pageNumber > 0) {
+            uriComponentsBuilder.queryParam("page", pageNumber + 1);
         }
 
         UriComponents uriComponents = uriComponentsBuilder

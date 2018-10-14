@@ -1,18 +1,23 @@
 package ar.com.tacsutn.grupo1.eventapp.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EventFilter {
+
+    private static final String KEYWORD_KEY = "q";
+    private static final String START_DATE_FROM_KEY = "start_date.range_start";
+    private static final String START_DATE_TO_KEY = "start_date.range_end";
+    private static final String ADDRESS_KEY = "location.address";
+    private static final String PRICE_KEY = "price";
 
     private String keyword;
 
@@ -24,27 +29,22 @@ public class EventFilter {
 
     private String price;
 
-    @JsonProperty("q")
     public String getKeyword() {
         return keyword;
     }
 
-    @JsonProperty("start_date.range_start")
     public String getStartDateFrom() {
         return startDateFrom == null ? null : formatDateTime(startDateFrom);
     }
 
-    @JsonProperty("start_date.range_end")
     public String getStartDateTo() {
         return startDateTo == null ? null : formatDateTime(startDateTo);
     }
 
-    @JsonProperty("location.address")
     public String getAddress() {
         return address;
     }
 
-    @JsonProperty("price")
     public String getPrice() {
         return price;
     }
@@ -75,14 +75,27 @@ public class EventFilter {
     }
 
     MultiValueMap<String, String> getQueryParams() {
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference typeReference = new TypeReference<HashMap<String, String>>() {};
-        HashMap<String, String> map = mapper.convertValue(this, typeReference);
-
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.setAll(map);
 
+        multiValueMap.set(KEYWORD_KEY, getKeyword());
+        multiValueMap.set(START_DATE_FROM_KEY, getStartDateFrom());
+        multiValueMap.set(START_DATE_TO_KEY, getStartDateTo());
+        multiValueMap.set(ADDRESS_KEY, getAddress());
+        multiValueMap.set(PRICE_KEY, getPrice());
+
+        multiValueMap.values().removeIf(elem -> elem.stream().allMatch(Objects::isNull));
         return multiValueMap;
+    }
+
+    @JsonIgnore
+    public boolean isValid() {
+        return Stream.of(
+            getKeyword(),
+            getStartDateFrom(),
+            getStartDateTo(),
+            getAddress(),
+            getPrice()
+        ).anyMatch(Objects::nonNull);
     }
 
     private String formatDateTime(LocalDateTime dateTime) {

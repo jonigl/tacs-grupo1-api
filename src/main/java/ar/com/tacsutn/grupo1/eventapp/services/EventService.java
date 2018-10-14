@@ -44,6 +44,11 @@ public class EventService {
     }
 
     @Transactional
+    public Page<EventId> getEventsBetween(Date from, Date to, Pageable pageable) {
+        return eventRepository.getAllByCreatedTimeIsBetween(from, to, pageable);
+    }
+
+    @Transactional
     public Page<EventId> getIdsByEventListId(Long eventListId, Pageable pageable) {
         return eventRepository.getIdsByEventListId(eventListId, pageable);
     }
