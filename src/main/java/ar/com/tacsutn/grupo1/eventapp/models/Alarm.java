@@ -1,12 +1,11 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
 import ar.com.tacsutn.grupo1.eventapp.client.EventFilter;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 //@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "user"}))
@@ -22,6 +21,7 @@ public class Alarm {
     @ApiModelProperty(example = "sample alarm name")
     private String name;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user")
     private User user;
@@ -29,7 +29,7 @@ public class Alarm {
     @Embedded
     private EventFilter filter;
 
-    public Alarm(){
+    public Alarm() {
 
     }
 
