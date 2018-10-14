@@ -126,6 +126,28 @@ public class EventsControllerTest extends ControllerTest {
     @Transactional
     @DirtiesContext
     @Test
+    public void canGetRegisteredEvents() throws Exception {
+        this.getMockMvc()
+                .perform(get("/api/v1/events/registered_events"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @WithMockUser(roles = "USER")
+    @Transactional
+    @DirtiesContext
+    @Test
+    public void shouldNotGetRegisteredEventsIfNotAdmin() throws Exception {
+        this.getMockMvc()
+                .perform(get("/api/v1/events/registered_events"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @WithMockUser(roles = "ADMIN")
+    @Transactional
+    @DirtiesContext
+    @Test
     public void canGetTotalEventsFromADateRange() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/events/total_events?from=1970-01-01T00:00:00&to=2070-01-01T00:00:00"))
