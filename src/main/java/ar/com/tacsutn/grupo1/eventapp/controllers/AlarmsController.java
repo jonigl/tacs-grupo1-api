@@ -42,6 +42,22 @@ public class AlarmsController {
         this.eventbriteClient = eventbriteClient;
     }
 
+    /**
+     * Get all alarms of the authenticated user.
+     *
+     * @return the alarms page.
+     */
+    @GetMapping("/alarms")
+    @PreAuthorize("hasRole('USER')")
+    @ApiPageable
+    public RestPage<Alarm> getAll(
+            @ApiIgnore Pageable pageable,
+            HttpServletRequest request) {
+        User user = sessionService.getAuthenticatedUser(request);
+        Page<Alarm> page = alarmService.getAllAlarmsByUserId(user.getId(), pageable);
+        return new RestPage<>(page);
+    }
+
     @PostMapping("/alarms")
     @PreAuthorize("hasRole('USER')")
     public Alarm create(@RequestBody AlarmRequest alarmRequest,
