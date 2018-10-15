@@ -1,5 +1,7 @@
 package ar.com.tacsutn.grupo1.eventapp.services;
 
+import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
+import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.models.EventId;
 import ar.com.tacsutn.grupo1.eventapp.models.EventList;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
@@ -15,15 +17,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class EventListService {
 
     private final EventListRepository eventListRepository;
+    private final EventbriteClient eventbriteClient;
 
     @Autowired
-    public EventListService(EventListRepository eventListRepository) {
+    public EventListService(
+            EventListRepository eventListRepository,
+            EventbriteClient eventbriteClient) {
+
         this.eventListRepository = eventListRepository;
+        this.eventbriteClient = eventbriteClient;
     }
 
     @Transactional
@@ -92,17 +101,38 @@ public class EventListService {
         });
     }
 
-    public Page<EventId> getCommonEvents(Long id1, Long id2) {
+    @Transactional
+    public Page<Event> getCommonEvents(Long id1, Long id2, Pageable pageable) {
         EventList list1 = getById(id1)
                 .orElseThrow(NoSuchElementException::new);
 
         EventList list2 = getById(id2)
                 .orElseThrow(NoSuchElementException::new);
 
-        List<EventId> events = list1.getEvents();
-        events.retainAll(list2.getEvents());
+        List<EventId> eventIds = list1.getEvents();
+        eventIds.retainAll(list2.getEvents());
 
-        return new PageImpl<>(events);
+        List<Event> events = eventIds
+            .parallelStream()
+            .flatMap(event -> eventbriteClient.getEvent(event.getId())
+                .map(Stream::of)
+                .orElseGet(Stream::empty))
+            .collect(Collectors.toList());
+
+        return listToPage(events, pageable);
+    }
+
+    private <T> Page<T> listToPage(List<T> list, Pageable pageable) {
+        int start = Math.toIntExact(pageable.getOffset());
+
+        int end;
+        if ((start + pageable.getPageSize()) > list.size()) {
+            end = list.size();
+        } else {
+            end = start + pageable.getPageSize();
+        }
+
+        return new PageImpl<>(list.subList(start, end), pageable, list.size());
     }
 
     public long getTotalEventListByUserId(long user_id){

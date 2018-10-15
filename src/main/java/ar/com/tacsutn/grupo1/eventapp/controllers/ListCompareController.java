@@ -1,15 +1,19 @@
 package ar.com.tacsutn.grupo1.eventapp.controllers;
 
-import ar.com.tacsutn.grupo1.eventapp.models.EventId;
+import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.models.RestPage;
 import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
+import ar.com.tacsutn.grupo1.eventapp.swagger.ApiPageable;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -30,10 +34,13 @@ public class ListCompareController {
      */
     @GetMapping("/lists/compare")
     @PreAuthorize("hasRole('ADMIN')")
-    public RestPage<EventId> getCommonEvents(
+    @ApiPageable
+    public RestPage<Event> getCommonEvents(
             @RequestParam(name = "list1") Long listId1,
-            @RequestParam(name = "list2") Long listId2) {
+            @RequestParam(name = "list2") Long listId2,
+            @ApiIgnore Pageable pageable) {
 
-        return new RestPage<>(listService.getCommonEvents(listId1, listId2));
+        Page<Event> commonEvents = listService.getCommonEvents(listId1, listId2, pageable);
+        return new RestPage<>(commonEvents);
     }
 }
