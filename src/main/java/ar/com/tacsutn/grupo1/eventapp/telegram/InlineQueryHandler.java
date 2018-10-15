@@ -53,17 +53,30 @@ public class InlineQueryHandler {
      * @return the inline query answer.
      */
     private AnswerInlineQuery createAnswer(InlineQuery inlineQuery) {
+        String offset = inlineQuery.getOffset();
+        Integer offsetNumber;
+
+        if (offset == null || offset.isEmpty()) {
+            offsetNumber = 0;
+        } else {
+            offsetNumber = Integer.parseInt(offset);
+        }
+
+        Integer pageNumber = offsetNumber / 50;
+        Integer pageOffset = offsetNumber % 50;
+
         EventFilter filter = new EventFilter().setKeyword(inlineQuery.getQuery());
 
         List<InlineQueryResult> results = eventbriteClient
-                .searchEvents(filter)
-                .map(this::createResults)
+                .searchEvents(filter, pageNumber)
+                .map(page -> this.createResults(page, pageOffset))
                 .orElseGet(Collections::emptyList);
 
         return new AnswerInlineQuery()
                 .setInlineQueryId(inlineQuery.getId())
                 .setPersonal(false)
-                .setResults(results);
+                .setResults(results)
+                .setNextOffset(Integer.toString(offsetNumber + 5));
     }
 
     /**
@@ -71,9 +84,18 @@ public class InlineQueryHandler {
      * @param page the Eventbrite search result page.
      * @return an Telegram inline query result list.
      */
-    private List<InlineQueryResult> createResults(Page<Event> page) {
+    private List<InlineQueryResult> createResults(Page<Event> page, int fromIndex) {
+        int elements = page.getNumberOfElements();
+        int remainingElements = Math.max(elements - fromIndex, 0);
+        int fetchElements = Math.min(remainingElements, 5);
+        int toIndex = fromIndex + fetchElements;
+
+        if (fromIndex == toIndex) {
+            return Collections.emptyList();
+        }
+
         return page.getContent()
-                .subList(0, page.getNumberOfElements() > 5 ? 5 : page.getNumberOfElements())
+                .subList(fromIndex, toIndex)
                 .parallelStream()
                 .map(this::createResult)
                 .collect(Collectors.toList());

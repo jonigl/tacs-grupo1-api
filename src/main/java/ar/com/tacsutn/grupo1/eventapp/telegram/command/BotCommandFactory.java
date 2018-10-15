@@ -16,6 +16,7 @@ public class BotCommandFactory {
     @Autowired
     public BotCommandFactory(ApplicationContext applicationContext) {
         botCommandMap = new Hashtable<>();
+        botCommandMap.put("/start", applicationContext.getBean(HelpCommand.class));
         botCommandMap.put("/authenticate", applicationContext.getBean(AuthenticateCommand.class));
         botCommandMap.put("/search", applicationContext.getBean(SearchCommand.class));
         botCommandMap.put("/mylists", applicationContext.getBean(MyListsCommand.class));
