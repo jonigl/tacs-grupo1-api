@@ -109,4 +109,7 @@ public class EventListService {
         return eventListRepository.countAllByUserId(user_id);
     }
 
+    public Page<EventList> getListsByUserId(User user, Pageable pageable) {
+        return eventListRepository.findAllByUser(user, pageable);
+    }
 }

@@ -55,6 +55,21 @@ public class UserController {
         return new RestPage<>(list);
     }
 
+
+    /**
+     * Returns user's lists.
+     */
+    @GetMapping("/users/{user_id}/lists")
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiPageable
+    public RestPage<EventList> getUserLists(
+            @PathVariable("user_id") Long userId,
+            HttpServletRequest request) {
+        User user = userService.getById(userId).orElseThrow(()-> new ResourceNotFoundException("User id not found"));
+        Page<EventList> list = eventListService.getListsByUserId(user, PageRequest.of(0, 50));
+        return new RestPage<>(list);
+    }
+
     /**
      * Create a new user account.
      * @return the created user.
