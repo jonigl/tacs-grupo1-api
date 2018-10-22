@@ -37,3 +37,16 @@ Para las alarmas utilizamos una estrategia lazy (hasta que tengamos Telegram y h
 Nuestra **nueva documentación** está basada en swagger y se puede acceder desde el siguiente link: [`https://tacs-grupo1.herokuapp.com/swagger-ui.html`](https://tacs-grupo1.herokuapp.com/swagger-ui.html) y localmente desde: [`http://localhost:8080/swagger-ui.html`](http://localhost:8080/swagger-ui.html) .
 
 **Importante:** Hemos deprecado la documentación en postman porque hemos alcanzado el límite impuesto para TEAMS.
+
+Entrega 3
+-
+
+El código del front-end se encuentra en el siguiente repositorio: [`https://github.com/jonigl/tacs-grupo1-frontend/`](https://github.com/jonigl/tacs-grupo1-frontend/)
+
+El bot de telegram es el sigueinte: https://t.me/tacs_grupo1_test_bot
+
+Entrega 4
+-
+Decidimos utilizar Heroku para deployar la aplicación en la nube: https://tacs-grupo1.herokuapp.com
+
+Decidimos pasar de H2 que es una base de datos relacional en memoria a mongoDB porque al ser una base de datos no relacional nos permitiría  a futuro, de ser necesario, escalar horizontalmetne con una buena consistencia de datos y tolerancia a fallos. Aprovechamos el servicio gratuito de https://mlab.com (sandbox).
