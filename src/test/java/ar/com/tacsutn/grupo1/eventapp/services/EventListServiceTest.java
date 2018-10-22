@@ -16,10 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -62,7 +59,7 @@ public class EventListServiceTest {
     @Transactional
     @Test
     public void shouldNotGetEventsListIfNotExists() {
-        assertFalse(listService.getById(-500L).isPresent());
+        assertFalse(listService.getById("-500").isPresent());
     }
 
     @Transactional
@@ -106,7 +103,7 @@ public class EventListServiceTest {
     @Transactional
     @Test(expected = NoSuchElementException.class)
     public void shouldNotDeleteListIfNotExists() {
-        listService.delete(user1, -2000L);
+        listService.delete(user1, "-2000");
     }
 
     @Transactional
@@ -128,7 +125,7 @@ public class EventListServiceTest {
     @Transactional
     @Test(expected = NoSuchElementException.class)
     public void shouldNotChangeListNameIfNotExists() {
-        listService.rename(user1, -2000L, "TestRename");
+        listService.rename(user1, "-2000", "TestRename");
     }
 
     @Transactional
@@ -177,35 +174,35 @@ public class EventListServiceTest {
     @Transactional
     @Test(expected = NoSuchElementException.class)
     public void shouldNotFindCommonEventsIfFirstIdDoesNotExist() {
-        getCommonEvents(-2000L, eventList1.getId());
+        getCommonEvents("-2000", eventList1.getId());
     }
 
     @Transactional
     @Test(expected = NoSuchElementException.class)
     public void shouldNotFindCommonEventsIfSecondIdDoesNotExist() {
-        getCommonEvents(eventList1.getId(), -4000L);
+        getCommonEvents(eventList1.getId(), "-4000");
     }
 
     @Transactional
     @Test(expected = NoSuchElementException.class)
     public void shouldNotFindCommonEventsIfNeitherIdsDoesNotExist() {
-        getCommonEvents(-2000L, -4000L);
+        getCommonEvents("-2000", "-4000");
     }
 
     @Transactional
     @Test
     public void canFindUserCountInterestedInEvent() {
-        int interestedCount = eventService.getTotalUsersByEventId("0");
+        long interestedCount = eventService.getTotalUsersByEventId("0");
 
-        assertEquals(2, interestedCount);
+        assertEquals(2L, interestedCount);
     }
 
     @Transactional
     @Test
     public void shouldBe0IfNoUsersAreInterestedInEvent() {
-        int interestedCount = eventService.getTotalUsersByEventId("foo");
+        long interestedCount = eventService.getTotalUsersByEventId("foo");
 
-        assertEquals(0, interestedCount);
+        assertEquals(0L, interestedCount);
     }
 
     private void setUsers() {
@@ -251,7 +248,7 @@ public class EventListServiceTest {
         return listService.getCommonEvents(eventList1.getId(), eventList2.getId(), PageRequest.of(0, 50)).getContent();
     }
 
-    private List<Event> getCommonEvents(Long id1, Long id2) {
+    private List<Event> getCommonEvents(String id1, String id2) {
         return listService.getCommonEvents(id1, id2, PageRequest.of(0, 50)).getContent();
     }
 }

@@ -9,7 +9,6 @@ import ar.com.tacsutn.grupo1.eventapp.swagger.ApiPageable;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -47,11 +46,9 @@ public class UserController {
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
     @ApiPageable
-    public RestPage<User> getAll(
-            @ApiIgnore Pageable pageable,
-            HttpServletRequest request) {
+    public RestPage<User> getAll(@ApiIgnore Pageable pageable) {
 
-        Page<User> list = userService.getAllUsers(PageRequest.of(0, 50));
+        Page<User> list = userService.getAllUsers(pageable);
         return new RestPage<>(list);
     }
 
@@ -63,10 +60,10 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @ApiPageable
     public RestPage<EventList> getUserLists(
-            @PathVariable("user_id") Long userId,
-            HttpServletRequest request) {
+            @PathVariable("user_id") String userId,
+            @ApiIgnore Pageable pageable) {
         User user = userService.getById(userId).orElseThrow(()-> new ResourceNotFoundException("User id not found"));
-        Page<EventList> list = eventListService.getListsByUserId(user, PageRequest.of(0, 50));
+        Page<EventList> list = eventListService.getListsByUserId(user, pageable);
         return new RestPage<>(list);
     }
 
@@ -88,7 +85,7 @@ public class UserController {
      */
     @GetMapping("/users/{user_id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public User getUser(@PathVariable("user_id") Long userId) {
+    public User getUser(@PathVariable("user_id") String userId) {
         return userService
                 .getById(userId)
                 .orElseThrow(()-> new ResourceNotFoundException("User id not found"));
@@ -126,7 +123,7 @@ public class UserController {
      */
     @GetMapping("/users/{user_id}/total_lists")
     @PreAuthorize("hasRole('ADMIN')")
-    public TotalLists getTotalOfListEvents(@PathVariable("user_id") Long userId) {
+    public TotalLists getTotalOfListEvents(@PathVariable("user_id") String userId) {
         TotalLists totalLists = new TotalLists();
         totalLists.setTotalLists(eventListService.getTotalEventListByUserId(userId));
         return totalLists;
@@ -141,7 +138,7 @@ public class UserController {
      */
     @GetMapping("/users/{user_id}/total_alarms")
     @PreAuthorize("hasRole('ADMIN')")
-    public TotalAlarms getTotalOfAlarms(@PathVariable("user_id") Long userId) {
+    public TotalAlarms getTotalOfAlarms(@PathVariable("user_id") String userId) {
         TotalAlarms totalAlarms = new TotalAlarms();
         totalAlarms.setTotalAlarms(alarmService.getTotalAlarmsByUserId(userId));
         return totalAlarms;

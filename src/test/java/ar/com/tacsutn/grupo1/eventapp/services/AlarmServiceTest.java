@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
@@ -42,7 +41,7 @@ public class AlarmServiceTest {
 
     @Test
     public void shouldContainOneAlarm() {
-        assertEquals((long) this.alarmService.getTotalAlarmsByUserId(user1.getId()), 1);
+        assertEquals(this.alarmService.getTotalAlarmsByUserId(user1.getId()), 1);
     }
 
     @Test
