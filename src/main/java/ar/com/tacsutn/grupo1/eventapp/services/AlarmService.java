@@ -26,12 +26,12 @@ public class AlarmService {
         return alarmRepository.save(alarm);
     }
 
-    public Optional<Alarm> getById(long id){
+    public Optional<Alarm> getById(String id){
         return alarmRepository.findById(id);
     }
 
 
-    public Optional<Alarm> getById(User user, Long id) {
+    public Optional<Alarm> getById(User user, String id) {
         return getById(id).filter(alarm -> alarm.getUser().equals(user));
     }
 
@@ -39,11 +39,11 @@ public class AlarmService {
         alarmRepository.delete(alarm);
     }
 
-    public long getTotalAlarmsByUserId(Long userId) {
+    public long getTotalAlarmsByUserId(String userId) {
         return alarmRepository.countAllByUserId(userId);
     }
 
-    public Page<Alarm> getAllAlarmsByUserId(long userId, Pageable pageable){
+    public Page<Alarm> getAllAlarmsByUserId(String userId, Pageable pageable){
         return alarmRepository.getAlarmsByUserId(userId, pageable);
     }
 }

@@ -3,7 +3,7 @@ package ar.com.tacsutn.grupo1.eventapp.telegram.callback.operation;
 import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
 import ar.com.tacsutn.grupo1.eventapp.models.Event;
 import ar.com.tacsutn.grupo1.eventapp.models.EventId;
-import ar.com.tacsutn.grupo1.eventapp.services.EventService;
+import ar.com.tacsutn.grupo1.eventapp.services.EventListService;
 import ar.com.tacsutn.grupo1.eventapp.services.UserService;
 import ar.com.tacsutn.grupo1.eventapp.telegram.TelegramBot;
 import ar.com.tacsutn.grupo1.eventapp.telegram.callback.CallbackData;
@@ -25,23 +25,24 @@ import java.util.stream.Stream;
 public class ShowListEventsCallbackOperation extends AuthenticatedCallbackOperation {
 
     private final EventbriteClient eventbriteClient;
-    private final EventService eventService;
+    private final EventListService eventListService;
 
     @Autowired
     protected ShowListEventsCallbackOperation(
             UserService userService,
             EventbriteClient eventbriteClient,
-            EventService eventService) {
+            EventListService eventListService) {
 
         super(userService);
         this.eventbriteClient = eventbriteClient;
-        this.eventService = eventService;
+        this.eventListService = eventListService;
     }
 
     @Override
     public void handle(TelegramBot bot, CallbackQuery callbackQuery, CallbackData callbackData) {
         getUserOrAlert(bot, callbackQuery)
-                .map(user -> eventService.getIdsByEventListId(callbackData.getListId(), PageRequest.of(0, 5)))
+                .flatMap(user -> eventListService.getById(user, callbackData.getListId()))
+                .map(list -> eventListService.getListEvents(list, PageRequest.of(0, 5)))
                 .map(eventIds -> getShowListEventsMessageRequest(callbackQuery, eventIds))
                 .ifPresent(request -> makeRequest(bot, request));
     }

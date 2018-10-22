@@ -7,46 +7,54 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "USER")
+@Document
 public class User {
 
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "USERNAME", length = 50, unique = true, nullable = false)
+    @Field
+    @NotNull
     @Size(min = 4, max = 50)
     private String username;
 
     @ApiModelProperty(hidden = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(name = "PASSWORD", length = 100, nullable = false)
+    @Field
+    @NotNull
     @Size(min = 4, max = 100)
     private String password;
 
-    @Column(name = "FIRSTNAME", length = 50, nullable = false)
+    @Field
+    @NotNull
     @Size(min = 4, max = 50)
     private String firstname;
 
-    @Column(name = "LASTNAME", length = 50, nullable = false)
+    @Field
+    @NotNull
     @Size(min = 4, max = 50)
     private String lastname;
 
-    @Column(name = "EMAIL", length = 50, nullable = false)
+    @Field
+    @NotNull
     @Size(min = 4, max = 50)
     private String email;
 
     @JsonIgnore
-    @Column(name = "ENABLED", nullable = false)
+    @Field
+    @NotNull
     private Boolean enabled;
     
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -62,26 +70,19 @@ public class User {
     private LocalDateTime lastAccess;
 
     @JsonIgnore
-    @Column(name = "LASTPASSWORDRESETDATE", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Field
+    @NotNull
     private Date lastPasswordResetDate;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "USER_AUTHORITY",
-            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
+    @DBRef
     private List<Authority> authorities;
 
     @JsonIgnore
-    @OneToMany(
-        cascade = CascadeType.ALL,
-        fetch = FetchType.LAZY
-    )
+    @DBRef(lazy = true)
     private List<Alarm> alarms;
 
-    @Column(unique = true)
+    @Indexed(unique = true, sparse = true)
     private Integer telegramUserId;
 
     public User() {
@@ -108,11 +109,11 @@ public class User {
         this.authorities = authorities;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

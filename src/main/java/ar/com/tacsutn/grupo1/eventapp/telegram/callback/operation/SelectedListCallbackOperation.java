@@ -42,7 +42,7 @@ public class SelectedListCallbackOperation extends AuthenticatedCallbackOperatio
     @Override
     public void handle(TelegramBot bot, CallbackQuery callbackQuery, CallbackData callbackData) {
         EventId eventId = new EventId(callbackData.getEventId());
-        Long listId = callbackData.getListId();
+        String listId = callbackData.getListId();
 
         getUserOrAlert(bot, callbackQuery)
                 .flatMap(user -> addEventToList(user, listId, eventId))
@@ -63,7 +63,7 @@ public class SelectedListCallbackOperation extends AuthenticatedCallbackOperatio
     }
 
     @Transactional
-    private Optional<EventList> addEventToList(User user, Long listId, EventId eventId) {
+    private Optional<EventList> addEventToList(User user, String listId, EventId eventId) {
         try {
             eventService.save(eventId);
             return eventListService.addEvent(user, listId, eventId);

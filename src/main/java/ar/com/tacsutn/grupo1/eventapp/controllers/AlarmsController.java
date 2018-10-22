@@ -82,13 +82,13 @@ public class AlarmsController {
 
     @GetMapping("/alarms/{alarmId}")
     @PreAuthorize("hasRole('USER')")
-    public Alarm get(@PathVariable Long alarmId) {
+    public Alarm get(@PathVariable String alarmId) {
         return alarmService.getById(alarmId).orElseThrow(() -> new ResourceNotFoundException("Alarm not found."));
     }
 
     @PutMapping("/alarms/{alarmId}")
     @PreAuthorize("hasRole('USER')")
-    public Alarm update(@PathVariable Long alarmId,
+    public Alarm update(@PathVariable String alarmId,
                         @RequestBody AlarmRequest alarmRequest,
                         HttpServletRequest request) {
 
@@ -113,7 +113,7 @@ public class AlarmsController {
     @DeleteMapping("/alarms/{alarmId}")
     @PreAuthorize("hasRole('USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long alarmId,
+    public void delete(@PathVariable String alarmId,
                        HttpServletRequest request) {
 
         User user = sessionService.getAuthenticatedUser(request);
@@ -164,7 +164,7 @@ public class AlarmsController {
     @GetMapping("/alarms/{alarmId}/fetch")
     @PreAuthorize("hasRole('USER')")
     public RestPage<Event> getEvents(
-            @PathVariable Long alarmId,
+            @PathVariable String alarmId,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
             HttpServletRequest request) {
 

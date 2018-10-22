@@ -4,7 +4,7 @@ import ar.com.tacsutn.grupo1.eventapp.client.EventFilter;
 
 public class AlarmResponse {
 
-    private Long id;
+    private String id;
 
     private String name;
 
@@ -12,18 +12,18 @@ public class AlarmResponse {
 
     private EventFilter filter;
 
-    public AlarmResponse(Long id, String name, EventFilter filter, Long total_events_matched) {
+    public AlarmResponse(String id, String name, EventFilter filter, Long total_events_matched) {
         this.id = id;
         this.name = name;
         this.filter = filter;
         this.total_events_matched = total_events_matched;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

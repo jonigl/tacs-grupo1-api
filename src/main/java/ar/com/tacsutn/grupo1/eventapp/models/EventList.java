@@ -1,29 +1,31 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-// TODO: 12/10/2018 thinks about this feature
-// @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "user"}))
+@Document
 public class EventList {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "name", nullable = false)
+    @NotNull
+    @Field("name")
     private String name;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user")
+    @DBRef
     private User user;
 
-    @ManyToMany
-    private List<EventId> events;
+    @DBRef
+    private List<EventId> events = new ArrayList<>();
 
     public EventList() {
 
@@ -34,11 +36,11 @@ public class EventList {
         this.user = user;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) { this.id = id; }
+    public void setId(String id) { this.id = id; }
 
     public String getName() {
         return name;

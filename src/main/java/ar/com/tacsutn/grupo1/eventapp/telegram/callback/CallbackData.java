@@ -24,7 +24,7 @@ public class CallbackData {
     private String eventId;
 
     @JsonProperty("l")
-    private Long listId;
+    private String listId;
 
     public Type getType() {
         return type;
@@ -42,11 +42,11 @@ public class CallbackData {
         this.eventId = eventId;
     }
 
-    public Long getListId() {
+    public String getListId() {
         return listId;
     }
 
-    public void setListId(Long listId) {
+    public void setListId(String listId) {
         this.listId = listId;
     }
 
