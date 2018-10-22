@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
 import ar.com.tacsutn.grupo1.eventapp.security.JwtUserFactory;
 import ar.com.tacsutn.grupo1.eventapp.repositories.UserRepository;
+
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 

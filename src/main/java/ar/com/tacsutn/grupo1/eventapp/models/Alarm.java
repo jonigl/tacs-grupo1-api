@@ -4,29 +4,33 @@ import ar.com.tacsutn.grupo1.eventapp.client.EventFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-@Entity
-//@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "user"}))
+@Document
 @ApiModel
 public class Alarm {
 
     @Id
     @ApiModelProperty(example = "12345678")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "name", nullable = false)
+    @Field("name")
+    @Indexed(unique = true)
+    @NotNull
     @ApiModelProperty(example = "sample alarm name")
     private String name;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user")
+    @DBRef
+    @NotNull
     private User user;
 
-    @Embedded
     private EventFilter filter;
 
     public Alarm() {
@@ -39,11 +43,11 @@ public class Alarm {
         this.filter = filter;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

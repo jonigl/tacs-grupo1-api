@@ -36,8 +36,8 @@ public class ListCompareController {
     @PreAuthorize("hasRole('ADMIN')")
     @ApiPageable
     public RestPage<Event> getCommonEvents(
-            @RequestParam(name = "list1") Long listId1,
-            @RequestParam(name = "list2") Long listId2,
+            @RequestParam(name = "list1") String listId1,
+            @RequestParam(name = "list2") String listId2,
             @ApiIgnore Pageable pageable) {
 
         Page<Event> commonEvents = listService.getCommonEvents(listId1, listId2, pageable);

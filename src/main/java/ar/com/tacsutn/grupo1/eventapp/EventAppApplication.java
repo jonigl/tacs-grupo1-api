@@ -1,20 +1,19 @@
 package ar.com.tacsutn.grupo1.eventapp;
 
-import org.h2.tools.Server;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.telegram.telegrambots.ApiContextInitializer;
 
-import java.sql.SQLException;
-
-@EnableJpaAuditing
+@EnableMongoAuditing
+@EnableMongoRepositories
 @SpringBootApplication
 public class EventAppApplication {
 
@@ -34,11 +33,6 @@ public class EventAppApplication {
         );
         configurer.setProperties(yaml.getObject());
         return configurer;
-    }
-
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    public Server h2Server() throws SQLException {
-        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092");
     }
 
     @Bean

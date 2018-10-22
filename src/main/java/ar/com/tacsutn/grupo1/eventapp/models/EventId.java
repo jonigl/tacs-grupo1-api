@@ -1,28 +1,20 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+import javax.annotation.Nonnull;
 import java.util.Date;
-import java.util.List;
 
-@Entity
-@Table(name = "Event")
-@EntityListeners(AuditingEntityListener.class)
-public class EventId {
+@Document
+public class EventId implements Persistable<String> {
 
     @Id
-    @Column(unique = true)
     private String id;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "events", fetch = FetchType.LAZY)
-    private List<EventList> eventLists;
-
     @CreatedDate
-    @Column
     private Date createdTime;
 
     public EventId() {
@@ -33,20 +25,18 @@ public class EventId {
         this.id = id;
     }
 
+    @Nonnull
     public String getId() {
         return id;
     }
 
+    @Override
+    public boolean isNew() {
+        return true;
+    }
+
     public void setId(String id) {
         this.id = id;
-    }
-
-    public List<EventList> getEventLists() {
-        return eventLists;
-    }
-
-    public void setEventLists(List<EventList> eventLists) {
-        this.eventLists = eventLists;
     }
 
     @Override

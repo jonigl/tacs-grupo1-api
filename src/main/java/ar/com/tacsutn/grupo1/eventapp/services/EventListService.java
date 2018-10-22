@@ -1,22 +1,16 @@
 package ar.com.tacsutn.grupo1.eventapp.services;
 
 import ar.com.tacsutn.grupo1.eventapp.client.EventbriteClient;
-import ar.com.tacsutn.grupo1.eventapp.models.Event;
-import ar.com.tacsutn.grupo1.eventapp.models.EventId;
-import ar.com.tacsutn.grupo1.eventapp.models.EventList;
-import ar.com.tacsutn.grupo1.eventapp.models.User;
+import ar.com.tacsutn.grupo1.eventapp.models.*;
 import ar.com.tacsutn.grupo1.eventapp.repositories.EventListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,12 +30,12 @@ public class EventListService {
     }
 
     @Transactional
-    public Optional<EventList> getById(Long id) {
+    public Optional<EventList> getById(String id) {
         return eventListRepository.findById(id);
     }
 
     @Transactional
-    public Optional<EventList> getById(User user, Long id) {
+    public Optional<EventList> getById(User user, String id) {
         return getById(id).filter(list -> list.getUser().equals(user));
     }
 
@@ -66,6 +60,16 @@ public class EventListService {
     }
 
     @Transactional
+    public List<EventList> findListsWithEvent(EventId eventId) {
+        return eventListRepository.findAllByEvents(eventId);
+    }
+
+    @Transactional
+    public Page<EventId> getListEvents(EventList eventList, Pageable pageable) {
+        return Utils.listToPage(new ArrayList<>(eventList.getEvents()), pageable);
+    }
+
+    @Transactional
     public EventList save(EventList eventList) {
         return eventListRepository.save(eventList);
     }
@@ -73,11 +77,11 @@ public class EventListService {
     @Transactional
     public EventList save(User user, EventList eventList) {
         eventList.setUser(user);
-        return eventListRepository.save(eventList);
+        return save(eventList);
     }
 
     @Transactional
-    public void delete(User user, Long id) {
+    public void delete(User user, String id) {
         EventList eventList = getById(user, id)
                 .orElseThrow(NoSuchElementException::new);
 
@@ -85,16 +89,16 @@ public class EventListService {
     }
 
     @Transactional
-    public EventList rename(User user, Long id, String newName) {
+    public EventList rename(User user, String id, String newName) {
         EventList eventList = getById(user, id)
                 .orElseThrow(NoSuchElementException::new);
 
         eventList.setName(newName);
-        return eventListRepository.save(eventList);
+        return save(eventList);
     }
 
     @Transactional
-    public Optional<EventList> addEvent(User user, Long id, EventId event) {
+    public Optional<EventList> addEvent(User user, String id, EventId event) {
         return getById(user, id).map(eventList -> {
             eventList.getEvents().add(event);
             return eventListRepository.save(eventList);
@@ -102,7 +106,7 @@ public class EventListService {
     }
 
     @Transactional
-    public Page<Event> getCommonEvents(Long id1, Long id2, Pageable pageable) {
+    public Page<Event> getCommonEvents(String id1, String id2, Pageable pageable) {
         EventList list1 = getById(id1)
                 .orElseThrow(NoSuchElementException::new);
 
@@ -119,23 +123,10 @@ public class EventListService {
                 .orElseGet(Stream::empty))
             .collect(Collectors.toList());
 
-        return listToPage(events, pageable);
+        return Utils.listToPage(events, pageable);
     }
 
-    private <T> Page<T> listToPage(List<T> list, Pageable pageable) {
-        int start = Math.toIntExact(pageable.getOffset());
-
-        int end;
-        if ((start + pageable.getPageSize()) > list.size()) {
-            end = list.size();
-        } else {
-            end = start + pageable.getPageSize();
-        }
-
-        return new PageImpl<>(list.subList(start, end), pageable, list.size());
-    }
-
-    public long getTotalEventListByUserId(long user_id){
+    public long getTotalEventListByUserId(String user_id){
         return eventListRepository.countAllByUserId(user_id);
     }
 
