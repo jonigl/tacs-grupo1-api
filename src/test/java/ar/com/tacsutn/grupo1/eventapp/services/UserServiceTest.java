@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.NoSuchElementException;
@@ -16,7 +16,6 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Transactional
 public class UserServiceTest {
 
     @Autowired
@@ -28,6 +27,7 @@ public class UserServiceTest {
         createUsers();
     }
 
+    @DirtiesContext
     @Test
     public void canCreateUser() {
         User user3 = new User("JaneDoemann", "1234", "Jane", "Doemann", "jane.doemann@test.com", true, new Date(), null);
@@ -36,23 +36,27 @@ public class UserServiceTest {
         assertEquals(result.getId(), user3.getId());
     }
 
+    @DirtiesContext
     @Test
     public void canGetUserById() {
         User result = userService.getById(user1.getId()).orElseThrow(NoSuchElementException::new);
         assertEquals(result.getId(), user1.getId());
     }
 
+    @DirtiesContext
     @Test
     public void canAccessPropertiesOfUser() {
         User result = userService.getById(user1.getId()).orElseThrow(NoSuchElementException::new);
         assertEquals(result.getLastAccess(), user1.getLastAccess());
     }
 
+    @DirtiesContext
     @Test(expected = NoSuchElementException.class)
     public void getExceptionWhenUserIsNotFound() {
         userService.getById(user1.getId() + 123).orElseThrow(NoSuchElementException::new);
     }
 
+    @DirtiesContext
     @Test
     public void canUpdateUser() {
         User result = userService.getById(user1.getId()).orElseThrow(NoSuchElementException::new);
