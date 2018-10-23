@@ -1,6 +1,7 @@
 package ar.com.tacsutn.grupo1.eventapp.models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -14,6 +15,7 @@ public class Authority {
     private String id;
 
     @Field("name")
+    @Indexed(unique = true)
     private AuthorityName name;
 
     @DBRef

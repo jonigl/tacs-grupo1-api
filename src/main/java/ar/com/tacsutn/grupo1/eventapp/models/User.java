@@ -26,6 +26,7 @@ public class User {
     private String id;
 
     @Field
+    @Indexed(unique = true)
     @NotNull
     @Size(min = 4, max = 50)
     private String username;
