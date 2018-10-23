@@ -79,6 +79,12 @@ public abstract class ControllerTest {
 
     private MockMvc mockMvc;
 
+    protected String
+            userId1, userId2,
+            alarmId1, alarmId2, alarmId3,
+            eventId0, eventId1,
+            eventListId1, eventListId2, eventListId3;
+
     private void setAuthorities() {
         Authority userAuthority = new Authority();
         userAuthority.setName(AuthorityName.ROLE_USER);
@@ -99,6 +105,9 @@ public abstract class ControllerTest {
 
         userService.save(user1);
         userService.save(user2);
+
+        userId1 = user1.getId();
+        userId2 = user2.getId();
     }
 
     private void setAlarms() {
@@ -125,6 +134,10 @@ public abstract class ControllerTest {
         alarmService.save(alarm1);
         alarmService.save(alarm2);
         alarmService.save(alarm3);
+
+        alarmId1 = alarm1.getId();
+        alarmId2 = alarm2.getId();
+        alarmId3 = alarm3.getId();
     }
 
     private void setEvents() {
@@ -133,6 +146,9 @@ public abstract class ControllerTest {
 
         eventService.save(event1);
         eventService.save(event2);
+
+        eventId0 = event1.getId();
+        eventId1 = event2.getId();
     }
 
     private void setLists() {
@@ -152,6 +168,10 @@ public abstract class ControllerTest {
 
         listService.save(eventList1);
         listService.save(eventList3);
+
+        eventListId1 = eventList1.getId();
+        eventListId2 = eventList2.getId();
+        eventListId3 = eventList3.getId();
     }
 
     protected MockMvc getMockMvc() {

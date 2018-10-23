@@ -32,11 +32,11 @@ public class AlarmsControllerTest extends ControllerTest {
     @Test
     public void canGetAlarm() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/alarms/1").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+                .perform(get("/api/v1/alarms/" + alarmId1).accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("alarm1"))
-                .andExpect(jsonPath("$.id").value("1"));
+                .andExpect(jsonPath("$.id").value(alarmId1));
 
     }
 
@@ -45,7 +45,7 @@ public class AlarmsControllerTest extends ControllerTest {
     @Test
     public void shouldNotGetAlarmIfNotExists() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/alarms/4"))
+                .perform(get("/api/v1/alarms/500"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -55,7 +55,7 @@ public class AlarmsControllerTest extends ControllerTest {
     @Test
     public void canPutAlarm() throws Exception {
         this.getMockMvc()
-                .perform(put("/api/v1/alarms/1")
+                .perform(put("/api/v1/alarms/" + alarmId1)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{ \"address\": \"argentina\", \"keyword\": \"x\", \"name\": \"x\", \"price\": \"100\", \"startDateFrom\": \"2018-10-08T22:54:28.201Z\", \"startDateTo\": \"2018-10-08T22:54:28.201Z\" }"))
                 .andDo(print())
@@ -67,7 +67,7 @@ public class AlarmsControllerTest extends ControllerTest {
     @Test
     public void shouldNotPutAlarmIfNotExists() throws Exception {
         this.getMockMvc()
-                .perform(put("/api/v1/alarms/4")
+                .perform(put("/api/v1/alarms/500")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{ \"address\": \"argentina\", \"keyword\": \"x\", \"name\": \"x\", \"price\": \"100\", \"startDateFrom\": \"2018-10-08T22:54:28.201Z\", \"startDateTo\": \"2018-10-08T22:54:28.201Z\" }"))
                 .andDo(print())
@@ -79,7 +79,7 @@ public class AlarmsControllerTest extends ControllerTest {
     @Test
     public void canDeleteAlarm() throws Exception {
         this.getMockMvc()
-                .perform(delete("/api/v1/alarms/1"))
+                .perform(delete("/api/v1/alarms/" + alarmId1))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
@@ -89,7 +89,7 @@ public class AlarmsControllerTest extends ControllerTest {
     @Test
     public void shouldNotDeleteAlarmIfNotExists() throws Exception {
         this.getMockMvc()
-                .perform(delete("/api/v1/alarms/4"))
+                .perform(delete("/api/v1/alarms/500"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -99,7 +99,7 @@ public class AlarmsControllerTest extends ControllerTest {
     @Test
     public void canFetchAlarmPagedEvents() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/alarms/1/fetch"))
+                .perform(get("/api/v1/alarms/" + alarmId1 + "/fetch"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -109,7 +109,7 @@ public class AlarmsControllerTest extends ControllerTest {
     @Test
     public void canFetchAlarmEvents() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/alarms/1/fetch?page=1"))
+                .perform(get("/api/v1/alarms/" + alarmId1 + "/fetch?page=1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -119,7 +119,7 @@ public class AlarmsControllerTest extends ControllerTest {
     @Test
     public void shouldNotFetchAlarmIfDoesNotExist() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/alarms/4/fetch"))
+                .perform(get("/api/v1/alarms/500/fetch"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -129,7 +129,7 @@ public class AlarmsControllerTest extends ControllerTest {
     @Test
     public void shouldNotFetchAlarmEventsIfPageDoesNotExist() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/alarms/1/fetch/?page=100000000"))
+                .perform(get("/api/v1/alarms/" + alarmId1 + "/fetch/?page=100000000"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 

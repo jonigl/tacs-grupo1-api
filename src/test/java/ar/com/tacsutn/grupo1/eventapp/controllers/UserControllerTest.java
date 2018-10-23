@@ -66,11 +66,11 @@ public class UserControllerTest extends ControllerTest {
     @Test
     public void canGetUserById() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/1"))
+                .perform(get("/api/v1/users/" + userId1))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("JohnDoemann1"))
-                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.id").value(userId1))
                 .andExpect(jsonPath("$.firstname").value("John"))
                 .andExpect(jsonPath("$.lastname").value("Doemann"));
 
@@ -81,7 +81,7 @@ public class UserControllerTest extends ControllerTest {
     @Test
     public void shouldNotGetUserByIdIfNotAdmin() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/1"))
+                .perform(get("/api/v1/users/" + userId1))
                 .andDo(print())
                 .andExpect(status().isForbidden());
 
@@ -103,7 +103,7 @@ public class UserControllerTest extends ControllerTest {
     @Test
     public void canGetTotalAlarms() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/2/total_alarms"))
+                .perform(get("/api/v1/users/" + userId1 + "/total_alarms"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -113,7 +113,7 @@ public class UserControllerTest extends ControllerTest {
     @Test
     public void shouldNotGetTotalAlarmsIfNotAdmin() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/2/total_alarms"))
+                .perform(get("/api/v1/users/" + userId1 + "/total_alarms"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
 
@@ -136,7 +136,7 @@ public class UserControllerTest extends ControllerTest {
     @Test
     public void canGetTotalLists() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/1/total_lists"))
+                .perform(get("/api/v1/users/" + userId1 + "/total_lists"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -146,7 +146,7 @@ public class UserControllerTest extends ControllerTest {
     @Test
     public void shouldNotGetTotalListsIfNotAdmin() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/1/total_lists"))
+                .perform(get("/api/v1/users/" + userId1 + "/total_lists"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
