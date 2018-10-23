@@ -167,6 +167,7 @@ public abstract class ControllerTest {
         eventList3.setEvents(list3);
 
         listService.save(eventList1);
+        listService.save(eventList2);
         listService.save(eventList3);
 
         eventListId1 = eventList1.getId();
