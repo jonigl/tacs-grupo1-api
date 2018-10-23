@@ -16,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ListsControllerTest extends ControllerTest {
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetLists() throws Exception {
@@ -27,7 +26,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPostLists() throws Exception {
@@ -40,7 +38,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPostListsWithNoEvents() throws Exception {
@@ -53,7 +50,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPostListsWithManyEvents() throws Exception {
@@ -67,7 +63,6 @@ public class ListsControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPostListsIfHasSameName() throws Exception {
@@ -81,7 +76,6 @@ public class ListsControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPostListsIfNoNameGiven() throws Exception {
@@ -94,7 +88,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetListsById() throws Exception {
@@ -105,7 +98,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPutListsById() throws Exception {
@@ -118,7 +110,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPutListsByIdWithNoEvents() throws Exception {
@@ -131,7 +122,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPutListsByIdWithManyEvents() throws Exception {
@@ -144,7 +134,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPutListsByIdWithSameName() throws Exception {
@@ -158,7 +147,6 @@ public class ListsControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPutListsByIdIfNotNameGiven() throws Exception {
@@ -171,7 +159,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPutListsByIdIfNotExists() throws Exception {
@@ -185,7 +172,6 @@ public class ListsControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPutListsByIdWithEventThatDoesNotExist() throws Exception {
@@ -198,7 +184,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canDeleteListsById() throws Exception {
@@ -209,7 +194,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotDeleteListsByIdIfNotExists() throws Exception {
@@ -220,7 +204,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetListsEventsById() throws Exception {
@@ -231,7 +214,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPostListsEventsById() throws Exception {
@@ -245,7 +227,6 @@ public class ListsControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPostListsEventsWithExistingEvent() throws Exception {
@@ -259,7 +240,6 @@ public class ListsControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPostListsEventsWithAnEventThatDoesNotExist() throws Exception {
@@ -272,7 +252,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canDeleteListsEventsById() throws Exception {
@@ -283,7 +262,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotDeleteListsEventsByIdIfEventIsNotSpecified() throws Exception {
@@ -294,7 +272,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotDeleteListsEventsByIdIfEventDoesNotExist() throws Exception {
@@ -305,7 +282,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canCompareLists() throws Exception {
@@ -316,7 +292,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canCompareListsIsAssociative() throws Exception {
@@ -327,7 +302,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canCompareListsIfEqual() throws Exception {
@@ -338,7 +312,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void userShouldNotCompareLists() throws Exception {
@@ -349,7 +322,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotCompareListsIfNotSpecified() throws Exception {
@@ -360,7 +332,6 @@ public class ListsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotCompareListsIfQueriesAreMissing() throws Exception {
@@ -372,7 +343,6 @@ public class ListsControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotCompareListsIfOneDoesNotExist() throws Exception {
