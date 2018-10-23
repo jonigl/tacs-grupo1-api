@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.NoSuchElementException;
@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Transactional
 public class AlarmServiceTest {
 
     @Autowired
@@ -39,42 +38,47 @@ public class AlarmServiceTest {
         createAlarms();
     }
 
+    @DirtiesContext
     @Test
     public void shouldContainOneAlarm() {
         assertEquals(this.alarmService.getTotalAlarmsByUserId(user1.getId()), 1);
     }
 
+    @DirtiesContext
     @Test
     public void canGetAlarmById() {
         Alarm result = alarmService.getById(alarm2.getId()).orElseThrow(NoSuchElementException::new);
         assertEquals(result.getId(), alarm2.getId());
     }
 
+    @DirtiesContext
     @Test(expected = NoSuchElementException.class)
     public void canNotGetAlarmFromAnotherUser() {
         alarmService.getById(user1, alarm2.getId()).orElseThrow(NoSuchElementException::new);
     }
 
+    @DirtiesContext
     @Test(expected = NoSuchElementException.class)
     public void getExceptionWhenAlarmIsNotFound () {
         userService.getById(alarm1.getId() + 123).orElseThrow(NoSuchElementException::new);
     }
 
+    @DirtiesContext
     @Test
     public void canRemoveAlarm() {
-        assertEquals(1, (long) alarmService.getTotalAlarmsByUserId(user1.getId()));
+        assertEquals(1L, alarmService.getTotalAlarmsByUserId(user1.getId()));
 
         PageRequest pageRequest = PageRequest.of(0, 50);
         Page<Alarm> alarms = alarmService.getAllAlarmsByUserId(user1.getId(), pageRequest);
 
-        assertEquals(1, alarms.getTotalElements());
+        assertEquals(1L, alarms.getTotalElements());
         alarms.forEach(alarmService::remove);
 
-        assertEquals(0, (long) alarmService.getTotalAlarmsByUserId(user1.getId()));
+        assertEquals(0L, alarmService.getTotalAlarmsByUserId(user1.getId()));
 
         Page<Alarm> alarmsReload = alarmService.getAllAlarmsByUserId(user1.getId(), pageRequest);
 
-        assertEquals( 0, alarmsReload.getTotalElements());
+        assertEquals( 0L, alarmsReload.getTotalElements());
     }
 
     private void createUsers() {

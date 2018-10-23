@@ -48,7 +48,6 @@ public class AuthenticationControllerTest {
                 .build();
     }
 
-    @Transactional
     @DirtiesContext
     @Test
     public void canLogin() throws Exception {
@@ -60,7 +59,6 @@ public class AuthenticationControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotLoginWithWrongUser() throws Exception {
@@ -72,7 +70,6 @@ public class AuthenticationControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotLoginWithWrongPassword() throws Exception {
@@ -85,7 +82,6 @@ public class AuthenticationControllerTest {
     }
 
     @Ignore
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotLoginTwice() throws Exception {
@@ -107,7 +103,6 @@ public class AuthenticationControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    @Transactional
     @DirtiesContext
     @Test
     public void canRefresh() throws Exception {
@@ -123,7 +118,6 @@ public class AuthenticationControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotRefreshWhenNotLogged() throws Exception {

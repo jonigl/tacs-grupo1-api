@@ -3,19 +3,40 @@ package ar.com.tacsutn.grupo1.eventapp.controllers;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserControllerTest extends ControllerTest {
+    @WithMockUser(roles = "ADMIN")
+    @DirtiesContext
+    @Test
+    public void canGetUsers() throws Exception {
+        this.getMockMvc()
+                .perform(get("/api/v1/users"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
     @WithMockUser(roles = "USER")
-    @Transactional
+    @DirtiesContext
+    @Test
+    public void shouldNotGetUsersIfNotAdmin() throws Exception {
+        this.getMockMvc()
+                .perform(get("/api/v1/users"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @WithMockUser(roles = "USER")
     @DirtiesContext
     @Test
     public void canPostUser() throws Exception {
@@ -29,7 +50,6 @@ public class UserControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPostExistingUser() throws Exception {
@@ -42,38 +62,35 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
-    public void canGetUser() throws Exception {
+    public void canGetUserById() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/1"))
+                .perform(get("/api/v1/users/" + userId1))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("JohnDoemann1"))
-                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.id").value(userId1))
                 .andExpect(jsonPath("$.firstname").value("John"))
                 .andExpect(jsonPath("$.lastname").value("Doemann"));
 
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
-    public void shouldNotGetUserIfNotAdmin() throws Exception {
+    public void shouldNotGetUserByIdIfNotAdmin() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/1"))
+                .perform(get("/api/v1/users/" + userId1))
                 .andDo(print())
                 .andExpect(status().isForbidden());
 
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
-    public void shouldNotGetUserIfDoesNotExist() throws Exception {
+    public void shouldNotGetUserByIdIfDoesNotExist() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/500"))
                 .andDo(print())
@@ -82,24 +99,21 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetTotalAlarms() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/2/total_alarms"))
+                .perform(get("/api/v1/users/" + userId1 + "/total_alarms"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.total_alarms").value("1"));
+                .andExpect(status().isOk());
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetTotalAlarmsIfNotAdmin() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/2/total_alarms"))
+                .perform(get("/api/v1/users/" + userId1 + "/total_alarms"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
 
@@ -107,7 +121,6 @@ public class UserControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetTotalAlarmsIfUserDoesNotExist() throws Exception {
@@ -119,37 +132,65 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
-    public void canGetTotalEvents() throws Exception {
+    public void canGetTotalLists() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/2/total_events"))
+                .perform(get("/api/v1/users/" + userId1 + "/total_lists"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.total_lists").value("1"));
+                .andExpect(status().isOk());
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
-    public void shouldNotGetTotalEventsIfNotAdmin() throws Exception {
+    public void shouldNotGetTotalListsIfNotAdmin() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/2/total_events"))
+                .perform(get("/api/v1/users/" + userId1 + "/total_lists"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
     @Ignore
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
-    public void shouldNotGetTotalEventsIfUserDoesNotExist() throws Exception {
+    public void shouldNotGetTotalListsIfUserDoesNotExist() throws Exception {
         this.getMockMvc()
-                .perform(get("/api/v1/users/500/total_events"))
+                .perform(get("/api/v1/users/500/total_lists"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @WithMockUser(roles = "USER")
+    @DirtiesContext
+    @Test
+    public void canGetUsersInfo() throws Exception {
+        this.getMockMvc()
+                .perform(get("/api/v1/users/info"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @DirtiesContext
+    @Test
+    public void shouldNotGetUsersInfoIfNotLoggedIn() throws Exception {
+        this.getMockMvc()
+                .perform(get("/api/v1/users/info"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+    @WithMockUser(roles = "USER")
+    @DirtiesContext
+    @Test
+    public void canPatchUsersInfo() throws Exception {
+        this.getMockMvc()
+                .perform(patch("/api/v1/users/info")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{ \"username\": \"JohnDoemann1\", \"email\": \"john@foobar.com\", \"firstname\": \"Jhonny\", \"lastname\": \"Foobar\" }")
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
