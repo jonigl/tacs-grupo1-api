@@ -47,7 +47,7 @@ public class AuthenticationControllerTest {
                 .apply(springSecurity())
                 .build();
     }
-    
+
     @DirtiesContext
     @Test
     public void canLogin() throws Exception {
@@ -58,7 +58,7 @@ public class AuthenticationControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-    
+
     @DirtiesContext
     @Test
     public void shouldNotLoginWithWrongUser() throws Exception {
@@ -69,7 +69,7 @@ public class AuthenticationControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
-    
+
     @DirtiesContext
     @Test
     public void shouldNotLoginWithWrongPassword() throws Exception {
@@ -102,7 +102,7 @@ public class AuthenticationControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
-    
+
     @DirtiesContext
     @Test
     public void canRefresh() throws Exception {
@@ -117,7 +117,7 @@ public class AuthenticationControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-    
+
     @DirtiesContext
     @Test
     public void shouldNotRefreshWhenNotLogged() throws Exception {

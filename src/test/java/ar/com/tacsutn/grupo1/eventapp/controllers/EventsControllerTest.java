@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class EventsControllerTest extends ControllerTest {
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetEventsWithAddress() throws Exception {
@@ -23,7 +22,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetEventsWithFrom() throws Exception {
@@ -34,7 +32,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetEventsWithPrice() throws Exception {
@@ -45,7 +42,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetEventsWithQ() throws Exception {
@@ -56,7 +52,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetEventsWithTo() throws Exception {
@@ -67,7 +62,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetEventsWithUnknownFilterFromAPI() throws Exception {
@@ -78,7 +72,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetEventsWithNonExistentFilter() throws Exception {
@@ -89,7 +82,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetTotalUsers() throws Exception {
@@ -100,7 +92,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetTotalUsersIfNotAdmin() throws Exception {
@@ -112,7 +103,6 @@ public class EventsControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetTotalUsersIfEventDoesNotExist() throws Exception {
@@ -123,7 +113,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetRegisteredEvents() throws Exception {
@@ -134,7 +123,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetRegisteredEventsIfNotAdmin() throws Exception {
@@ -145,7 +133,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetTotalEventsFromADateRange() throws Exception {
@@ -156,7 +143,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetTotalEventsFromBeginningOfTimes() throws Exception {
@@ -167,7 +153,6 @@ public class EventsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetTotalEventsIfNotAdmin() throws Exception {
