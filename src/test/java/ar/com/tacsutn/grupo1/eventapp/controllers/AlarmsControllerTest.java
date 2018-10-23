@@ -16,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AlarmsControllerTest extends ControllerTest {
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPostAlarm() throws Exception {
@@ -29,7 +28,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetAlarm() throws Exception {
@@ -43,7 +41,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetAlarmIfNotExists() throws Exception {
@@ -54,7 +51,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPutAlarm() throws Exception {
@@ -67,7 +63,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPutAlarmIfNotExists() throws Exception {
@@ -80,7 +75,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canDeleteAlarm() throws Exception {
@@ -91,7 +85,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotDeleteAlarmIfNotExists() throws Exception {
@@ -102,7 +95,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canFetchAlarmPagedEvents() throws Exception {
@@ -113,7 +105,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canFetchAlarmEvents() throws Exception {
@@ -124,7 +115,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotFetchAlarmIfDoesNotExist() throws Exception {
@@ -135,7 +125,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotFetchAlarmEventsIfPageDoesNotExist() throws Exception {
@@ -147,7 +136,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetTodayAlarms() throws Exception {
@@ -158,7 +146,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetTodayAlarmsSortedDesc() throws Exception {
@@ -169,7 +156,6 @@ public class AlarmsControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetTodayAlarmsSortedAsc() throws Exception {

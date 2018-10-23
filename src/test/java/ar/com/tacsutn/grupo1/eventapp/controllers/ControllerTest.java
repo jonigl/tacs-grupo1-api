@@ -175,7 +175,6 @@ public abstract class ControllerTest {
                 .build();
     }
 
-    @Transactional
     @Test
     public void incorrectURIReturnsErrorStatus() throws Exception {
         mockMvc.perform(get("/fail")).andExpect(status().is4xxClientError());
