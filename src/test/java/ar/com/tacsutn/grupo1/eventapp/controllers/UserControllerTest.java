@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class UserControllerTest extends ControllerTest {
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetUsers() throws Exception {
@@ -28,7 +27,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetUsersIfNotAdmin() throws Exception {
@@ -39,7 +37,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPostUser() throws Exception {
@@ -53,7 +50,6 @@ public class UserControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotPostExistingUser() throws Exception {
@@ -66,7 +62,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetUserById() throws Exception {
@@ -82,7 +77,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetUserByIdIfNotAdmin() throws Exception {
@@ -94,7 +88,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetUserByIdIfDoesNotExist() throws Exception {
@@ -106,7 +99,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetTotalAlarms() throws Exception {
@@ -117,7 +109,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetTotalAlarmsIfNotAdmin() throws Exception {
@@ -130,7 +121,6 @@ public class UserControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetTotalAlarmsIfUserDoesNotExist() throws Exception {
@@ -142,7 +132,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetTotalLists() throws Exception {
@@ -153,7 +142,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetTotalListsIfNotAdmin() throws Exception {
@@ -165,7 +153,6 @@ public class UserControllerTest extends ControllerTest {
 
     @Ignore
     @WithMockUser(roles = "ADMIN")
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetTotalListsIfUserDoesNotExist() throws Exception {
@@ -176,7 +163,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canGetUsersInfo() throws Exception {
@@ -186,7 +172,6 @@ public class UserControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Transactional
     @DirtiesContext
     @Test
     public void shouldNotGetUsersInfoIfNotLoggedIn() throws Exception {
@@ -197,7 +182,6 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @WithMockUser(roles = "USER")
-    @Transactional
     @DirtiesContext
     @Test
     public void canPatchUsersInfo() throws Exception {
