@@ -23,7 +23,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.Filter;
@@ -42,6 +41,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public abstract class ControllerTest {
+
     @MockBean
     private BootstrapData bootstrapData;
 
