@@ -1,3 +1,6 @@
 spring:
   autoconfigure:
     exclude: org.telegram.telegrambots.starter.TelegramBotStarterConfiguration
+  data:
+    mongodb:
+      port: 0
