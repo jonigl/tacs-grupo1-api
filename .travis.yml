@@ -6,7 +6,7 @@ services:
   - docker
 
 script:
-  - travis_wait docker build -t jonigl/tacs-grupo1:1.0.0 .
+  - docker build -t jonigl/tacs-grupo1:1.0.0 .
 
 deploy:
   provider: heroku
