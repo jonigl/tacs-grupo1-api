@@ -10,7 +10,7 @@ cache:
   - $HOME/.m2
 
 script:
-  - docker build -t jonigl/tacs-grupo1:1.0.0 .
+  - travis_wait docker build -t jonigl/tacs-grupo1:1.0.0 .
 
 deploy:
   provider: heroku
