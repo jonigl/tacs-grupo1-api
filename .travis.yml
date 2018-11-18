@@ -5,6 +5,10 @@ sudo: required
 services:
   - docker
 
+cache:
+  directories:
+  - $HOME/.m2
+
 script:
   - docker build -t jonigl/tacs-grupo1:1.0.0 .
 
