@@ -8,5 +8,5 @@ WORKDIR /app
 COPY eventbrite.yml eventbrite.yml
 COPY telegram.yml telegram.yml
 COPY jwt.yml jwt.yml
-COPY --from=builder target target
+COPY --from=builder /build/target target
 ENTRYPOINT ["java","-Dspring.data.mongodb.uri=mongodb://mongodb:27017/eventapp","-jar","target/event-app-1.0.0.jar"]
