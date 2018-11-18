@@ -9,4 +9,4 @@ COPY eventbrite.yml eventbrite.yml
 COPY telegram.yml telegram.yml
 COPY jwt.yml jwt.yml
 COPY --from=builder /build/target target
-ENTRYPOINT ["java","-Dspring.data.mongodb.uri=mongodb://mongodb:27017/eventapp","-jar","target/event-app-1.0.0.jar"]
+ENTRYPOINT ["java","-Dspring.data.mongodb.uri=mongodb://admin:admin123@ds161913.mlab.com:61913/tacs-grupo1","-jar","target/event-app-1.0.0.jar"]
