@@ -5,10 +5,10 @@ install: true
 script:
   - "./mvnw install -q -Dmaven.test.skip=true"
 
-#deploy:
-#  provider: heroku
-#  api_key:
-#    secure: hSn6n52KkhO4GZbBag0+87o04IojXr0YyLtwajEULLVFawYO6p6iBtQ1JrMJnR/Xp/dZdvJDTlmh3cVqHYdJ+LunCRyPF571JJtOsBYcATm3iAZsbzPVED4r4riJjDeagetbZQUhnBcHpfFxdkcAFP2ibJnXSUF5RT6z0oeRKw/Am8R6PnnY/HHT6oMOyJm6pGi8AaIFjOCJfBcAbnmI+AcsQ3jPpum/xvk87mbTDM3Bo0Ywipty5/R2eh1xj7NO50jjRXcq16JDslMjT1iFBjNTANYGQ9J3qYvqe30BiWfsrTUsQldAFd8lWQ2a9mlGRUeUE2auEurBixmnBmQ4omJW3knpTQ+vpEMXq4Oj+HBCvr3cVnHgH0YXfW+zatEcQTD2MlvTLwVpt8f8YtSiZ23kLMyGYNPf4XIP8iprymIMVMgwYgEYYbw9FOktX0mnQ4qaPxelSdBFjTTSTt7f/Zxxq0TeVRbJDGGjpzeuXNSgG+tz3RVFEO1MEwyR87oO4ddXbgmrJLN0wkcB+h+4PI+QKefGRjOhtWhuQTcqy8dPPmonAY2e7+sZZP4QuCkPUgayEYKnddl0Y26cPYExxqNhkhR8JwJNnxDo47csS4ds5E5ua98j/fWINOQN0cA/gd3CFC2e/PEOviulEDKrJc7988wAEsCVRkSjD2TQjuU=
-#  app: tacs-grupo1
-#  on:
-#    all_branches: true
+deploy:
+  provider: heroku
+  api_key:
+    secure: $HEROKU_KEY
+  app: tacs-grupo1
+  on:
+    all_branches: true
