@@ -2,6 +2,8 @@ version: '3'
 services:
   api:
     restart: always
+    build:
+      context: .
     image: jonigl/tacs-grupo1:1.0.0
     container_name: "api"
     ports:
