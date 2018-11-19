@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/jonigl/tacs-grupo1-api.svg?branch=master)](https://travis-ci.com/jonigl/tacs-grupo1-api)
+
 **TACS Grupo 1**
 --
 
