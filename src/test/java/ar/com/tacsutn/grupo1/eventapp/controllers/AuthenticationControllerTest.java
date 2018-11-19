@@ -21,7 +21,6 @@ import javax.servlet.Filter;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -56,7 +55,6 @@ public class AuthenticationControllerTest {
                 post("/api/v1/login")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"username\": \"user\", \"password\": \"user\"}"))
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -67,7 +65,6 @@ public class AuthenticationControllerTest {
                 post("/api/v1/login")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"username\": \"wrong\", \"password\": \"wrong\"}"))
-                .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
 
@@ -78,7 +75,6 @@ public class AuthenticationControllerTest {
                 post("/api/v1/login")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"username\": \"user\", \"password\": \"wrong\"}"))
-                .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
 
@@ -100,7 +96,6 @@ public class AuthenticationControllerTest {
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"username\": \"user\", \"password\": \"user\"}"))
-                .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
 
@@ -115,7 +110,6 @@ public class AuthenticationControllerTest {
         mockMvc.perform(
                 get("/api/v1/refresh")
                         .header("Authorization", getBearerToken(loginResponse)))
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -124,7 +118,6 @@ public class AuthenticationControllerTest {
     public void shouldNotRefreshWhenNotLogged() throws Exception {
         mockMvc.perform(
                 get("/api/v1/refresh"))
-                .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
 

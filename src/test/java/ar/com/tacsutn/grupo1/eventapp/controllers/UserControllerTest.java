@@ -9,7 +9,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,7 +21,6 @@ public class UserControllerTest extends ControllerTest {
     public void canGetUsers() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users"))
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -32,7 +30,6 @@ public class UserControllerTest extends ControllerTest {
     public void shouldNotGetUsersIfNotAdmin() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users"))
-                .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
@@ -44,7 +41,6 @@ public class UserControllerTest extends ControllerTest {
                 .perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"email\": \"a@a.com\", \"firstname\": \"Nombre5\", \"lastAccess\": \"2018-10-08T01:03:50.801Z\", \"lastname\": \"Apellido5\", \"username\": \"user5\", \"password\": \"123456\"}"))
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -57,7 +53,6 @@ public class UserControllerTest extends ControllerTest {
                 .perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"email\": \"a@a.com\", \"firstname\": \"Nombre5\", \"lastAccess\": \"2018-10-08T01:03:50.801Z\", \"lastname\": \"Apellido5\", \"username\": \"JohnDoemann1\", \"password\": \"123456\"}"))
-                .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
 
@@ -67,7 +62,6 @@ public class UserControllerTest extends ControllerTest {
     public void canGetUserById() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/" + userId1))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("JohnDoemann1"))
                 .andExpect(jsonPath("$.id").value(userId1))
@@ -82,7 +76,6 @@ public class UserControllerTest extends ControllerTest {
     public void shouldNotGetUserByIdIfNotAdmin() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/" + userId1))
-                .andDo(print())
                 .andExpect(status().isForbidden());
 
     }
@@ -93,7 +86,6 @@ public class UserControllerTest extends ControllerTest {
     public void shouldNotGetUserByIdIfDoesNotExist() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/500"))
-                .andDo(print())
                 .andExpect(status().isNotFound());
 
     }
@@ -104,7 +96,6 @@ public class UserControllerTest extends ControllerTest {
     public void canGetTotalAlarms() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/" + userId1 + "/total_alarms"))
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -114,7 +105,6 @@ public class UserControllerTest extends ControllerTest {
     public void shouldNotGetTotalAlarmsIfNotAdmin() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/" + userId1 + "/total_alarms"))
-                .andDo(print())
                 .andExpect(status().isForbidden());
 
     }
@@ -126,7 +116,6 @@ public class UserControllerTest extends ControllerTest {
     public void shouldNotGetTotalAlarmsIfUserDoesNotExist() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/500/total_alarms"))
-                .andDo(print())
                 .andExpect(status().isNotFound());
 
     }
@@ -137,7 +126,6 @@ public class UserControllerTest extends ControllerTest {
     public void canGetTotalLists() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/" + userId1 + "/total_lists"))
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -147,7 +135,6 @@ public class UserControllerTest extends ControllerTest {
     public void shouldNotGetTotalListsIfNotAdmin() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/" + userId1 + "/total_lists"))
-                .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
@@ -158,7 +145,6 @@ public class UserControllerTest extends ControllerTest {
     public void shouldNotGetTotalListsIfUserDoesNotExist() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/500/total_lists"))
-                .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
@@ -168,7 +154,6 @@ public class UserControllerTest extends ControllerTest {
     public void canGetUsersInfo() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/info"))
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -177,7 +162,6 @@ public class UserControllerTest extends ControllerTest {
     public void shouldNotGetUsersInfoIfNotLoggedIn() throws Exception {
         this.getMockMvc()
                 .perform(get("/api/v1/users/info"))
-                .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
 
@@ -190,7 +174,6 @@ public class UserControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{ \"username\": \"JohnDoemann1\", \"email\": \"john@foobar.com\", \"firstname\": \"Jhonny\", \"lastname\": \"Foobar\" }")
                 )
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 }
