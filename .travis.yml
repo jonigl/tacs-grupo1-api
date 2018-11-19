@@ -3,8 +3,7 @@ jdk: oraclejdk8
 install: true
 
 script:
-  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -q
-  - ./mvnw test -B
+  - ./mvnw test -B -q
 
 deploy:
   provider: heroku
