@@ -1,5 +1,6 @@
 package ar.com.tacsutn.grupo1.eventapp.services;
 
+import ar.com.tacsutn.grupo1.eventapp.BootstrapData;
 import ar.com.tacsutn.grupo1.eventapp.models.Authority;
 import ar.com.tacsutn.grupo1.eventapp.models.AuthorityName;
 import ar.com.tacsutn.grupo1.eventapp.models.User;
@@ -13,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,65 +27,68 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SessionServiceTest {
-  @Autowired
-  private SessionService sessionService;
+    @MockBean
+    private BootstrapData bootstrapData;
 
-  @Autowired
-  private AuthorityRepository authorityRepository;
+    @Autowired
+    private SessionService sessionService;
 
-  List<Authority> userAuthorities, adminAuthorities;
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
-  @Autowired
-  private UserService userService;
+    List<Authority> userAuthorities, adminAuthorities;
 
-  private User user1, user2;
+    @Autowired
+    private UserService userService;
 
-  @Autowired
-  @Qualifier("jwtUserDetailsService")
-  private UserDetailsService userDetailsService;
+    private User user1, user2;
 
-  @Autowired
-  private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    @Qualifier("jwtUserDetailsService")
+    private UserDetailsService userDetailsService;
 
-  @Before
-  public void before() {
-    setAuthorities();
-    setUsers();
-  }
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
-  @Test
-  public void canGetAuthenticatedUser() {
-    MockHttpServletRequest request = new MockHttpServletRequest();
-    JwtAuthenticationRequest authenticationRequest = new JwtAuthenticationRequest(user1.getUsername(), user1.getPassword());
+    @Before
+    public void before() {
+        setAuthorities();
+        setUsers();
+    }
 
-    final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-    final String token = jwtTokenUtil.generateToken(userDetails);
-    request.addHeader("Authorization", "Value= " + token);
+    @Test
+    public void canGetAuthenticatedUser() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        JwtAuthenticationRequest authenticationRequest = new JwtAuthenticationRequest(user1.getUsername(), user1.getPassword());
 
-    User userAuthenticated = sessionService.getAuthenticatedUser(request);
-    Assert.assertEquals(user1, userAuthenticated);
-  }
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final String token = jwtTokenUtil.generateToken(userDetails);
+        request.addHeader("Authorization", "Value= " + token);
 
-  private void setUsers() {
-    user1 = new User("JohnDoemann1", "1234", "John", "Doemann", "john.doemann@test.com", true, new Date(), userAuthorities);
-    user2 = new User("JanetDoemann2", "1234", "Janet", "Doemann", "janet.doemann@test.com", true, new Date(), adminAuthorities);
+        User userAuthenticated = sessionService.getAuthenticatedUser(request);
+        Assert.assertEquals(user1, userAuthenticated);
+    }
 
-    userService.save(user1);
-    userService.save(user2);
-  }
+    private void setUsers() {
+        user1 = new User("JohnDoemann1", "1234", "John", "Doemann", "john.doemann@test.com", true, new Date(), userAuthorities);
+        user2 = new User("JanetDoemann2", "1234", "Janet", "Doemann", "janet.doemann@test.com", true, new Date(), adminAuthorities);
+
+        userService.save(user1);
+        userService.save(user2);
+    }
 
 
-  private void setAuthorities() {
-    Authority userAuthority = new Authority();
-    userAuthority.setName(AuthorityName.ROLE_USER);
-    authorityRepository.save(userAuthority);
+    private void setAuthorities() {
+        Authority userAuthority = new Authority();
+        userAuthority.setName(AuthorityName.ROLE_USER);
+        authorityRepository.save(userAuthority);
 
-    userAuthorities = Collections.singletonList(userAuthority);
+        userAuthorities = Collections.singletonList(userAuthority);
 
-    Authority adminAuthority = new Authority();
-    adminAuthority.setName(AuthorityName.ROLE_ADMIN);
-    authorityRepository.save(adminAuthority);
+        Authority adminAuthority = new Authority();
+        adminAuthority.setName(AuthorityName.ROLE_ADMIN);
+        authorityRepository.save(adminAuthority);
 
-    adminAuthorities = Collections.singletonList(adminAuthority);
-  }
+        adminAuthorities = Collections.singletonList(adminAuthority);
+    }
 }

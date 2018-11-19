@@ -4,7 +4,7 @@ spring:
       INDENT_OUTPUT: true
   data:
     mongodb:
-      uri: mongodb://localhost/eventapp
+      uri: ${MONGO_URI}
 
 #  h2:
 #    console:
