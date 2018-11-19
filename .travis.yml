@@ -3,12 +3,10 @@ jdk: oraclejdk8
 install: true
 
 script:
-  - "./mvnw install -q -Dmaven.test.skip=true"
+  - "./mvnw test --quiet"
 
 deploy:
   provider: heroku
   api_key:
     secure: $HEROKU_KEY
   app: tacs-grupo1
-  on:
-    all_branches: true
