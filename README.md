@@ -57,6 +57,8 @@ Decidimos pasar de H2 que es una base de datos relacional en memoria a mongoDB p
 
 Entrega 5
 -
+**Docker**
+
 Con respecto a docker hemos utilizado varias estrategias para utilizar docker:
 Dockerfile default para crear a partir del compilado una imagen (la cual ya está subida a docker hub). La app usa una variable de entorno para la base mongo. Se puede correr directamente configurandola para cualquier db remota o usando la local.
 Build: 
@@ -80,6 +82,10 @@ Para levantar todo y si no está hecho el build lo hace:
 docker-compose up -d
 Para bajarlo:
 docker-compose down
+
+Docker Hub: https://hub.docker.com/r/jonigl/tacs-grupo1/
+
+**CI**
 
 Para agregar a nuestro workflow CI utilizamos travis (que lo aprovechamos con github education pack). Conectamos a travis con nuestro repositorio en github y agregamos el archivo .travis.yml configurado para que corra los tests y se conecte con heroku (https://docs.travis-ci.com/user/deployment/heroku/).
 En Heroku teníamos deploy automáticos para master (además de las review apps) por lo que configuramos que los deploy automáticos aguarden a travis para hacer los deploys. En travis configuramos que se genere un job por cada PR o commit a master el cual va correr todos nuestros tests, si corren de manera exitosa permite el deploy en Heroku sino lo saltea. 
